@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { getTasks, createTask } from "../services/tasks";
 import PageHeader from "../ui/PageHeader";
@@ -7,11 +8,14 @@ import Select from "../ui/Select";
 import Button from "../ui/Button";
 import EmptyState from "../ui/EmptyState";
 import type { Task } from "../types";
+import TaskCard from "../components/TaskCard";
+import NewTaskModal from "../components/NewTaskModal";
 
 export default function DashboardPage() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<"all" | Task["status"]>("all");
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     getTasks().then((data) => setTasks(data));
@@ -30,23 +34,23 @@ export default function DashboardPage() {
     return matchesStatus && matchesSearch;
   });
 
-  const handleNewTask = async () => {
-    const title = prompt("Task title");
-    if (!title) return;
-    const newTask = await createTask({
-      title,
-      status: "todo",
-      description: "",
-      priority: "medium",
-    });
+  const handleCreateTask = async (task: Task) => {
+    const newTask = await createTask(task);
     setTasks((prev) => [...prev, newTask]);
   };
 
   return (
-    <div>
+    <div className="animate-pageFade">
       <PageHeader title="Dashboard" subtitle="Overview of your study tasks">
-        <Button onClick={handleNewTask}>+ New Task</Button>
+        <Button onClick={() => setShowModal(true)}>+ New Task</Button>
       </PageHeader>
+
+      {showModal && (
+        <NewTaskModal
+          onClose={() => setShowModal(false)}
+          onCreate={handleCreateTask}
+        />
+      )}
 
       <div className="grid grid-cols-4 gap-4 mb-6">
         <StatsCard label="Total Tasks" value={stats.total} />
@@ -85,26 +89,26 @@ export default function DashboardPage() {
         <EmptyState message="No tasks yet. Create your first task to get started!" />
       ) : (
         <div className="space-y-3">
-          {filtered.map((t) => (
-            <div
-              key={t.id}
-              className="bg-white dark:bg-slate-800 border border-border rounded-lg p-4 flex items-center justify-between"
-            >
-              <div>
-                <strong>{t.title}</strong>
-                <p className="text-sm text-gray-500">{t.description}</p>
-              </div>
+  {filtered
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    .map((t) => (
+      <TaskCard
+        key={t.id}
+        task={t}
+        onUpdate={(updated) =>
+          setTasks((prev) =>
+            prev.map((task) => (task.id === updated.id ? updated : task))
+          )
+        }
+        onDelete={(id) =>
+          setTasks((prev) => prev.filter((task) => task.id !== id))
+        }
+      />
+    ))}
+</div>
 
-              <div className="text-right">
-                <p className="text-sm font-medium">{t.priority} Priority</p>
-                <span className="px-3 py-1 rounded-md text-sm bg-gray-200 dark:bg-slate-700">
-                  {t.status === "completed" ? "✅ Completed" : t.status}
-                </span>
-              </div>
-            </div>
-          ))}
-        </div>
       )}
     </div>
   );
 }
+
