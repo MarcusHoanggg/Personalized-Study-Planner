@@ -1,35 +1,30 @@
-package com.studyplanner.backend.Model.Entity;
+package com.studyplanner.backend.entity;
 
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Entity
-@Table(name = "tasks")
+@Table(name = "suggested")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 
 
-public class Tasks {
+public class SuggestedLLM {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
-    private List<Reminder> reminders;
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "taskId")
+    @Column(name = "task_id", nullable = false)
     private Long id;
 
     @Column(name = "task_name", nullable = false)
@@ -38,18 +33,16 @@ public class Tasks {
     @Column(name = "task_description", nullable = false)
     private String taskDescription;
 
-    @Column(name = "task_deadline")
+    @Column(name = "task_deadline", nullable = true)
     private LocalDateTime taskDeadline;
 
-    @Column(name = "creation_date", updatable = false, nullable = false)
-    @CreationTimestamp
-    private LocalDateTime creationDate;
-
-    @Column(name = "priority", nullable = false)
+    @Column(name = "priority", nullable = true)
     private String priority;
 
-    @Column(name = "completed", nullable = false)
-    private boolean completed;
+    @Column(name = "status", nullable = false) // approved by the user or not
+    private boolean status;
 
+    @Column(name = "response", nullable = false)
+    private String response;
 
 }
