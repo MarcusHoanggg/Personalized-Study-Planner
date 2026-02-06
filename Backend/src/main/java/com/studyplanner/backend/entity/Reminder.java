@@ -1,4 +1,4 @@
-package com.studyplanner.backend.Model.Entity;
+package com.studyplanner.backend.entity;
 
 
 import jakarta.persistence.*;
@@ -22,7 +22,7 @@ public class Reminder {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "reminderId", nullable = false)
+    @Column(name = "reminder_id", nullable = false)
     private long id;
 
     @Column(name = "reminder_sent", nullable = false)

@@ -1,4 +1,4 @@
-package com.studyplanner.backend.Model.Entity;
+package com.studyplanner.backend.entity;
 
 
 import jakarta.persistence.*;
