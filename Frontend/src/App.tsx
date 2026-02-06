@@ -1,14 +1,44 @@
-function App() {
+// // src/App.tsx
+// import { BrowserRouter, Routes, Route } from "react-router-dom";
+// import MainLayout from "./layout/MainLayout";
+// import DashboardPage from "./pages/DashboardPage";
+// import CalendarPage from "./pages/CalendarPage";
+// import ProfilePage from "./pages/ProfilePage";
+
+// export default function App() {
+//   return (
+//     <BrowserRouter>
+//       <Routes>
+//         <Route element={<MainLayout />}>
+//           <Route path="/" element={<DashboardPage />} />
+//           <Route path="/dashboard" element={<DashboardPage />} />
+//           <Route path="/calendar" element={<CalendarPage />} />
+//           <Route path="/profile" element={<ProfilePage />} />
+//         </Route>
+//       </Routes>
+//     </BrowserRouter>
+//   );
+// }
+
+import { Routes, Route } from "react-router-dom";
+import MainLayout from "./layout/MainLayout";
+import DashboardPage from "./pages/DashboardPage";
+import CalendarPage from "./pages/CalendarPage";
+import ProfilePage from "./pages/ProfilePage";
+import LoginPage from "./pages/LoginPage";
+import SignupPage from "./pages/SignupPage";
+
+export default function App() {
   return (
-    <div className="flex h-screen justify-center items-center flex-col gap-2 bg-linear-to-r from-cyan-500 to-blue-200">
-      <h1 className=" ">
-        Personalized Study Planner
-      </h1>
-      <h3 className=" ">
-        Customize your study plan and track your progress{" "}
-      </h3>
-    </div>
+    <Routes>
+       <Route path="/signup" element={<SignupPage />} />
+       <Route path="/login" element={<LoginPage />} />
+      <Route element={<MainLayout />}>
+        <Route path="/" element={<DashboardPage />} />
+        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/calendar" element={<CalendarPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
+      </Route>
+    </Routes>
   );
 }
-
-export default App;
