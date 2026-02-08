@@ -25,14 +25,23 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserProfileUpdateDto createUser(UserRegisterDto userDto) {
+        // Check if email is already registered
         if (userRepository.findByEmail(userDto.getEmail()).isPresent()) {
             throw new IllegalArgumentException("Email already registered");
         }
+
+        // Map DTO to entity,
         User user = UserMapper.mapToUser(userDto);
         String now = LocalDateTime.now().format(FORMATTER);
+
+        // set timestamps, default values
         user.setCreatedAt(now);
         user.setUpdatedAt(now);
+
+        // save to database
         User saved = userRepository.save(user);
+
+        // Map back to DTO for response (without password)
         return UserMapper.mapToUserDto(saved);
     }
 
