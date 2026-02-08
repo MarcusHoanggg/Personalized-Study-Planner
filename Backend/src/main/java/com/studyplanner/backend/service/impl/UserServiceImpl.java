@@ -9,6 +9,7 @@ import com.studyplanner.backend.dto.UserLoginDto;
 import com.studyplanner.backend.dto.UserProfileUpdateDto;
 import com.studyplanner.backend.dto.UserRegisterDto;
 import com.studyplanner.backend.entity.User;
+import com.studyplanner.backend.exception.ResourceNotFoundException;
 import com.studyplanner.backend.mapper.UserMapper;
 import com.studyplanner.backend.repository.UserRepository;
 import com.studyplanner.backend.service.UserService;
@@ -27,7 +28,7 @@ public class UserServiceImpl implements UserService {
     public UserProfileUpdateDto createUser(UserRegisterDto userDto) {
         // Check if email is already registered
         if (userRepository.findByEmail(userDto.getEmail()).isPresent()) {
-            throw new IllegalArgumentException("Email already registered");
+            throw new RuntimeException("Email already registered");
         }
 
         // Map DTO to entity,
@@ -60,10 +61,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserProfileUpdateDto updateProfile(UserProfileUpdateDto userDto) {
         if (userDto.getUserId() == null) {
-            throw new IllegalArgumentException("User ID is required for profile update");
+            throw new IllegalArgumentException("User ID is required");
         }
         User user = userRepository.findById(userDto.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Cannot update: User not found"));
+
         UserMapper.applyProfileUpdate(user, userDto);
         user.setUpdatedAt(LocalDateTime.now().format(FORMATTER));
         User updated = userRepository.save(user);
@@ -73,7 +75,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserProfileUpdateDto getUserById(Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         return UserMapper.mapToUserDto(user);
     }
 }
