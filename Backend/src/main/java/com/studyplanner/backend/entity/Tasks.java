@@ -1,8 +1,8 @@
 package com.studyplanner.backend.entity;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
-
+@Builder
 
 public class Tasks {
 
@@ -25,7 +25,6 @@ public class Tasks {
 
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
     private List<Reminder> reminders;
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,15 +40,33 @@ public class Tasks {
     @Column(name = "task_deadline")
     private LocalDateTime taskDeadline;
 
-    @Column(name = "creation_date", updatable = false, nullable = false)
+    @Column(name = "created_at", updatable = false, nullable = false)
     @CreationTimestamp
-    private LocalDateTime creationDate;
+    private LocalDateTime createdAt;
 
-    @Column(name = "priority", nullable = false)
-    private String priority;
+    @Column(name = "updated_at")
+    @CreationTimestamp
+    private LocalDateTime updatedAt;
+
+    public enum Priority {
+        LOW,
+        MEDIUM,
+        HIGH
+    }
+
+    @Column(name = "priority")
+    private Priority priority;
+
+    public enum Status {
+        PENDING,
+        IN_PROGRESS,
+        COMPLETED
+    }
+
+    @Column(name = "status")
+    private Status status;
 
     @Column(name = "completed", nullable = false)
     private boolean completed;
-
 
 }
