@@ -1,37 +1,3 @@
-// // src/layout/MainLayout.tsx
-// import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-// import { logout, getCurrentUser } from '../services/auth';
-
-// export default function MainLayout() {
-//   const navigate = useNavigate();
-//   const user = getCurrentUser();
-
-//   const handleLogout = () => {
-//     logout();
-//     navigate('/login');
-//   };
-
-//   return (
-//     <div className="app">
-//       <header className="topbar">
-//         <div className="logo">Study Planner</div>
-//         <nav className="nav">
-//           <NavLink to="/" end>Dashboard</NavLink>
-//           <NavLink to="/calendar">Calendar</NavLink>
-//           <NavLink to="/profile">Profile</NavLink>
-//         </nav>
-//         <div className="topbar-right">
-//           <button onClick={handleLogout}>Logout</button>
-//           <div className="avatar">{user?.username[0]?.toUpperCase()}</div>
-//         </div>
-//       </header>
-//       <main className="content">
-//         <Outlet />
-//       </main>
-//     </div>
-//   );
-// }
-// 
 // src/layout/MainLayout.tsx
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { logout, getCurrentUser } from "../services/auth";
@@ -51,19 +17,31 @@ export default function MainLayout() {
         <h1 className="text-xl font-bold">Study Planner</h1>
 
         <nav className="flex gap-6 text-sm font-medium">
-          <NavLink to="/dashboard" className={({ isActive }) => isActive ? "text-blue-600" : ""}>
+          <NavLink
+            to="/dashboard"
+            className={({ isActive }) => (isActive ? "text-blue-600" : "")}
+          >
             Dashboard
           </NavLink>
-          <NavLink to="/calendar" className={({ isActive }) => isActive ? "text-blue-600" : ""}>
+          <NavLink
+            to="/calendar"
+            className={({ isActive }) => (isActive ? "text-blue-600" : "")}
+          >
             Calendar
           </NavLink>
-          <NavLink to="/profile" className={({ isActive }) => isActive ? "text-blue-600" : ""}>
+          <NavLink
+            to="/profile"
+            className={({ isActive }) => (isActive ? "text-blue-600" : "")}
+          >
             Profile
           </NavLink>
         </nav>
 
         <div className="flex items-center gap-4">
-          <button onClick={handleLogout} className="text-sm px-3 py-1 border rounded">
+          <button
+            onClick={handleLogout}
+            className="text-sm px-3 py-1 border rounded"
+          >
             Logout
           </button>
           <div className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center">
@@ -72,7 +50,7 @@ export default function MainLayout() {
         </div>
       </header>
 
-      <main className="max-w-4xl mx-auto px-6 py-8">
+      <main className="max-w-7xl mx-auto px-6 py-8">
         <Outlet />
       </main>
     </div>
