@@ -44,10 +44,10 @@ public class User {
     private String email;
 
     @Column(name = "password_hash")
-    // depending on if the users signs in from google account idk if to keep this as
-    // null or not
     private String passwordHash;
 
+    @Column(name = "auth_token")
+    private String authToken;
 //    @Enumerated(EnumType.STRING)
 //    @Column(nullable = false)
 //    private AuthProvider provider;
