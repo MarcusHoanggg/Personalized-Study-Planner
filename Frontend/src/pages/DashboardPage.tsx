@@ -1,3 +1,4 @@
+// src/pages/DashboardPage.tsx
 import { useEffect, useState } from "react";
 import PageHeader from "../ui/PageHeader";
 import StatsCard from "../ui/StatsCard";
@@ -8,9 +9,17 @@ import type { Task, TaskStatus } from "../types";
 import TaskCard from "../components/TaskCard";
 import NewTaskModal from "../components/NewTaskModal";
 import EditTaskModal from "../components/EditTaskModal";
+import NotificationPopup, { NotificationType } from "../components/NotificationPopup";
 
 type StatusFilter = "all" | TaskStatus;
 type SortBy = "created" | "deadline" | "priority";
+
+type NotiState = {
+  open: boolean;
+  type: NotificationType;
+  title: string;
+  message?: string;
+};
 
 export default function DashboardPage() {
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -22,8 +31,20 @@ export default function DashboardPage() {
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
-  // NEW: controls which TaskCard menu is open
+  // controls which TaskCard menu is open
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
+
+  // Notification state
+  const [noti, setNoti] = useState<NotiState>({
+    open: false,
+    type: "info",
+    title: "",
+    message: "",
+  });
+
+  const showNoti = (type: NotificationType, title: string, message?: string) => {
+    setNoti({ open: true, type, title, message });
+  };
 
   // Load tasks
   useEffect(() => {
@@ -52,12 +73,13 @@ export default function DashboardPage() {
   let sorted = [...filtered];
 
   if (sortBy === "created") {
-    sorted.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    sorted.sort(
+      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
   } else if (sortBy === "deadline") {
     sorted.sort(
       (a, b) =>
-        new Date(a.deadline ?? 0).getTime() -
-        new Date(b.deadline ?? 0).getTime()
+        new Date(a.deadline ?? 0).getTime() - new Date(b.deadline ?? 0).getTime()
     );
   } else if (sortBy === "priority") {
     const order = { high: 3, medium: 2, low: 1 };
@@ -71,11 +93,13 @@ export default function DashboardPage() {
   // CREATE
   const handleCreateTask = (task: Task) => {
     setTasks((prev) => [...prev, task]);
+    showNoti("success", "Success!", "Task created successfully.");
   };
 
   // UPDATE
   const handleUpdateTask = (updated: Task) => {
     setTasks((prev) => prev.map((t) => (t.id === updated.id ? updated : t)));
+    showNoti("info", "Updated", "Task updated successfully.");
   };
 
   // DELETE
@@ -87,6 +111,7 @@ export default function DashboardPage() {
     if (!deleteId) return;
     setTasks((prev) => prev.filter((t) => t.id !== deleteId));
     setDeleteId(null);
+    showNoti("error", "Deleted", "Task has been deleted.");
   };
 
   return (
@@ -94,6 +119,15 @@ export default function DashboardPage() {
       <PageHeader title="Dashboard" subtitle="Overview of your study tasks">
         <Button onClick={() => setShowNewModal(true)}>+ New Task</Button>
       </PageHeader>
+
+      {/* Notification popup */}
+      <NotificationPopup
+        open={noti.open}
+        type={noti.type}
+        title={noti.title}
+        message={noti.message}
+        onClose={() => setNoti((p) => ({ ...p, open: false }))}
+      />
 
       {/* NEW TASK MODAL */}
       {showNewModal && (
@@ -156,10 +190,7 @@ export default function DashboardPage() {
           <option value="completed">Completed</option>
         </Select>
 
-        <Select
-          value={sortBy}
-          onChange={(e) => setSortBy(e.target.value as SortBy)}
-        >
+        <Select value={sortBy} onChange={(e) => setSortBy(e.target.value as SortBy)}>
           <option value="created">Created Date</option>
           <option value="deadline">Deadline</option>
           <option value="priority">Priority</option>
@@ -170,6 +201,7 @@ export default function DashboardPage() {
       <div className="space-y-3 relative overflow-visible">
         {sorted.map((t) => (
           <TaskCard
+            key={t.id}
             task={t}
             onUpdate={handleUpdateTask}
             onDelete={handleDeleteTask}
@@ -177,7 +209,6 @@ export default function DashboardPage() {
             openMenuId={openMenuId}
             setOpenMenuId={setOpenMenuId}
           />
-
         ))}
       </div>
     </div>
