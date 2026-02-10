@@ -3,9 +3,9 @@ spring:
     name: Personalized-Study-Planner
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/personalized_study_planner
-    username: study_planner
-    password: study_planner
+    url: jdbc:postgresql://localhost:5432/study_planner
+    username: java
+    password: java
 
   jpa:
     hibernate:
@@ -15,4 +15,7 @@ spring:
       hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
 
 server:
-  port: 8000
+  port: 5000 # changed to 8082, 8081 "was busy"
+jwt:
+  secret: 1zqnmqv2UgQ3Vk6nn53KeR+HnRjbhInN21Z2YsIQh5w= #secret key
+  expiration: 3600000 # 1 hour in milliseconds
