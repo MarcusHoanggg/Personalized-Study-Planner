@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.security.AuthProvider;
 import java.util.List;
 
 // using lombok as it automatically generates getters and setters
@@ -46,6 +48,12 @@ public class User {
 
     @Column(name = "auth_token")
     private String authToken;
+//    @Enumerated(EnumType.STRING)
+//    @Column(nullable = false)
+//    private AuthProvider provider;
+
+    @Column
+    private String providerId;
 
     @Column(name = "profile_picture")
     private String profilePicture;
