@@ -39,9 +39,7 @@ export default function MainLayout() {
         </div>
       </header>
 
-      {/* <main className="max-w-4xl mx-auto px-6 py-8"> */}
-      <main className="w-full max-w-7xl mx-auto px-8 py-10">
-
+      <main className="max-w-4xl mx-auto px-6 py-8">
         <Outlet />
       </main>
     </div>
