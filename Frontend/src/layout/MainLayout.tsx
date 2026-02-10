@@ -1,4 +1,4 @@
-// src/layout/MainLayout.tsx
+
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { logout, getCurrentUser } from "../services/auth";
 
@@ -12,6 +12,7 @@ export default function MainLayout() {
   };
 
   return (
+    
     <div className="min-h-screen bg-gray-50 dark:bg-slate-900 text-gray-800 dark:text-slate-50">
       <header className="bg-white dark:bg-slate-800 border-b border-border px-6 py-4 flex items-center justify-between">
         <h1 className="text-xl font-bold">Study Planner</h1>
@@ -50,7 +51,9 @@ export default function MainLayout() {
         </div>
       </header>
 
-      <main className="max-w-7xl mx-auto px-6 py-8">
+      {/* <main className="max-w-4xl mx-auto px-6 py-8"> */}
+      <main className="w-full max-w-7xl mx-auto px-8 py-10">
+
         <Outlet />
       </main>
     </div>

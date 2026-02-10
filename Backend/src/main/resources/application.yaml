@@ -15,4 +15,7 @@ spring:
       hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
 
 server:
-  port: 8081
+  port: 5000 # changed to 8082, 8081 "was busy"
+jwt:
+  secret: 1zqnmqv2UgQ3Vk6nn53KeR+HnRjbhInN21Z2YsIQh5w= #secret key
+  expiration: 3600000 # 1 hour in milliseconds

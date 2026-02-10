@@ -1,19 +1,26 @@
 package com.studyplanner.backend.service.impl;
 
+import java.security.SecureRandom;
+import java.security.spec.KeySpec;
+import java.security.spec.PKCS8EncodedKeySpec;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.studyplanner.backend.dto.UserLoginDto;
 import com.studyplanner.backend.dto.UserProfileUpdateDto;
 import com.studyplanner.backend.dto.UserRegisterDto;
 import com.studyplanner.backend.entity.User;
+import com.studyplanner.backend.exception.ResourceNotFoundException;
 import com.studyplanner.backend.mapper.UserMapper;
 import com.studyplanner.backend.repository.UserRepository;
 import com.studyplanner.backend.service.UserService;
 
 import lombok.AllArgsConstructor;
+
+import javax.crypto.SecretKeyFactory;
 
 @Service
 @AllArgsConstructor
@@ -25,14 +32,31 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserProfileUpdateDto createUser(UserRegisterDto userDto) {
+
+        // Check if email is already registered
         if (userRepository.findByEmail(userDto.getEmail()).isPresent()) {
-            throw new IllegalArgumentException("Email already registered");
+            throw new RuntimeException("Email already registered");
         }
+
+        // Password Hashing
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String hashedPassword = passwordEncoder.encode(userDto.getPassword());
+
+        // Map DTO to entity,
         User user = UserMapper.mapToUser(userDto);
         String now = LocalDateTime.now().format(FORMATTER);
+
+        // Hashed password updated to userDto
+        user.setPasswordHash(hashedPassword);
+
+        // set timestamps, default values
         user.setCreatedAt(now);
         user.setUpdatedAt(now);
+
+        // save to database
         User saved = userRepository.save(user);
+
+        // Map back to DTO for response (without password)
         return UserMapper.mapToUserDto(saved);
     }
 
@@ -51,10 +75,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserProfileUpdateDto updateProfile(UserProfileUpdateDto userDto) {
         if (userDto.getUserId() == null) {
-            throw new IllegalArgumentException("User ID is required for profile update");
+            throw new IllegalArgumentException("User ID is required");
         }
         User user = userRepository.findById(userDto.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Cannot update: User not found"));
+
         UserMapper.applyProfileUpdate(user, userDto);
         user.setUpdatedAt(LocalDateTime.now().format(FORMATTER));
         User updated = userRepository.save(user);
@@ -64,7 +89,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserProfileUpdateDto getUserById(Long userId) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         return UserMapper.mapToUserDto(user);
     }
 }

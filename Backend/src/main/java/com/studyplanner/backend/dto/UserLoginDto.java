@@ -13,6 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserLoginDto {
+
     @Email(message = "Invalid email format")
     @NotBlank(message = "Email is required")
     private String email;
