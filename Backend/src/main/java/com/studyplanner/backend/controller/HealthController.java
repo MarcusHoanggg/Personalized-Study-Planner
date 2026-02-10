@@ -10,4 +10,10 @@ public class HealthController {
     public String health() {
         return "Backend is running ";
     }
+
+    // checking
+    @GetMapping("/secured")
+    public String secured() {
+        return "Hello, Secured!";
+    }
 }

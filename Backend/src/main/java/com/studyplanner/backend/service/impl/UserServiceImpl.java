@@ -1,8 +1,12 @@
 package com.studyplanner.backend.service.impl;
 
+import java.security.SecureRandom;
+import java.security.spec.KeySpec;
+import java.security.spec.PKCS8EncodedKeySpec;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.studyplanner.backend.dto.UserLoginDto;
@@ -16,6 +20,8 @@ import com.studyplanner.backend.service.UserService;
 
 import lombok.AllArgsConstructor;
 
+import javax.crypto.SecretKeyFactory;
+
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -26,14 +32,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserProfileUpdateDto createUser(UserRegisterDto userDto) {
+
         // Check if email is already registered
         if (userRepository.findByEmail(userDto.getEmail()).isPresent()) {
             throw new RuntimeException("Email already registered");
         }
 
+        // Password Hashing
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String hashedPassword = passwordEncoder.encode(userDto.getPassword());
+
         // Map DTO to entity,
         User user = UserMapper.mapToUser(userDto);
         String now = LocalDateTime.now().format(FORMATTER);
+
+        // Hashed password updated to userDto
+        user.setPasswordHash(hashedPassword);
 
         // set timestamps, default values
         user.setCreatedAt(now);
