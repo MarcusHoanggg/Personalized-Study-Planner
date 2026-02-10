@@ -4,7 +4,6 @@ import StatsCard from "../ui/StatsCard";
 import Input from "../ui/Input";
 import Select from "../ui/Select";
 import Button from "../ui/Button";
-import EmptyState from "../ui/EmptyState";
 import type { Task, TaskStatus } from "../types";
 import TaskCard from "../components/TaskCard";
 import NewTaskModal from "../components/NewTaskModal";
@@ -168,23 +167,19 @@ export default function DashboardPage() {
       </div>
 
       {/* TASK LIST */}
-      {sorted.length === 0 ? (
-        <EmptyState message="No tasks yet. Create your first task to get started!" />
-      ) : (
-        <div className="space-y-3 relative overflow-visible">
-          {sorted.map((t) => (
-            <TaskCard
-              task={t}
-              onUpdate={handleUpdateTask}
-              onDelete={handleDeleteTask}
-              onEdit={(task) => setEditingTask(task)}
-              openMenuId={openMenuId}
-              setOpenMenuId={setOpenMenuId}
-            />
+      <div className="space-y-3 relative overflow-visible">
+        {sorted.map((t) => (
+          <TaskCard
+            task={t}
+            onUpdate={handleUpdateTask}
+            onDelete={handleDeleteTask}
+            onEdit={(task) => setEditingTask(task)}
+            openMenuId={openMenuId}
+            setOpenMenuId={setOpenMenuId}
+          />
 
-          ))}
-        </div>
-      )}
+        ))}
+      </div>
     </div>
   );
 }
