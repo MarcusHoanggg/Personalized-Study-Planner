@@ -2,6 +2,8 @@ package com.studyplanner.backend.mapper;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.LocalDateTime;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -29,10 +31,10 @@ class UserMapperTest {
                 .firstName("John")
                 .lastName("Doe")
                 .email("john.doe@example.com")
-                .passwordHash("hashedPassword123")
+                .password("hashedPassword123")
                 .profilePicture("profile.jpg")
-                .createdAt("2024-01-01T10:00:00")
-                .updatedAt("2024-01-15T15:30:00")
+                .createdAt(LocalDateTime.of(2024, 1, 1, 10, 0, 0))
+                .updatedAt(LocalDateTime.of(2024, 1, 15, 15, 30, 0))
                 .build();
 
         // Sample registration DTO
@@ -47,8 +49,8 @@ class UserMapperTest {
                 .lastName("Smith")
                 .email("jane.smith@example.com")
                 .profilePicture("new-profile.jpg")
-                .createdAt("2024-01-01T10:00:00")
-                .updatedAt("2024-01-20T12:00:00")
+                .createdAt(LocalDateTime.of(2024, 1, 1, 10, 0, 0))
+                .updatedAt(LocalDateTime.of(2024, 1, 20, 12, 0, 0))
                 .build();
     }
 
@@ -121,7 +123,7 @@ class UserMapperTest {
             // Assert
             assertNotNull(result);
             assertEquals(sampleRegisterDto.getEmail(), result.getEmail());
-            assertEquals(sampleRegisterDto.getPassword(), result.getPasswordHash());
+            assertEquals(sampleRegisterDto.getPassword(), result.getPassword());
         }
 
         @Test
@@ -256,4 +258,3 @@ class UserMapperTest {
         }
     }
 }
-
