@@ -21,8 +21,8 @@ public class AuthController {
     private final JwtUtil jwtUtil;
 
     public AuthController(AuthenticationManager authManager,
-                          UserDetailsService userDetailsService,
-                          JwtUtil jwtUtil) {
+            UserDetailsService userDetailsService,
+            JwtUtil jwtUtil) {
         this.authManager = authManager;
         this.userDetailsService = userDetailsService;
         this.jwtUtil = jwtUtil;
@@ -33,7 +33,8 @@ public class AuthController {
         // Use email for authentication (UserLoginDto exposes `getEmail()`)
         authManager.authenticate(new UsernamePasswordAuthenticationToken(body.getEmail(), body.getPassword()));
         UserDetails userDetails = userDetailsService.loadUserByUsername(body.getEmail());
-        String token = jwtUtil.generateToken(userDetails);
+        // String token = jwtUtil.generateToken(userDetails);
+        String token = jwtUtil.generateToken(Map.of("userId", userDetails.getUsername()), userDetails);
         return ResponseEntity.ok(Map.of("token", token));
     }
 }

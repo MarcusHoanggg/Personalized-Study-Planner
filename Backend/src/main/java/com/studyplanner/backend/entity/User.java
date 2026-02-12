@@ -6,7 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.security.AuthProvider;
+import java.time.LocalDateTime;
 import java.util.List;
 
 // using lombok as it automatically generates getters and setters
@@ -44,24 +44,27 @@ public class User {
     private String email;
 
     @Column(name = "password_hash")
-    private String passwordHash;
+    private String password;
 
-    @Column(name = "auth_token")
-    private String authToken;
-//    @Enumerated(EnumType.STRING)
-//    @Column(nullable = false)
-//    private AuthProvider provider;
+    @Column(name = "google_id", unique = true)
+    private String googleId; // Google OAuth2 unique identifier for the user
 
-    @Column
-    private String providerId;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "auth_provider")
+    private AuthProvider authProvider; // LOCAL or GOOGLE
+
+    public enum AuthProvider {
+        LOCAL, // for email/password signups
+        GOOGLE // for Google OAuth2 signups
+    }
 
     @Column(name = "profile_picture")
     private String profilePicture;
 
     @Column(name = "created_at")
-    private String createdAt;
+    private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
-    private String updatedAt;
+    private LocalDateTime updatedAt;
 
 }

@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +25,8 @@ import com.studyplanner.backend.repository.UserRepository;
 
 /**
  * Unit tests for UserServiceImpl.
- * Tests cover user registration, login, profile update, and retrieval operations.
+ * Tests cover user registration, login, profile update, and retrieval
+ * operations.
  */
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
@@ -53,11 +55,11 @@ class UserServiceImplTest {
         existingUser = User.builder()
                 .id(1L)
                 .email("test@example.com")
-                .passwordHash("hashedPassword")
+                .password("hashedPassword")
                 .firstName("John")
                 .lastName("Doe")
-                .createdAt("2024-01-01T10:00:00")
-                .updatedAt("2024-01-01T10:00:00")
+                .createdAt(LocalDateTime.of(2024, 1, 1, 10, 0, 0))
+                .updatedAt(LocalDateTime.of(2024, 1, 1, 10, 0, 0))
                 .build();
     }
 
@@ -95,7 +97,7 @@ class UserServiceImplTest {
 
             // Act & Assert
             RuntimeException exception = assertThrows(RuntimeException.class,
-                () -> userService.createUser(validRegisterDto));
+                    () -> userService.createUser(validRegisterDto));
             assertEquals("Email already registered", exception.getMessage());
             verify(userRepository, never()).save(any(User.class));
         }
@@ -109,7 +111,7 @@ class UserServiceImplTest {
                 User user = invocation.getArgument(0);
                 user.setId(1L);
                 // Verify password is hashed (BCrypt hashes start with $2a$, $2b$, or $2y$)
-                assertTrue(user.getPasswordHash().startsWith("$2"));
+                assertTrue(user.getPassword().startsWith("$2"));
                 return user;
             });
 
@@ -117,10 +119,8 @@ class UserServiceImplTest {
             userService.createUser(validRegisterDto);
 
             // Assert
-            verify(userRepository).save(argThat(user ->
-                user.getPasswordHash() != null &&
-                !user.getPasswordHash().equals(validRegisterDto.getPassword())
-            ));
+            verify(userRepository).save(argThat(user -> user.getPassword() != null &&
+                    !user.getPassword().equals(validRegisterDto.getPassword())));
         }
     }
 
@@ -152,7 +152,7 @@ class UserServiceImplTest {
 
             // Act & Assert
             IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> userService.login(validLoginDto));
+                    () -> userService.login(validLoginDto));
             assertEquals("Invalid email or password", exception.getMessage());
         }
 
@@ -165,7 +165,7 @@ class UserServiceImplTest {
 
             // Act & Assert
             IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> userService.login(validLoginDto));
+                    () -> userService.login(validLoginDto));
             assertEquals("Invalid email or password", exception.getMessage());
         }
     }
@@ -209,7 +209,7 @@ class UserServiceImplTest {
 
             // Act & Assert
             IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                () -> userService.updateProfile(updateDto));
+                    () -> userService.updateProfile(updateDto));
             assertEquals("User ID is required", exception.getMessage());
         }
 
@@ -226,7 +226,7 @@ class UserServiceImplTest {
 
             // Act & Assert
             assertThrows(ResourceNotFoundException.class,
-                () -> userService.updateProfile(updateDto));
+                    () -> userService.updateProfile(updateDto));
         }
 
         @Test
@@ -279,9 +279,8 @@ class UserServiceImplTest {
 
             // Act & Assert
             ResourceNotFoundException exception = assertThrows(ResourceNotFoundException.class,
-                () -> userService.getUserById(999L));
+                    () -> userService.getUserById(999L));
             assertEquals("User not found", exception.getMessage());
         }
     }
 }
-

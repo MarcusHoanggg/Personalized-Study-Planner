@@ -30,11 +30,13 @@ import com.studyplanner.backend.exception.ResourceNotFoundException;
 import com.studyplanner.backend.security.JwtUtil;
 import com.studyplanner.backend.service.UserService;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 
 /**
  * Unit tests for UserController.
- * Tests HTTP endpoints for user registration, login, profile update, and retrieval.
+ * Tests HTTP endpoints for user registration, login, profile update, and
+ * retrieval.
  */
 @WebMvcTest(controllers = UserController.class, excludeAutoConfiguration = SecurityAutoConfiguration.class)
 @AutoConfigureMockMvc(addFilters = false) // Disable security filters for unit testing
@@ -47,7 +49,8 @@ class UserControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    // Replace deprecated @MockBean usage by providing mocked beans via a TestConfiguration.
+    // Replace deprecated @MockBean usage by providing mocked beans via a
+    // TestConfiguration.
     // Expose mocks as static fields so tests can configure stubbing in @BeforeEach.
     private static final UserService userServiceMock = mock(UserService.class);
     private static final JwtUtil jwtUtilMock = mock(JwtUtil.class);
@@ -94,8 +97,8 @@ class UserControllerTest {
                 .firstName("John")
                 .lastName("Doe")
                 .email("test@example.com")
-                .createdAt("2024-01-01T10:00:00")
-                .updatedAt("2024-01-01T10:00:00")
+                .createdAt(LocalDateTime.of(2024, 1, 1, 10, 0, 0))
+                .updatedAt(LocalDateTime.of(2024, 1, 1, 10, 0, 0))
                 .build();
 
         mockUserDetails = User.builder()
@@ -200,7 +203,7 @@ class UserControllerTest {
                     .firstName("Jane")
                     .lastName("Smith")
                     .email("test@example.com")
-                    .updatedAt("2024-01-02T10:00:00")
+                    .updatedAt(LocalDateTime.of(2024, 1, 2, 10, 0, 0))
                     .build();
 
             when(userServiceMock.updateProfile(any(UserProfileUpdateDto.class))).thenReturn(updatedProfile);

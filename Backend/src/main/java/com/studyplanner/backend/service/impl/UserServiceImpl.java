@@ -47,11 +47,11 @@ public class UserServiceImpl implements UserService {
         String now = LocalDateTime.now().format(FORMATTER);
 
         // Hashed password updated to userDto
-        user.setPasswordHash(hashedPassword);
+        user.setPassword(hashedPassword);
 
         // set timestamps, default values
-        user.setCreatedAt(now);
-        user.setUpdatedAt(now);
+        user.setCreatedAt(LocalDateTime.now());
+        user.setUpdatedAt(LocalDateTime.now());
 
         // save to database
         User saved = userRepository.save(user);
@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
         // TODO: Replace with password hash comparison (e.g. BCrypt) in production
 
-        if (!user.getPasswordHash().equals(userDto.getPassword())) {
+        if (!user.getPassword().equals(userDto.getPassword())) {
             throw new IllegalArgumentException("Invalid email or password");
         }
         return UserMapper.mapToUserDto(user);
@@ -81,7 +81,7 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot update: User not found"));
 
         UserMapper.applyProfileUpdate(user, userDto);
-        user.setUpdatedAt(LocalDateTime.now().format(FORMATTER));
+        user.setUpdatedAt(LocalDateTime.now());
         User updated = userRepository.save(user);
         return UserMapper.mapToUserDto(updated);
     }
