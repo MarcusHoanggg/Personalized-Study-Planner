@@ -26,7 +26,7 @@ public class UserMapper {
     public static User mapToUser(UserRegisterDto dto) {
         return User.builder()
                 .email(dto.getEmail())
-                .passwordHash(dto.getPassword())
+                .password(dto.getPassword())
                 .firstName(null)
                 .lastName(null)
                 .profilePicture(null)
