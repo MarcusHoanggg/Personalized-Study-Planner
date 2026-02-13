@@ -24,7 +24,7 @@ import java.util.List;
 public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Tasks> tasks;
+    private List<Task> tasks;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<SuggestedLLM> suggestedTasks;

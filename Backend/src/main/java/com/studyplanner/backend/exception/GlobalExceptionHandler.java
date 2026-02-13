@@ -16,7 +16,11 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ApiResponse<Object>> handleValidationExcption(
             MethodArgumentNotValidException ex) {
 
-        String errorMessage = ex.getBindingResult().getFieldError().getDefaultMessage();
+        String errorMessage = "Validation failed";
+        var fieldError = ex.getBindingResult().getFieldError();
+        if (fieldError != null) {
+            errorMessage = fieldError.getDefaultMessage();
+        }
 
         ApiResponse<Object> response = ApiResponse.builder()
                 .status(HttpStatus.BAD_REQUEST.value())
@@ -27,13 +31,38 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
-    // Handle bad input (e.g. duplicate email, invalid login)
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiResponse<Object>> handleException(Exception ex) {
+    // handle resource not found (e.g. user not found) - can be expanded with
+    // specific
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ApiResponse<Object>> handleResourceNotFoundException(ResourceNotFoundException ex) {
 
         ApiResponse<Object> response = ApiResponse.builder()
+                .status(HttpStatus.NOT_FOUND.value())
+                .message("Resource not found: " + ex.getMessage())
+                .data(null)
+                .build();
+
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(UnauthorizedAccessException.class)
+    public ResponseEntity<ApiResponse<Object>> handleUnauthorizedAccessExecption(UnauthorizedAccessException ex) {
+
+        ApiResponse<Object> response = ApiResponse.builder()
+                .status(HttpStatus.FORBIDDEN.value())
+                .message("Unauthorized access: " + ex.getMessage())
+                .data(null)
+                .build();
+
+        return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
+    }
+
+    // handle illegal arguments (e.g. missing user ID for update)
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ApiResponse<Object>> handleIllegalArgumentException(IllegalArgumentException ex) {
+        ApiResponse<Object> response = ApiResponse.builder()
                 .status(HttpStatus.BAD_REQUEST.value())
-                .message("Error: " + ex.getMessage())
+                .message("Illegal argument: " + ex.getMessage())
                 .data(null)
                 .build();
 
@@ -54,26 +83,13 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    // handle resource not found (e.g. user not found) - can be expanded with
-    // specific
-    @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ApiResponse<Object>> handleResourceNotFoundException(ResourceNotFoundException ex) {
+    // Handle bad input (e.g. duplicate email, invalid login)
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ApiResponse<Object>> handleException(Exception ex) {
 
-        ApiResponse<Object> response = ApiResponse.builder()
-                .status(HttpStatus.NOT_FOUND.value())
-                .message("Resource not found: " + ex.getMessage())
-                .data(null)
-                .build();
-
-        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
-    }
-
-    // handle illegal arguments (e.g. missing user ID for update)
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ApiResponse<Object>> handleIllegalArgumentException(IllegalArgumentException ex) {
         ApiResponse<Object> response = ApiResponse.builder()
                 .status(HttpStatus.BAD_REQUEST.value())
-                .message("Illegal argument: " + ex.getMessage())
+                .message("Error: " + ex.getMessage())
                 .data(null)
                 .build();
 
