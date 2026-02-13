@@ -1,10 +1,6 @@
 package com.studyplanner.backend.service.impl;
 
-import java.security.SecureRandom;
-import java.security.spec.KeySpec;
-import java.security.spec.PKCS8EncodedKeySpec;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,13 +16,11 @@ import com.studyplanner.backend.service.UserService;
 
 import lombok.AllArgsConstructor;
 
-import javax.crypto.SecretKeyFactory;
 
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
 
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
 
     private final UserRepository userRepository;
 
@@ -44,7 +38,6 @@ public class UserServiceImpl implements UserService {
 
         // Map DTO to entity,
         User user = UserMapper.mapToUser(userDto);
-        String now = LocalDateTime.now().format(FORMATTER);
 
         // Hashed password updated to userDto
         user.setPassword(hashedPassword);
@@ -64,7 +57,6 @@ public class UserServiceImpl implements UserService {
     public UserProfileUpdateDto login(UserLoginDto userDto) {
         User user = userRepository.findByEmail(userDto.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
-        // TODO: Replace with password hash comparison (e.g. BCrypt) in production
 
         if (!user.getPassword().equals(userDto.getPassword())) {
             throw new IllegalArgumentException("Invalid email or password");

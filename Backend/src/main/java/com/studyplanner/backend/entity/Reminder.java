@@ -19,7 +19,7 @@ public class Reminder {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "task_id", nullable = false)
-    private Tasks task;
+    private Task task;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
