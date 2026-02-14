@@ -2,6 +2,7 @@ package com.studyplanner.backend.service.impl;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import com.studyplanner.backend.exception.UnauthorizedAccessException;
 import com.studyplanner.backend.mapper.TaskMapper;
 import com.studyplanner.backend.repository.TaskRepository;
 import com.studyplanner.backend.repository.UserRepository;
+import com.studyplanner.backend.service.ReminderService;
 import com.studyplanner.backend.service.TaskService;
 
 import lombok.AllArgsConstructor;
@@ -27,6 +29,7 @@ public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
+    private final ReminderService reminderService;
 
     // --- Helper ---
     // Load a User
@@ -55,6 +58,10 @@ public class TaskServiceImpl implements TaskService {
         User user = findUser(taskDto.getUserId());
         Task task = TaskMapper.mapToTask(taskDto, user);
         Task saved = taskRepository.save(task);
+
+        // Auto create a reminder for the task
+        reminderService.createReminderForTask(saved);
+
         return TaskMapper.mapToTaskDto(saved);
     }
 
@@ -152,8 +159,18 @@ public class TaskServiceImpl implements TaskService {
     public TaskDto updateTask(Long taskId, TaskDto taskDto) {
         Task task = findTask(taskId);
         verifyOwnership(task, taskDto.getUserId());
+
+        LocalDateTime oldDeadline = task.getTaskDeadline();
         TaskMapper.updateTask(task, taskDto);
         Task updated = taskRepository.save(task);
+
+        // If deadline chnaged, cancel the old reminder and create a new one
+        boolean deadlineChanged = !Objects.equals(oldDeadline, task.getTaskDeadline());
+        if (deadlineChanged) {
+            reminderService.cancelReminderForTask(taskId);
+            reminderService.createReminderForTask(updated);
+        }
+
         return TaskMapper.mapToTaskDto(updated);
     }
 
@@ -165,6 +182,8 @@ public class TaskServiceImpl implements TaskService {
         task.setCompleted(completed);
         if (completed) {
             task.setStatus(Status.COMPLETED);
+            // Task is done - no need for a reminder
+            reminderService.cancelReminderForTask(taskId);
         }
         return TaskMapper.mapToTaskDto(taskRepository.save(task));
     }
@@ -194,6 +213,8 @@ public class TaskServiceImpl implements TaskService {
     public void deleteTask(Long taskId, Long userId) {
         Task task = findTask(taskId);
         verifyOwnership(task, userId);
+        // cancle reminder before deleting task
+        reminderService.cancelReminderForTask(taskId);
         taskRepository.delete(task);
     }
 }

@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 @Entity
 @Table(name = "reminder")
 @NoArgsConstructor
@@ -32,10 +35,15 @@ public class Reminder {
     @Column(name = "reminder_date", nullable = true)
     private LocalDateTime reminderDate;
 
-    @Column(name = "created_at")
-    private String createdAt;
+    @Column(name = "sent_at")
+    private LocalDateTime sentAt;
 
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
     @Column(name = "updated_at")
-    private String updatedAt;
+    private LocalDateTime updatedAt;
 
 }

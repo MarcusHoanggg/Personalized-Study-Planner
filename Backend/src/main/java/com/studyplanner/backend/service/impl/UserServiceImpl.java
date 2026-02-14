@@ -12,17 +12,21 @@ import com.studyplanner.backend.entity.User;
 import com.studyplanner.backend.exception.ResourceNotFoundException;
 import com.studyplanner.backend.mapper.UserMapper;
 import com.studyplanner.backend.repository.UserRepository;
+import com.studyplanner.backend.service.EmailService;
 import com.studyplanner.backend.service.UserService;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
 
 
     private final UserRepository userRepository;
+    private final EmailService emailService;
 
     @Override
     public UserProfileUpdateDto createUser(UserRegisterDto userDto) {
@@ -48,6 +52,15 @@ public class UserServiceImpl implements UserService {
 
         // save to database
         User saved = userRepository.save(user);
+
+        // Send welcome email (local registration)
+        try {
+            String firstName = saved.getFirstName() != null && !saved.getFirstName().isBlank()
+                    ? saved.getFirstName() : "there";
+            emailService.sendWelcomeEmail(saved.getEmail(), firstName);
+        } catch (Exception e) {
+            log.warn("Failed to send welcome email to {}: {}", saved.getEmail(), e.getMessage());
+        }
 
         // Map back to DTO for response (without password)
         return UserMapper.mapToUserDto(saved);
