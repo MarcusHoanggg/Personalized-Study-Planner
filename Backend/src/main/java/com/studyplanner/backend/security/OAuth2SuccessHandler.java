@@ -13,18 +13,22 @@ import org.springframework.stereotype.Component;
 
 import com.studyplanner.backend.entity.User;
 import com.studyplanner.backend.repository.UserRepository;
+import com.studyplanner.backend.service.EmailService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
     private final UserDetailsService userDetailsService;
+    private final EmailService emailService;
 
     @Value("${app.frontend.url}")
     private String frontendUrl;
@@ -56,7 +60,14 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                         .authProvider(User.AuthProvider.GOOGLE)
                         .password(null)
                         .build();
-                return userRepository.save(newUser);
+                User saved = userRepository.save(newUser);
+                // Send welcome email for first-time Google sign-up
+                try {
+                    emailService.sendWelcomeEmail(email, firstName != null && !firstName.isBlank() ? firstName : "there");
+                } catch (Exception e) {
+                    log.warn("Failed to send welcome email to {}: {}", email, e.getMessage());
+                }
+                return saved;
             });
         });
 
