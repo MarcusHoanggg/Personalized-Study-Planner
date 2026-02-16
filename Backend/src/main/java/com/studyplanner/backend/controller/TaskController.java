@@ -22,6 +22,7 @@ import com.studyplanner.backend.dto.TaskDto;
 import com.studyplanner.backend.entity.Task.Priority;
 import com.studyplanner.backend.entity.Task.Status;
 import com.studyplanner.backend.service.TaskService;
+import com.studyplanner.backend.util.SecurityUtils;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,15 +32,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 public class TaskController {
 
     private final TaskService taskService;
+    private final SecurityUtils securityUtils;
 
     @Autowired
-    public TaskController(TaskService taskService) {
+    public TaskController(TaskService taskService, SecurityUtils securityUtils) {
         this.taskService = taskService;
+        this.securityUtils = securityUtils;
     }
 
     // CREAT POST api
     @PostMapping("/create")
     public ResponseEntity<ApiResponse<TaskDto>> createTask(@Valid @RequestBody TaskDto taskDto) {
+        taskDto.setUserId(securityUtils.getAuthenticatedUserId());
         TaskDto created = taskService.createTask(taskDto);
 
         ApiResponse<TaskDto> response = ApiResponse.<TaskDto>builder()
@@ -54,17 +58,19 @@ public class TaskController {
     // READ GET api
 
     @GetMapping("/{taskId}")
-    public ResponseEntity<ApiResponse<TaskDto>> getTaskById(
-            @PathVariable Long taskId,
-            @RequestParam Long userId) {
+    public ResponseEntity<ApiResponse<TaskDto>> getTaskById(@PathVariable Long taskId) {
+        Long userId = securityUtils.getAuthenticatedUserId();
         TaskDto task = taskService.getTaskById(taskId, userId);
         return ResponseEntity.ok(ApiResponse.<TaskDto>builder().status(HttpStatus.OK.value())
                 .message("Task retrieved successfully").data(task).build());
     }
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<ApiResponse<List<TaskDto>>> getAllTasksByUser(@PathVariable Long userId) {
+    @GetMapping("/user")
+    public ResponseEntity<ApiResponse<List<TaskDto>>> getAllTasksByUser() {
+
+        Long userId = securityUtils.getAuthenticatedUserId();
         List<TaskDto> tasks = taskService.getTasksByUserId(userId);
+
         return ResponseEntity.ok(
                 ApiResponse.<List<TaskDto>>builder()
                         .status(HttpStatus.OK.value())
@@ -73,9 +79,8 @@ public class TaskController {
                         .build());
     }
 
-    @GetMapping("/user/{userId}/filter")
+    @GetMapping("/user/filter")
     public ResponseEntity<ApiResponse<List<TaskDto>>> filterTasks(
-            @PathVariable Long userId,
             @RequestParam(required = false) Priority priority,
             @RequestParam(required = false) Status status,
             @RequestParam(required = false) Boolean completed,
@@ -83,6 +88,7 @@ public class TaskController {
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime to,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime taskDeadline) {
 
+        Long userId = securityUtils.getAuthenticatedUserId();
         List<TaskDto> tasks;
 
         if (priority != null && status != null) {
@@ -90,7 +96,7 @@ public class TaskController {
         } else if (priority != null) {
             tasks = taskService.getTasksByPriority(userId, priority);
         } else if (taskDeadline != null) {
-            tasks = taskService.getTasksByDeadline(userId, from);
+            tasks = taskService.getTasksByDeadline(userId, taskDeadline);
         } else if (status != null) {
             tasks = taskService.getTasksByStatus(userId, status);
         } else if (completed != null) {
@@ -115,7 +121,9 @@ public class TaskController {
     public ResponseEntity<ApiResponse<TaskDto>> updateTask(
             @PathVariable Long taskId,
             @Valid @RequestBody TaskDto taskDto) {
-        TaskDto updated = taskService.updateTask(taskId, taskDto);
+
+        Long userId = securityUtils.getAuthenticatedUserId();
+        TaskDto updated = taskService.updateTask(userId, taskId, taskDto);
         return ResponseEntity.ok(
                 ApiResponse.<TaskDto>builder()
                         .status(HttpStatus.OK.value())
@@ -127,8 +135,9 @@ public class TaskController {
     @PatchMapping("/update/{taskId}/complete")
     public ResponseEntity<ApiResponse<TaskDto>> markCompleted(
             @PathVariable Long taskId,
-            @RequestParam Long userId,
             @RequestParam boolean completed) {
+
+        Long userId = securityUtils.getAuthenticatedUserId();
         TaskDto updated = taskService.markTaskAsCompleted(taskId, userId, completed);
         return ResponseEntity.ok(
                 ApiResponse.<TaskDto>builder()
@@ -141,8 +150,9 @@ public class TaskController {
     @PatchMapping("/update/{taskId}/status")
     public ResponseEntity<ApiResponse<TaskDto>> updateStatus(
             @PathVariable Long taskId,
-            @RequestParam Long userId,
             @RequestParam Status status) {
+
+        Long userId = securityUtils.getAuthenticatedUserId();
         TaskDto updated = taskService.updateTaskStatus(taskId, userId, status.name());
         return ResponseEntity.ok(
                 ApiResponse.<TaskDto>builder()
@@ -154,8 +164,8 @@ public class TaskController {
 
     @DeleteMapping("/delete/{taskId}")
     public ResponseEntity<ApiResponse<Void>> deleteTask(
-            @PathVariable Long taskId,
-            @RequestParam Long userId) {
+            @PathVariable Long taskId) {
+        Long userId = securityUtils.getAuthenticatedUserId();
         taskService.deleteTask(taskId, userId);
         return ResponseEntity.ok(
                 ApiResponse.<Void>builder()

@@ -156,9 +156,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     @Transactional
-    public TaskDto updateTask(Long taskId, TaskDto taskDto) {
+    public TaskDto updateTask(Long userId, Long taskId, TaskDto taskDto) {
         Task task = findTask(taskId);
-        verifyOwnership(task, taskDto.getUserId());
+        verifyOwnership(task, userId);
 
         LocalDateTime oldDeadline = task.getTaskDeadline();
         TaskMapper.updateTask(task, taskDto);
