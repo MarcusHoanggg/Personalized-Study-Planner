@@ -206,7 +206,8 @@ class UserControllerTest {
                     .updatedAt(LocalDateTime.of(2024, 1, 2, 10, 0, 0))
                     .build();
 
-            when(userServiceMock.updateProfile(any(UserProfileUpdateDto.class))).thenReturn(updatedProfile);
+            when(userServiceMock.updateProfile(any(Long.class), any(UserProfileUpdateDto.class)))
+                    .thenReturn(updatedProfile);
 
             // Act & Assert
             mockMvc.perform(put("/api/v1/users/update")
@@ -228,7 +229,7 @@ class UserControllerTest {
                     .firstName("Jane")
                     .build();
 
-            when(userServiceMock.updateProfile(any(UserProfileUpdateDto.class)))
+            when(userServiceMock.updateProfile(any(Long.class), any(UserProfileUpdateDto.class)))
                     .thenThrow(new ResourceNotFoundException("Cannot update: User not found"));
 
             // Act & Assert

@@ -84,16 +84,17 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByEmail(userDto.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
 
-        if (!user.getPassword().equals(userDto.getPassword())) {
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        if (!passwordEncoder.matches(userDto.getPassword(), user.getPassword())) {
             throw new IllegalArgumentException("Invalid email or password");
         }
         return UserMapper.mapToUserDto(user);
     }
 
     @Override
-    public UserProfileUpdateDto updateProfile(UserProfileUpdateDto userDto) {
-        if (userDto.getUserId() == null) {
-            throw new IllegalArgumentException("User ID is required");
+    public UserProfileUpdateDto updateProfile(Long userId, UserProfileUpdateDto userDto) {
+        if (userDto.getUserId() == null || !userDto.getUserId().equals(userId)) {
+            throw new IllegalArgumentException("User ID mismatch: You can only update your own profile");
         }
         User user = userRepository.findById(userDto.getUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("Cannot update: User not found"));

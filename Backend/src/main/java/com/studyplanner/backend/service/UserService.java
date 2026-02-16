@@ -15,7 +15,7 @@ public interface UserService {
 
     UserProfileUpdateDto login(UserLoginDto userDto);
 
-    UserProfileUpdateDto updateProfile(UserProfileUpdateDto userDto);
+    UserProfileUpdateDto updateProfile(Long userId, UserProfileUpdateDto userDto);
 
     UserProfileUpdateDto getUserById(Long userId);
 

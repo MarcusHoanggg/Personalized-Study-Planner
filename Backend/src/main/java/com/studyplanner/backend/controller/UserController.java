@@ -5,7 +5,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,6 +22,7 @@ import com.studyplanner.backend.dto.UserRegisterDto;
 import com.studyplanner.backend.dto.UserSearchdto;
 import com.studyplanner.backend.security.JwtUtil;
 import com.studyplanner.backend.service.UserService;
+import com.studyplanner.backend.util.SecurityUtils;
 
 import jakarta.validation.Valid;
 
@@ -39,6 +39,7 @@ public class UserController {
         private final UserService userService;
         private final JwtUtil jwtUtil;
         private final UserDetailsService userDetailsService;
+        private final SecurityUtils securityUtils;
 
         // Build user registration
         @PostMapping("/register")
@@ -79,7 +80,8 @@ public class UserController {
         public ResponseEntity<ApiResponse<UserProfileUpdateDto>> updateProfile(
                         @RequestBody UserProfileUpdateDto userDto) {
 
-                UserProfileUpdateDto updatedUser = userService.updateProfile(userDto);
+                Long userId = securityUtils.getAuthenticatedUserId();
+                UserProfileUpdateDto updatedUser = userService.updateProfile(userId, userDto);
 
                 ApiResponse<UserProfileUpdateDto> response = ApiResponse.<UserProfileUpdateDto>builder()
                                 .status(HttpStatus.OK.value())
@@ -91,11 +93,11 @@ public class UserController {
         }
 
         // Build get user by id
-        @GetMapping("/get/{id}")
-        public ResponseEntity<ApiResponse<UserProfileUpdateDto>> getUserById(
-                        @PathVariable Long id) {
+        @GetMapping("/me")
+        public ResponseEntity<ApiResponse<UserProfileUpdateDto>> getUserById() {
 
-                UserProfileUpdateDto user = userService.getUserById(id);
+                Long userId = securityUtils.getAuthenticatedUserId();
+                UserProfileUpdateDto user = userService.getUserById(userId);
 
                 ApiResponse<UserProfileUpdateDto> response = ApiResponse.<UserProfileUpdateDto>builder()
                                 .status(HttpStatus.OK.value())
