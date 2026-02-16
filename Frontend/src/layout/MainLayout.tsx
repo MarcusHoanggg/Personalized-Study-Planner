@@ -18,19 +18,31 @@ export default function MainLayout() {
         <h1 className="text-xl font-bold">Study Planner</h1>
 
         <nav className="flex gap-6 text-sm font-medium">
-          <NavLink to="/dashboard" className={({ isActive }) => isActive ? "text-blue-600" : ""}>
+          <NavLink
+            to="/dashboard"
+            className={({ isActive }) => (isActive ? "text-blue-600" : "")}
+          >
             Dashboard
           </NavLink>
-          <NavLink to="/calendar" className={({ isActive }) => isActive ? "text-blue-600" : ""}>
+          <NavLink
+            to="/calendar"
+            className={({ isActive }) => (isActive ? "text-blue-600" : "")}
+          >
             Calendar
           </NavLink>
-          <NavLink to="/profile" className={({ isActive }) => isActive ? "text-blue-600" : ""}>
+          <NavLink
+            to="/profile"
+            className={({ isActive }) => (isActive ? "text-blue-600" : "")}
+          >
             Profile
           </NavLink>
         </nav>
 
         <div className="flex items-center gap-4">
-          <button onClick={handleLogout} className="text-sm px-3 py-1 border rounded">
+          <button
+            onClick={handleLogout}
+            className="text-sm px-3 py-1 border rounded"
+          >
             Logout
           </button>
           <div className="w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center">
