@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.studyplanner.backend.dto.ApiResponse;
 import com.studyplanner.backend.dto.AuthResponseDto;
 import com.studyplanner.backend.dto.ShareTaskDto;
-import com.studyplanner.backend.dto.TaskDto;
+import com.studyplanner.backend.dto.TaskShareInviteDto;
 import com.studyplanner.backend.dto.UserLoginDto;
 import com.studyplanner.backend.dto.UserProfileUpdateDto;
 import com.studyplanner.backend.dto.UserRegisterDto;
@@ -108,6 +109,123 @@ public class UserController {
                 return new ResponseEntity<>(response, HttpStatus.OK);
         }
 
+        // call search on every keystroke from the frontend
+        @GetMapping("/search")
+        public ResponseEntity<ApiResponse<List<UserSearchdto>>> searchUsers(
+                        @RequestParam String query) {
+
+                Long excludeUserId = securityUtils.getAuthenticatedUserId();
+                List<UserSearchdto> results = userService.searchUsers(query, excludeUserId);
+                return ResponseEntity.ok(
+                                ApiResponse.<List<UserSearchdto>>builder()
+                                                .status(HttpStatus.OK.value())
+                                                .message(results.isEmpty()
+                                                                ? "No users found matching: " + query
+                                                                : results.size() + " user(s) found")
+                                                .data(results)
+                                                .build());
+        }
+
+        // share one or multiple tasks
+        @PostMapping("/share")
+        public ResponseEntity<ApiResponse<List<TaskShareInviteDto>>> shareTasks(
+                        @Valid @RequestBody ShareTaskDto shareTaskDto) {
+
+                // Inject sender from token — client cannot spoof this
+                shareTaskDto.setSenderUserId(securityUtils.getAuthenticatedUserId());
+
+                List<TaskShareInviteDto> invites = userService.shareTasks(shareTaskDto);
+                return ResponseEntity.status(HttpStatus.CREATED).body(
+                                ApiResponse.<List<TaskShareInviteDto>>builder()
+                                                .status(HttpStatus.CREATED.value())
+                                                .message(invites.size() + " invite(s) sent successfully")
+                                                .data(invites)
+                                                .build());
+        }
+
+        @GetMapping("/invites/accept")
+        public ResponseEntity<ApiResponse<TaskShareInviteDto>> acceptViaEmail(
+                        @RequestParam String token) {
+
+                return ResponseEntity.ok(
+                                ApiResponse.<TaskShareInviteDto>builder()
+                                                .status(HttpStatus.OK.value())
+                                                .message("Task accepted and added to your calendar!")
+                                                .data(userService.acceptInvite(token))
+                                                .build());
+        }
+
+        @GetMapping("/invites/decline")
+        public ResponseEntity<ApiResponse<TaskShareInviteDto>> declineViaEmail(
+                        @RequestParam String token) {
+
+                return ResponseEntity.ok(
+                                ApiResponse.<TaskShareInviteDto>builder()
+                                                .status(HttpStatus.OK.value())
+                                                .message("Task invite declined.")
+                                                .data(userService.declineInvite(token))
+                                                .build());
+        }
+
+        @PatchMapping("/invites/accept")
+        public ResponseEntity<ApiResponse<TaskShareInviteDto>> acceptInApp(
+                        @RequestParam String token) {
+
+                return ResponseEntity.ok(
+                                ApiResponse.<TaskShareInviteDto>builder()
+                                                .status(HttpStatus.OK.value())
+                                                .message("Task accepted and added to your calendar!")
+                                                .data(userService.acceptInvite(token))
+                                                .build());
+        }
+
+        @PatchMapping("/invites/decline")
+        public ResponseEntity<ApiResponse<TaskShareInviteDto>> declineInApp(
+                        @RequestParam String token) {
+
+                return ResponseEntity.ok(
+                                ApiResponse.<TaskShareInviteDto>builder()
+                                                .status(HttpStatus.OK.value())
+                                                .message("Task invite declined.")
+                                                .data(userService.declineInvite(token))
+                                                .build());
+        }
+
+        @GetMapping("/invites/pending")
+        public ResponseEntity<ApiResponse<List<TaskShareInviteDto>>> getPendingInvites() {
+                Long userId = securityUtils.getAuthenticatedUserId();
+                List<TaskShareInviteDto> pending = userService.getPendingInvites(userId);
+                return ResponseEntity.ok(
+                                ApiResponse.<List<TaskShareInviteDto>>builder()
+                                                .status(HttpStatus.OK.value())
+                                                .message(pending.size() + " pending invite(s)")
+                                                .data(pending)
+                                                .build());
+        }
+
+        @GetMapping("/invites")
+        public ResponseEntity<ApiResponse<List<TaskShareInviteDto>>> getAllReceivedInvites() {
+                Long userId = securityUtils.getAuthenticatedUserId();
+                List<TaskShareInviteDto> all = userService.getAllReceivedInvites(userId);
+                return ResponseEntity.ok(
+                                ApiResponse.<List<TaskShareInviteDto>>builder()
+                                                .status(HttpStatus.OK.value())
+                                                .message(all.size() + " invite(s) found")
+                                                .data(all)
+                                                .build());
+        }
+
+        @GetMapping("/invites/count")
+        public ResponseEntity<ApiResponse<Long>> countPendingInvites() {
+                return ResponseEntity.ok(
+                                ApiResponse.<Long>builder()
+                                                .status(HttpStatus.OK.value())
+                                                .message("Pending invite count")
+                                                .data(userService.countPendingInvites(
+                                                                securityUtils.getAuthenticatedUserId()))
+                                                .build());
+        }
+
         private AuthResponseDto buildAuthResponse(UserProfileUpdateDto user) {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());
                 String token = jwtUtil.generateToken(Map.of("userId", user.getUserId()), userDetails);
@@ -116,34 +234,4 @@ public class UserController {
                                 .user(user)
                                 .build();
         }
-
-        // call search on every keystroke from the frontend
-        @GetMapping("/search")
-        public ResponseEntity<ApiResponse<List<UserSearchdto>>> searchUsers(
-                        @RequestParam String query,
-                        @RequestParam Long excludeUserId) {
-
-                List<UserSearchdto> results = userService.searchUsers(query, excludeUserId);
-                return ResponseEntity.ok(ApiResponse.<List<UserSearchdto>>builder()
-                                .status(HttpStatus.OK.value())
-                                .message("Users found successfully")
-                                .data(results)
-                                .build());
-        }
-
-        // share one or multiple tasks
-        @PostMapping("/share")
-        public ResponseEntity<ApiResponse<List<TaskDto>>> shareTasks(
-                        @Valid @RequestBody ShareTaskDto shareTaskDto) {
-                List<TaskDto> sharedTasks = userService.shareTasks(shareTaskDto);
-                return ResponseEntity.status(HttpStatus.CREATED).body(
-                                ApiResponse.<List<TaskDto>>builder()
-                                                .status(HttpStatus.CREATED.value())
-                                                .message(sharedTasks.size() + " Task(s) shared successfully")
-                                                .data(sharedTasks)
-                                                .build()
-
-                );
-        }
-
 }
