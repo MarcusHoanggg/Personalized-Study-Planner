@@ -2,7 +2,7 @@ package com.studyplanner.backend.dto;
 
 import java.util.List;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,12 +16,11 @@ import lombok.Setter;
 @Builder
 public class ShareTaskDto {
 
-    @NotNull(message = "Sender user ID is required")
     private Long senderUserId;
 
-    @NotNull(message = "Receiver user ID is required")
-    private Long receiverUserId;
+    @NotEmpty(message = "Receiver is required")
+    private List<Long> receiverUserIds;
 
-    @NotNull(message = "Task ID is required")
+    @NotEmpty(message = "Task is required")
     private List<Long> taskIds;
 }
