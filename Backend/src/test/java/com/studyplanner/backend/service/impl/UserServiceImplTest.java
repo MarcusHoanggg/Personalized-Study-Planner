@@ -189,7 +189,7 @@ class UserServiceImplTest {
             when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
             // Act
-            UserProfileUpdateDto result = userService.updateProfile(updateDto);
+            UserProfileUpdateDto result = userService.updateProfile(1L, updateDto);
 
             // Assert
             assertNotNull(result);
@@ -209,7 +209,7 @@ class UserServiceImplTest {
 
             // Act & Assert
             IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
-                    () -> userService.updateProfile(updateDto));
+                    () -> userService.updateProfile(null, updateDto));
             assertEquals("User ID is required", exception.getMessage());
         }
 
@@ -226,7 +226,7 @@ class UserServiceImplTest {
 
             // Act & Assert
             assertThrows(ResourceNotFoundException.class,
-                    () -> userService.updateProfile(updateDto));
+                    () -> userService.updateProfile(999L, updateDto));
         }
 
         @Test
@@ -242,7 +242,7 @@ class UserServiceImplTest {
             when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
             // Act
-            UserProfileUpdateDto result = userService.updateProfile(updateDto);
+            UserProfileUpdateDto result = userService.updateProfile(1L, updateDto);
 
             // Assert
             assertNotNull(result);

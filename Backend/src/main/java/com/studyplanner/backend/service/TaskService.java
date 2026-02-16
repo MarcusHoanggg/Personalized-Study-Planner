@@ -3,7 +3,6 @@ package com.studyplanner.backend.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
-
 import com.studyplanner.backend.dto.TaskDto;
 import com.studyplanner.backend.entity.Task.Priority;
 import com.studyplanner.backend.entity.Task.Status;
@@ -40,7 +39,7 @@ public interface TaskService {
 
     // -----UPDATE-------
     // update task by id
-    TaskDto updateTask(Long taskId, TaskDto taskDto);
+    TaskDto updateTask(Long userId, Long taskId, TaskDto taskDto);
 
     // Mark task as completed
     TaskDto markTaskAsCompleted(Long taskId, Long userId, boolean completed);

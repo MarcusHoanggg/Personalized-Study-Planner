@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 // using lombok as it automatically generates getters and setters
 
@@ -33,6 +34,10 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id", nullable = false)
     private Long id;
+
+    // public Id for safe exposure to the client, not the database ID
+    @Column(name = "public_id", unique = true, nullable = false, updatable = false)
+    private String publicId;
 
     @Column(name = "first_name")
     private String firstName;
@@ -66,5 +71,13 @@ public class User {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    // auto generate publicId when creating a new user
+    @PrePersist
+    public void generatePublicId() {
+        if (this.publicId == null) {
+            this.publicId = UUID.randomUUID().toString();
+        }
+    }
 
 }
