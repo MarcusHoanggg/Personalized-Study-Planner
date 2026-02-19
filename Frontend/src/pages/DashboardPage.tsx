@@ -1,25 +1,42 @@
 
 import { useEffect, useState } from "react";
-import { getTasks, createTask } from "../services/tasks";
 import PageHeader from "../ui/PageHeader";
 import StatsCard from "../ui/StatsCard";
 import Input from "../ui/Input";
 import Select from "../ui/Select";
 import Button from "../ui/Button";
 import EmptyState from "../ui/EmptyState";
-import type { Task } from "../types";
+import type { Task, TaskStatus } from "../types";
 import TaskCard from "../components/TaskCard";
 import NewTaskModal from "../components/NewTaskModal";
+import EditTaskModal from "../components/EditTaskModal";
+
+type StatusFilter = "all" | TaskStatus;
+type SortBy = "created" | "deadline" | "priority";
 
 export default function DashboardPage() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState<"all" | Task["status"]>("all");
-  const [showModal, setShowModal] = useState(false);
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
+  const [sortBy, setSortBy] = useState<SortBy>("created");
 
+  const [showNewModal, setShowNewModal] = useState(false);
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
+
+  // NEW: controls which TaskCard menu is open
+  const [openMenuId, setOpenMenuId] = useState<string | null>(null);
+
+  // Load tasks
   useEffect(() => {
-    getTasks().then((data) => setTasks(data));
+    const saved = localStorage.getItem("tasks");
+    if (saved) setTasks(JSON.parse(saved));
   }, []);
+
+  // Save tasks
+  useEffect(() => {
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+  }, [tasks]);
 
   const stats = {
     total: tasks.length,
@@ -34,31 +51,96 @@ export default function DashboardPage() {
     return matchesStatus && matchesSearch;
   });
 
-  const handleCreateTask = async (task: Task) => {
-    const newTask = await createTask(task);
-    setTasks((prev) => [...prev, newTask]);
+  let sorted = [...filtered];
+
+  if (sortBy === "created") {
+    sorted.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  } else if (sortBy === "deadline") {
+    sorted.sort(
+      (a, b) =>
+        new Date(a.deadline ?? 0).getTime() -
+        new Date(b.deadline ?? 0).getTime()
+    );
+  } else if (sortBy === "priority") {
+    const order = { high: 3, medium: 2, low: 1 };
+    sorted.sort(
+      (a, b) =>
+        (order[b.priority ?? "medium"] ?? 2) -
+        (order[a.priority ?? "medium"] ?? 2)
+    );
+  }
+
+  // CREATE
+  const handleCreateTask = (task: Task) => {
+    setTasks((prev) => [...prev, task]);
+  };
+
+  // UPDATE
+  const handleUpdateTask = (updated: Task) => {
+    setTasks((prev) => prev.map((t) => (t.id === updated.id ? updated : t)));
+  };
+
+  // DELETE
+  const handleDeleteTask = (id: string) => {
+    setDeleteId(id);
+  };
+
+  const confirmDelete = () => {
+    if (!deleteId) return;
+    setTasks((prev) => prev.filter((t) => t.id !== deleteId));
+    setDeleteId(null);
   };
 
   return (
     <div className="animate-pageFade">
       <PageHeader title="Dashboard" subtitle="Overview of your study tasks">
-        <Button onClick={() => setShowModal(true)}>+ New Task</Button>
+        <Button onClick={() => setShowNewModal(true)}>+ New Task</Button>
       </PageHeader>
 
-      {showModal && (
+      {/* NEW TASK MODAL */}
+      {showNewModal && (
         <NewTaskModal
-          onClose={() => setShowModal(false)}
+          onClose={() => setShowNewModal(false)}
           onCreate={handleCreateTask}
         />
       )}
 
-      <div className="grid grid-cols-4 gap-4 mb-6">
+      {/* EDIT TASK MODAL */}
+      {editingTask && (
+        <EditTaskModal
+          task={editingTask}
+          onClose={() => setEditingTask(null)}
+          onSave={handleUpdateTask}
+        />
+      )}
+
+      {/* DELETE CONFIRMATION */}
+      {deleteId && (
+        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="bg-white dark:bg-slate-900 rounded-xl p-5 w-full max-w-sm shadow-xl">
+            <h3 className="text-lg font-semibold mb-2">Delete task?</h3>
+            <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
+              This action cannot be undone.
+            </p>
+            <div className="flex justify-end gap-3">
+              <Button variant="outline" onClick={() => setDeleteId(null)}>
+                Cancel
+              </Button>
+              <Button onClick={confirmDelete}>Delete</Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* STATS */}
+      <div className="grid grid-cols-4 gap-7 mb-6">
         <StatsCard label="Total Tasks" value={stats.total} />
         <StatsCard label="To Do" value={stats.todo} />
         <StatsCard label="In Progress" value={stats.inProgress} />
         <StatsCard label="Completed" value={stats.completed} />
       </div>
 
+      {/* FILTERS */}
       <div className="flex items-center gap-4 mb-6">
         <Input
           placeholder="Search tasks..."
@@ -68,9 +150,7 @@ export default function DashboardPage() {
 
         <Select
           value={statusFilter}
-          onChange={(e) =>
-            setStatusFilter(e.target.value as "all" | Task["status"])
-          }
+          onChange={(e) => setStatusFilter(e.target.value as StatusFilter)}
         >
           <option value="all">All Status</option>
           <option value="todo">To Do</option>
@@ -78,37 +158,34 @@ export default function DashboardPage() {
           <option value="completed">Completed</option>
         </Select>
 
-        <Select>
-          <option>Created Date</option>
-          <option>Deadline</option>
-          <option>Priority</option>
+        <Select
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value as SortBy)}
+        >
+          <option value="created">Created Date</option>
+          <option value="deadline">Deadline</option>
+          <option value="priority">Priority</option>
         </Select>
       </div>
 
-      {filtered.length === 0 ? (
+      {/* TASK LIST */}
+      {sorted.length === 0 ? (
         <EmptyState message="No tasks yet. Create your first task to get started!" />
       ) : (
-        <div className="space-y-3">
-  {filtered
-    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-    .map((t) => (
-      <TaskCard
-        key={t.id}
-        task={t}
-        onUpdate={(updated) =>
-          setTasks((prev) =>
-            prev.map((task) => (task.id === updated.id ? updated : task))
-          )
-        }
-        onDelete={(id) =>
-          setTasks((prev) => prev.filter((task) => task.id !== id))
-        }
-      />
-    ))}
-</div>
+        <div className="space-y-3 relative overflow-visible">
+          {sorted.map((t) => (
+            <TaskCard
+              task={t}
+              onUpdate={handleUpdateTask}
+              onDelete={handleDeleteTask}
+              onEdit={(task) => setEditingTask(task)}
+              openMenuId={openMenuId}
+              setOpenMenuId={setOpenMenuId}
+            />
 
+          ))}
+        </div>
       )}
     </div>
   );
 }
-

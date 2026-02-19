@@ -1,5 +1,7 @@
 package com.studyplanner.backend.dto;
 
+import java.time.LocalDateTime;
+
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,6 +26,6 @@ public class UserProfileUpdateDto {
     private String lastName;
     private String email; // Read-only in response; never updated
     private String profilePicture;
-    private String createdAt;
-    private String updatedAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 }

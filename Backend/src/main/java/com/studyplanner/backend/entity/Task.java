@@ -17,7 +17,7 @@ import java.util.List;
 @Data
 @Builder
 
-public class Tasks {
+public class Task {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)

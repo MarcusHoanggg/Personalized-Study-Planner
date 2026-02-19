@@ -6,8 +6,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.security.AuthProvider;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 
 // using lombok as it automatically generates getters and setters
 
@@ -24,7 +25,7 @@ import java.util.List;
 public class User {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Tasks> tasks;
+    private List<Task> tasks;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<SuggestedLLM> suggestedTasks;
@@ -34,34 +35,49 @@ public class User {
     @Column(name = "user_id", nullable = false)
     private Long id;
 
-    @Column(name = "first_name")
+    // public Id for safe exposure to the client, not the database ID
+    @Column(name = "public_id", unique = true, nullable = false, updatable = false)
+    private String publicId;
+
+    @Column(name = "first_name", nullable = false)
     private String firstName;
 
-    @Column(name = "last_name")
+    @Column(name = "last_name", nullable = true)
     private String lastName;
 
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 
     @Column(name = "password_hash")
-    // depending on if the users signs in from google account idk if to keep this as
-    // null or not
-    private String passwordHash;
+    private String password;
 
-//    @Enumerated(EnumType.STRING)
-//    @Column(nullable = false)
-//    private AuthProvider provider;
+    @Column(name = "google_id", unique = true)
+    private String googleId; // Google OAuth2 unique identifier for the user
 
-    @Column
-    private String providerId;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "auth_provider")
+    private AuthProvider authProvider; // LOCAL or GOOGLE
+
+    public enum AuthProvider {
+        LOCAL, // for email/password signups
+        GOOGLE // for Google OAuth2 signups
+    }
 
     @Column(name = "profile_picture")
     private String profilePicture;
 
     @Column(name = "created_at")
-    private String createdAt;
+    private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
-    private String updatedAt;
+    private LocalDateTime updatedAt;
+
+    // auto generate publicId when creating a new user
+    @PrePersist
+    public void generatePublicId() {
+        if (this.publicId == null) {
+            this.publicId = UUID.randomUUID().toString();
+        }
+    }
 
 }
