@@ -25,15 +25,24 @@ public class LlmClient {
 
 
     public String sendPrompt(String prompt) {
+        String systemInstruction = """
+                You are a helpful study planner assistant.
+                        You create clear, realistic study tasks.
+                        Always respond in a structured way.
+                """;
+
         String requestBody = """
-            {
-              "contents": [
                 {
-                  "parts": [{ "text": "%s" }]
+                "systemInstruction": {
+                            "parts": [{ "text": %s }]
+                          },
+                  "contents": [
+                    {
+                      "parts": [{ "text": "%s" }]
+                    }
+                  ]
                 }
-              ]
-            }
-            """.formatted(prompt);
+                """.formatted(prompt);
 
 
 // ollama string body
