@@ -13,7 +13,7 @@ import com.studyplanner.backend.entity.TaskShareInvite.InviteStatus;
 public interface TaskShareInviteRepository extends JpaRepository<TaskShareInvite, Long> {
 
     // Find invite by invite token
-    Optional<TaskShareInvite> findByToken(String inviteToken);
+    Optional<TaskShareInvite> findByInviteToken(String inviteToken);
 
     // All pending invites for a given receiver in app notifications
     List<TaskShareInvite> findByReceiverIdAndStatus(Long receiverId, InviteStatus status);

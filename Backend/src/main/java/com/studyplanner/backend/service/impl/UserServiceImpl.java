@@ -178,7 +178,7 @@ public class UserServiceImpl implements UserService {
             for (Task task : tasks) {
 
                 if (inviteRepository.existsByReceiverIdAndTaskIdAndStatus(
-                        task.getId(), recipient.getId(), InviteStatus.PENDING)) {
+                        recipient.getId(), task.getId(), InviteStatus.PENDING)) {
                     log.info("Skipping duplicate invite: task {} → recipient {}",
                             task.getId(), recipient.getId());
                     continue;
@@ -222,8 +222,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public TaskShareInviteDto acceptInvite(String token) {
-        TaskShareInvite invite = inviteRepository.findByTokenWithDetails(token)
+    public TaskShareInviteDto acceptInvite(String inviteToken) {
+        TaskShareInvite invite = inviteRepository.findByTokenWithDetails(inviteToken)
                 .orElseThrow(() -> new ResourceNotFoundException("Invite not found"));
 
         if (invite.getStatus() != InviteStatus.PENDING) {
@@ -264,8 +264,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public TaskShareInviteDto declineInvite(String token) {
-        TaskShareInvite invite = inviteRepository.findByTokenWithDetails(token)
+    public TaskShareInviteDto declineInvite(String inviteToken) {
+        TaskShareInvite invite = inviteRepository.findByTokenWithDetails(inviteToken)
                 .orElseThrow(() -> new ResourceNotFoundException("Invite not found"));
 
         if (invite.getStatus() != InviteStatus.PENDING) {
