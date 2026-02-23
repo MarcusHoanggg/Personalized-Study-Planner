@@ -63,6 +63,7 @@ import { BookOpenIcon } from "@heroicons/react/24/solid";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   const handleLogin = () => {
@@ -86,7 +87,7 @@ export default function LoginPage() {
         </Button>
 
         <div className="text-center text-xs text-gray-500 mb-4">
-          OR CONTINUE WITH EMAIL
+          ----------OR CONTINUE WITH EMAIL----------
         </div>
 
         <label className="block mb-1 text-sm text-gray-700">Email</label>
@@ -96,6 +97,14 @@ export default function LoginPage() {
           onChange={(e) => setEmail(e.target.value)}
           className="mb-6"
         />
+        <label className="block mb-1 text-sm text-gray-700">Password</label>
+        <Input
+          placeholder="Enter your password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="mb-6"
+        />
+        
 
         <Button className="w-full mb-4" onClick={handleLogin}>
           Sign In

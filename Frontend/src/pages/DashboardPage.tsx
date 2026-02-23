@@ -120,7 +120,7 @@ export default function DashboardPage() {
           <div className="bg-white dark:bg-slate-900 rounded-xl p-5 w-full max-w-sm shadow-xl">
             <h3 className="text-lg font-semibold mb-2">Delete task?</h3>
             <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
-              This action cannot be undone.
+              Are you sure you want to delete it ?
             </p>
             <div className="flex justify-end gap-3">
               <Button variant="outline" onClick={() => setDeleteId(null)}>
