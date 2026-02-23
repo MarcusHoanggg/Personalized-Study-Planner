@@ -29,6 +29,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable).sessionManagement(sess -> sess
+        http.csrf(csrf -> csrf.disable()).sessionManagement(sess -> sess
                 // must be IF_REQUIRED for OAuth2 - Google redirect needs a brief session to
                 // carry state. JWT takes over after.
                 .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))

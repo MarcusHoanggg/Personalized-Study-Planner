@@ -41,7 +41,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         OAuth2User oauth2User = (OAuth2User) authentication.getPrincipal();
 
         String email = oauth2User.getAttribute("email");
-        String googleId = oauth2User.getAttribute("sub");
+        String googleId = oauth2User.getAttribute("sub"); // Google's unique ID for the user
         String firstName = oauth2User.getAttribute("name");
 
         // Check if user already exists in the database
