@@ -10,8 +10,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableAsync
 public class PersonalizedStudyPlannerApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(PersonalizedStudyPlannerApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(PersonalizedStudyPlannerApplication.class, args);
+    }
 
 }
