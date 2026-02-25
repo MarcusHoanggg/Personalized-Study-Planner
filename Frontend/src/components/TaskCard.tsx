@@ -24,16 +24,18 @@ export default function TaskCard({
   const priority = task.priority ?? "medium";
   const description = task.description ?? "";
 
+  // Pastel priority colors
   const priorityColors = {
-    high: "border-purple-500 bg-purple-50 text-purple-700",
-    medium: "border-green-500 bg-green-50 text-green-700",
-    low: "border-yellow-500 bg-yellow-50 text-yellow-700",
+    high: "bg-red-100 text-red-700 border-red-300",
+    medium: "bg-purple-100 text-purple-700 border-purple-300",
+    low: "bg-blue-100 text-blue-700 border-blue-300",
   };
 
+  // Soft pastel left border
   const borderColor = {
-    high: "border-l-4 border-purple-500",
-    medium: "border-l-4 border-green-500",
-    low: "border-l-4 border-yellow-500",
+    high: "border-l-4 border-red-300",
+    medium: "border-l-4 border-purple-300",
+    low: "border-l-4 border-blue-300",
   };
 
   const isOpen = openMenuId === task.id;
@@ -58,11 +60,23 @@ export default function TaskCard({
 
   return (
     <div
-      className={`relative bg-white dark:bg-slate-800 shadow-md rounded-lg p-5 mb-3 transition-all hover:shadow-lg overflow-visible ${borderColor[priority]}`}
+      className={`
+        relative 
+        bg-white 
+        rounded-2xl 
+        p-5 
+        mb-4 
+        shadow-sm 
+        hover:shadow-md 
+        transition-all 
+        border 
+        border-gray-100 
+        ${borderColor[priority]}
+      `}
     >
       {/* Three dots */}
       <button
-        className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+        className="absolute top-3 right-3 text-gray-400 hover:text-gray-600"
         onClick={(e) => {
           e.stopPropagation();
           setOpenMenuId(isOpen ? null : task.id);
@@ -80,28 +94,18 @@ export default function TaskCard({
             right-2 
             top-12 
             bg-white 
-            dark:bg-slate-800 
-            shadow-xl 
-            rounded-lg 
+            shadow-lg 
+            rounded-xl 
             w-44 
             z-[9999] 
             border 
             border-gray-200 
-            dark:border-slate-700 
             py-2
+            animate-fadeIn
           "
         >
-            {/* Close button */}
-            <div className="flex justify-end px-3 pb-1">
-              <button
-                className="text-gray-400 hover:text-gray-600"
-                onClick={() => setOpenMenuId(null)}
-              >
-                ✖
-              </button>
-            </div>
           <button
-            className="block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-slate-700"
+            className="block w-full text-left px-4 py-2 hover:bg-purple-50"
             onClick={() => {
               setOpenMenuId(null);
               onEdit(task);
@@ -110,16 +114,16 @@ export default function TaskCard({
             ✏️ Edit
           </button>
 
-          <button className="block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-slate-700">
+          <button className="block w-full text-left px-4 py-2 hover:bg-purple-50">
             ⏰ Set Reminder
           </button>
 
-          <button className="block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-slate-700">
+          <button className="block w-full text-left px-4 py-2 hover:bg-purple-50">
             🔗 Share
           </button>
 
           <button
-            className="block w-full text-left px-4 py-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30"
+            className="block w-full text-left px-4 py-2 text-red-600 hover:bg-red-50"
             onClick={() => {
               setOpenMenuId(null);
               onDelete(task.id);
@@ -131,43 +135,48 @@ export default function TaskCard({
       )}
 
       {/* CARD CONTENT */}
-      <div className="flex items-start gap-3">
+      <div className="flex items-start gap-4">
         {/* Checkbox */}
         <button
           onClick={toggleComplete}
-          className={`mt-1 w-5 h-5 rounded-full border-2 flex items-center justify-center ${
-            task.status === "completed"
-              ? "bg-green-500 border-green-500"
-              : "border-gray-400"
-          }`}
+          className={`
+            mt-1 w-6 h-6 rounded-full border-2 flex items-center justify-center transition
+            ${
+              task.status === "completed"
+                ? "bg-green-400 border-green-400"
+                : "border-gray-300"
+            }
+          `}
         >
           {task.status === "completed" && (
-            <span className="text-white text-xs">✓</span>
+            <span className="text-white text-sm">✓</span>
           )}
         </button>
 
         <div className="flex-1">
           <h3
-            className={`text-lg font-semibold ${
-              task.status === "completed" ? "line-through text-gray-400" : ""
-            }`}
+            className={`
+              text-lg font-semibold 
+              ${task.status === "completed" ? "line-through text-gray-400" : "text-gray-800"}
+            `}
           >
             {task.title}
           </h3>
 
           {description && (
-            <p className="text-sm text-gray-600 dark:text-gray-300">
-              {description}
-            </p>
+            <p className="text-sm text-gray-600 mt-1">{description}</p>
           )}
 
-          <p className="text-xs text-gray-400 mt-1">
+          <p className="text-xs text-gray-400 mt-2">
             Created on: {new Date(task.createdAt).toLocaleDateString()}
           </p>
 
-          <div className="flex items-center gap-2 mt-2">
+          <div className="flex items-center gap-3 mt-3">
             <span
-              className={`px-2 py-1 text-xs font-medium rounded-full ${priorityColors[priority]}`}
+              className={`
+                px-3 py-1 text-xs font-medium rounded-full border 
+                ${priorityColors[priority]}
+              `}
             >
               {priority.charAt(0).toUpperCase() + priority.slice(1)} Priority
             </span>

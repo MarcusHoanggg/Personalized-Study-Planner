@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import {
   startOfMonth,
@@ -101,8 +102,13 @@ export default function CalendarPage() {
   };
 
   return (
-    <div>
-      <PageHeader title="Calendar" subtitle="View your schedule and deadlines">
+    <div className="space-y-6">
+
+      {/* HEADER */}
+      <PageHeader
+        title="Calendar"
+        subtitle="View your schedule and deadlines"
+      >
         <div className="flex gap-3">
           <input
             type="file"
@@ -114,6 +120,7 @@ export default function CalendarPage() {
 
           <Button
             variant="outline"
+            className="border-purple-300 text-purple-600 hover:bg-purple-100"
             onClick={() =>
               document.getElementById("icsUpload")?.click()
             }
@@ -121,17 +128,25 @@ export default function CalendarPage() {
             Import from Google Calendar
           </Button>
 
-          <Button onClick={() => setShowAddEvent(true)}>Add Event</Button>
+          <Button
+            className="bg-purple-500 hover:bg-purple-600 text-white"
+            onClick={() => setShowAddEvent(true)}
+          >
+            Add Event
+          </Button>
         </div>
       </PageHeader>
 
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
         {/* LEFT SIDE — Calendar */}
-        <Card className="col-span-2">
+        <Card className="lg:col-span-2 rounded-3xl border border-purple-100 shadow-sm">
+
           {/* Month Navigation */}
-          <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center justify-between mb-6">
             <Button
               variant="outline"
+              className="border-purple-300 text-purple-600 hover:bg-purple-100"
               onClick={() =>
                 setCurrentMonth((prev) => subMonths(prev, 1))
               }
@@ -139,10 +154,13 @@ export default function CalendarPage() {
               Previous
             </Button>
 
-            <h3>{format(currentMonth, "MMMM yyyy")}</h3>
+            <h3 className="text-xl font-semibold text-purple-700">
+              {format(currentMonth, "MMMM yyyy")}
+            </h3>
 
             <Button
               variant="outline"
+              className="border-purple-300 text-purple-600 hover:bg-purple-100"
               onClick={() =>
                 setCurrentMonth((prev) => addMonths(prev, 1))
               }
@@ -152,7 +170,7 @@ export default function CalendarPage() {
           </div>
 
           {/* Calendar Grid */}
-          <div className="grid grid-cols-7 gap-2">
+          <div className="grid grid-cols-7 gap-3">
             {days.map((day) => {
               const iso = format(day, "yyyy-MM-dd");
               const isSelected = iso === selectedDate;
@@ -162,16 +180,15 @@ export default function CalendarPage() {
                 <button
                   key={iso}
                   onClick={() => setSelectedDate(iso)}
-                  className={`p-3 rounded-lg text-center transition
-                    ${
-                      isSelected
-                        ? "bg-blue-600 text-white"
-                        : "bg-gray-100 dark:bg-slate-700 hover:bg-blue-100 dark:hover:bg-slate-600"
+                  className={`
+                    p-3 rounded-xl text-center transition shadow-sm
+                    ${isSelected
+                      ? "bg-purple-500 text-white shadow-md"
+                      : "bg-purple-50 hover:bg-purple-100"
                     }
-                    ${
-                      !isSelected && isToday
-                        ? "border-2 border-blue-600"
-                        : ""
+                    ${!isSelected && isToday
+                      ? "border-2 border-purple-400"
+                      : ""
                     }
                   `}
                 >
@@ -183,19 +200,26 @@ export default function CalendarPage() {
         </Card>
 
         {/* RIGHT SIDE — Events */}
-        <Card>
-          <h3>{format(new Date(selectedDate), "MMMM d, yyyy")}</h3>
-          <p>{selectedEvents.length} item(s) scheduled</p>
+        <Card className="rounded-3xl border border-purple-100 shadow-sm">
+          <h3 className="text-lg font-semibold text-purple-700">
+            {format(new Date(selectedDate), "MMMM d, yyyy")}
+          </h3>
+          <p className="text-gray-500">
+            {selectedEvents.length} item(s) scheduled
+          </p>
 
           {selectedEvents.length === 0 ? (
-            <p className="text-gray-500 dark:text-slate-400 mt-2">
+            <p className="text-gray-500 mt-3">
               No tasks or events scheduled for this day.
             </p>
           ) : (
-            <ul className="mt-4 space-y-2">
+            <ul className="mt-4 space-y-3">
               {selectedEvents.map((e) => (
-                <li key={e.id}>
-                  <strong>{e.title}</strong>
+                <li
+                  key={e.id}
+                  className="p-3 bg-purple-50 rounded-xl border border-purple-100"
+                >
+                  <strong className="text-purple-700">{e.title}</strong>
                   <p className="text-sm text-gray-500">{e.type}</p>
                 </li>
               ))}
@@ -206,28 +230,33 @@ export default function CalendarPage() {
 
       {/* ADD EVENT MODAL */}
       {showAddEvent && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <Card className="w-full max-w-md">
-            <h3 className="mb-2">
+        <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50">
+          <Card className="w-full max-w-md rounded-3xl border border-purple-100 shadow-xl p-6">
+
+            <h3 className="text-xl font-semibold text-purple-700 mb-4">
               Add a new event to{" "}
               {format(new Date(selectedDate), "MMMM d, yyyy")}
             </h3>
 
-            <label className="block mb-1">Event Title</label>
+            <label className="block text-sm font-medium text-gray-600 mb-1">
+              Event Title
+            </label>
             <Input
               placeholder="e.g., Physics Lecture"
               value={newTitle}
               onChange={(e) => setNewTitle(e.target.value)}
-              className="mb-4"
+              className="mb-4 bg-purple-50/40 border-purple-200 focus:border-purple-400"
             />
 
-            <label className="block mb-1">Event Type</label>
+            <label className="block text-sm font-medium text-gray-600 mb-1">
+              Event Type
+            </label>
             <Select
               value={newType}
               onChange={(e) =>
                 setNewType(e.target.value as EventType)
               }
-              className="mb-4"
+              className="mb-4 bg-purple-50/40 border-purple-200 focus:border-purple-400"
             >
               <option value="Class">Class</option>
               <option value="Exam">Exam</option>
@@ -235,14 +264,21 @@ export default function CalendarPage() {
               <option value="Other">Other</option>
             </Select>
 
-            <div className="flex justify-end gap-3 mt-4">
+            <div className="flex justify-end gap-3 mt-6">
               <Button
                 variant="outline"
+                className="border-purple-300 text-purple-600 hover:bg-purple-100"
                 onClick={() => setShowAddEvent(false)}
               >
                 Cancel
               </Button>
-              <Button onClick={handleAddEvent}>Add Event</Button>
+
+              <Button
+                className="bg-purple-500 hover:bg-purple-600 text-white"
+                onClick={handleAddEvent}
+              >
+                Add Event
+              </Button>
             </div>
           </Card>
         </div>
@@ -250,3 +286,4 @@ export default function CalendarPage() {
     </div>
   );
 }
+

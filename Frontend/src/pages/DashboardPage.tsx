@@ -24,7 +24,6 @@ export default function DashboardPage() {
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
-  // NEW: controls which TaskCard menu is open
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
 
   // Load tasks
@@ -70,17 +69,14 @@ export default function DashboardPage() {
     );
   }
 
-  // CREATE
   const handleCreateTask = (task: Task) => {
     setTasks((prev) => [...prev, task]);
   };
 
-  // UPDATE
   const handleUpdateTask = (updated: Task) => {
     setTasks((prev) => prev.map((t) => (t.id === updated.id ? updated : t)));
   };
 
-  // DELETE
   const handleDeleteTask = (id: string) => {
     setDeleteId(id);
   };
@@ -92,9 +88,19 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="animate-pageFade">
-      <PageHeader title="Dashboard" subtitle="Overview of your study tasks">
-        <Button onClick={() => setShowNewModal(true)}>+ New Task</Button>
+    <div className="animate-pageFade space-y-8">
+
+      {/* HEADER */}
+      <PageHeader
+        title="Dashboard"
+        subtitle="Overview of your study tasks"
+      >
+        <Button
+          className="bg-purple-500 hover:bg-purple-600 text-white shadow-md"
+          onClick={() => setShowNewModal(true)}
+        >
+          + New Task
+        </Button>
       </PageHeader>
 
       {/* NEW TASK MODAL */}
@@ -116,41 +122,54 @@ export default function DashboardPage() {
 
       {/* DELETE CONFIRMATION */}
       {deleteId && (
-        <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
-          <div className="bg-white dark:bg-slate-900 rounded-xl p-5 w-full max-w-sm shadow-xl">
-            <h3 className="text-lg font-semibold mb-2">Delete task?</h3>
-            <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
-              This action cannot be undone.
+        <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white rounded-3xl p-6 w-full max-w-sm shadow-xl border border-purple-100">
+            <h3 className="text-lg font-semibold text-purple-700 mb-2">
+              Delete task?
+            </h3>
+            <p className="text-sm text-gray-600 mb-4">
+              Are you sure you want to delete this task?
             </p>
             <div className="flex justify-end gap-3">
-              <Button variant="outline" onClick={() => setDeleteId(null)}>
+              <Button
+                variant="outline"
+                className="border-purple-300 text-purple-600 hover:bg-purple-100"
+                onClick={() => setDeleteId(null)}
+              >
                 Cancel
               </Button>
-              <Button onClick={confirmDelete}>Delete</Button>
+              <Button
+                className="bg-red-500 hover:bg-red-600 text-white"
+                onClick={confirmDelete}
+              >
+                Delete
+              </Button>
             </div>
           </div>
         </div>
       )}
 
       {/* STATS */}
-      <div className="grid grid-cols-4 gap-7 mb-6">
-        <StatsCard label="Total Tasks" value={stats.total} />
-        <StatsCard label="To Do" value={stats.todo} />
-        <StatsCard label="In Progress" value={stats.inProgress} />
-        <StatsCard label="Completed" value={stats.completed} />
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <StatsCard label="Total Tasks" value={stats.total} color="purple" />
+        <StatsCard label="To Do" value={stats.todo} color="blue" />
+        <StatsCard label="In Progress" value={stats.inProgress} color="yellow" />
+        <StatsCard label="Completed" value={stats.completed} color="green" />
       </div>
 
       {/* FILTERS */}
-      <div className="flex items-center gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full mt-6">
         <Input
           placeholder="Search tasks..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
+          className="bg-white border-purple-200 focus:border-purple-400"
         />
 
         <Select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value as StatusFilter)}
+          className="bg-white border-purple-200 focus:border-purple-400"
         >
           <option value="all">All Status</option>
           <option value="todo">To Do</option>
@@ -161,6 +180,7 @@ export default function DashboardPage() {
         <Select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value as SortBy)}
+          className="bg-white border-purple-200 focus:border-purple-400"
         >
           <option value="created">Created Date</option>
           <option value="deadline">Deadline</option>
@@ -172,9 +192,10 @@ export default function DashboardPage() {
       {sorted.length === 0 ? (
         <EmptyState message="No tasks yet. Create your first task to get started!" />
       ) : (
-        <div className="space-y-3 relative overflow-visible">
+        <div className="space-y-4 relative overflow-visible">
           {sorted.map((t) => (
             <TaskCard
+              key={t.id}
               task={t}
               onUpdate={handleUpdateTask}
               onDelete={handleDeleteTask}
@@ -182,7 +203,6 @@ export default function DashboardPage() {
               openMenuId={openMenuId}
               setOpenMenuId={setOpenMenuId}
             />
-
           ))}
         </div>
       )}
