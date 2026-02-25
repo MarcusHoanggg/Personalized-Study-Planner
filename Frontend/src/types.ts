@@ -3,6 +3,8 @@
 // =========================
 
 export type TaskStatus = "todo" | "in_progress" | "completed";
+
+
  
 export interface Task {
   id: string;
@@ -37,4 +39,11 @@ export interface CalendarEvent {
   title: string;
   type: EventType;
   date: string; // ISO format: "2026-01-19"
+}
+
+// =========================
+interface StatsCardProps {
+  label: string;
+  value: number;
+  color?: "purple" | "blue" | "yellow" | "green";
 }

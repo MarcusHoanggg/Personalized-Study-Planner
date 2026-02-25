@@ -1,3 +1,4 @@
+
 interface AvatarProps {
   name: string;
   size?: "md" | "lg";
@@ -11,9 +12,18 @@ export default function Avatar({ name, size = "md" }: AvatarProps) {
 
   return (
     <div
-      className={`rounded-full bg-blue-600 text-white flex items-center justify-center font-semibold ${sizes[size]}`}
+      className={`
+        rounded-full 
+        bg-purple-300 
+        text-purple-900 
+        flex items-center justify-center 
+        font-semibold 
+        ${sizes[size]}
+        shadow-sm
+      `}
     >
       {name?.charAt(0).toUpperCase()}
     </div>
   );
 }
+
