@@ -14,8 +14,7 @@ public interface TaskShareInviteRepository extends JpaRepository<TaskShareInvite
 
     // Find invite by invite token
     Optional<TaskShareInvite> findByInviteToken(String inviteToken);
-    Optional<TaskShareInvite> findByToken(String inviteToken);
-
+  
     // All pending invites for a given receiver in app notifications
     List<TaskShareInvite> findByReceiverIdAndStatus(Long receiverId, InviteStatus status);
 

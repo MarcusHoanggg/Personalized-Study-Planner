@@ -37,6 +37,7 @@ public class SecurityConfig {
                         "/api/v1/users/register",
                         "/api/v1/users/login",
                         "/oauth2/**",
+                        "/",
                         "/login/oauth2/**").permitAll()
                         .requestMatchers("/api/llm/**").permitAll()
 
