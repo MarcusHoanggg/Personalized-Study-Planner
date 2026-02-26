@@ -17,7 +17,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git credentialsId: 'Github', url: 'https://github.com/MarcusHoanggg/Personalized-Study-Planner', branch: 'main'
+                git credentialsId: 'Github', url: 'https://github.com/MarcusHoanggg/Personalized-Study-Planner', branch: 'musti'
             }
         }
         stage('Build') {
