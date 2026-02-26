@@ -12,7 +12,6 @@ pipeline {
         DOCKER_IMAGE_TAG = 'p1'
     }
 
-
     stages {
         stage('Checkout') {
             steps {
@@ -21,15 +20,14 @@ pipeline {
         }
         stage('Build') {
             steps {
-                dir("Backend") {
+                dir('Backend') {
                     bat 'mvn clean install'
                 }
             }
         }
         stage('Test') {
             steps {
-                dir("Backend") {
-
+                dir('Backend') {
                     bat 'mvn test'
                 }
             }
@@ -41,12 +39,11 @@ pipeline {
             }
         }
 
-
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build("${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}", "./Backend")
-                    docker.build("${DOCKERHUB_REPO}:${DOCKER_IMAGE_TAG}", "./Frontend")
+                    docker.build("${DOCKERHUB_REPO}/backend:${DOCKER_IMAGE_TAG}", "./Backend")
+                    docker.build("${DOCKERHUB_REPO}/frontend:${DOCKER_IMAGE_TAG}", "./Frontend")
                 }
             }
         }
@@ -55,15 +52,11 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CREDENTIALS_ID) {
-                        docker.image("${DOCKERHUB_REPO}/Backend:${DOCKER_IMAGE_TAG}").push()
-                        docker.image($ { DOCKERHUB_REPO }: /frontend:${DOCKER_IMAGE_TAG}").push()
+                        docker.image("${DOCKERHUB_REPO}/backend:${DOCKER_IMAGE_TAG}").push()
+                        docker.image("${DOCKERHUB_REPO}/frontend:${DOCKER_IMAGE_TAG}").push()
                     }
                 }
             }
         }
-
-
-
-
     }
 }
