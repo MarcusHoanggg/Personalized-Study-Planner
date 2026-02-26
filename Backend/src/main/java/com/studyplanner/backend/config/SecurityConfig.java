@@ -23,41 +23,44 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtAuthFilter jwtAuthFilter;
-    private final OAuth2SuccessHandler oAuth2SuccessHandler;
+        private final JwtAuthFilter jwtAuthFilter;
+        private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable).sessionManagement(sess -> sess
-        http.csrf(csrf -> csrf.disable()).sessionManagement(sess -> sess
-                // must be IF_REQUIRED for OAuth2 - Google redirect needs a brief session to
-                // carry state. JWT takes over after.
-                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
-                .authorizeHttpRequests(auth -> auth.requestMatchers(
-                        "/api/v1/users/register",
-                        "/api/v1/users/login",
-                        "/oauth2/**",
-                        "/",
-                        "/login/oauth2/**").permitAll()
-                        .requestMatchers("/api/llm/**").permitAll()
+        @Bean
+        public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+                http
+                                // Disable CSRF
+                                .csrf(AbstractHttpConfigurer::disable)
+                                // Session management
+                                .sessionManagement(sess -> sess
+                                                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
+                                // Authorize requests
+                                .authorizeHttpRequests(auth -> auth
+                                                .requestMatchers(
+                                                                "/api/v1/users/register",
+                                                                "/api/v1/users/login",
+                                                                "/oauth2/**",
+                                                                "/",
+                                                                "/login/oauth2/**")
+                                                .permitAll()
+                                                .requestMatchers("/api/llm/**").permitAll()
+                                                .anyRequest().authenticated())
+                                // OAuth2 login with custom success handler
+                                .oauth2Login(oauth2 -> oauth2
+                                                .successHandler(oAuth2SuccessHandler))
+                                // JWT filter
+                                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
-                        .anyRequest()
-                        .authenticated())
-                // Wire up Google OAuth2 login with our custom success handler
-                .oauth2Login(oauth2 -> oauth2
-                        .successHandler(oAuth2SuccessHandler)// custom handler generating JWT after successful Google
-                                                             // login
-                ).addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
-        return http.build();
-    }
+                return http.build();
+        }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+        @Bean
+        public PasswordEncoder passwordEncoder() {
+                return new BCryptPasswordEncoder();
+        }
 
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
-        return authConfig.getAuthenticationManager();
-    }
+        @Bean
+        public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+                return authConfig.getAuthenticationManager();
+        }
 }
