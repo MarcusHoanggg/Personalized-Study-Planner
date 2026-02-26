@@ -32,7 +32,7 @@ public class SuggestedLLM {
     @Column(name = "task_name", nullable = false)
     private String taskName;
 
-    @Column(name = "task_description")
+    @Column(name = "task_description", columnDefinition = "TEXT")
     private String taskDescription;
 
     @Column(name = "task_deadline")
@@ -76,7 +76,7 @@ public class SuggestedLLM {
     private Task acceptedTask;
 
     // full raw text of the LLM response for analysis/debugging
-    @Column(name = "llm_response")
+    @Column(name = "llm_response", columnDefinition = "TEXT")
     private String llmResponse;
 
     // Which LLM Model generated this task

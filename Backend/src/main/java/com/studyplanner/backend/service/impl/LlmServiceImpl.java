@@ -1,51 +1,47 @@
 package com.studyplanner.backend.service.impl;
 
-import java.time.LocalDateTime;
-import java.time.YearMonth;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.management.RuntimeErrorException;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.studyplanner.backend.client.LlmClient;
 import com.studyplanner.backend.dto.LlmTaskGenerationRequest;
 import com.studyplanner.backend.dto.LlmTaskGenerationResponse;
 import com.studyplanner.backend.dto.SuggestedTasksDto;
 import com.studyplanner.backend.entity.SuggestedLLM;
-import com.studyplanner.backend.entity.User;
 import com.studyplanner.backend.entity.SuggestedLLM.Priority;
 import com.studyplanner.backend.entity.SuggestedLLM.Status;
 import com.studyplanner.backend.entity.SuggestedLLM.SuggestedStatus;
+import com.studyplanner.backend.entity.User;
 import com.studyplanner.backend.exception.ResourceNotFoundException;
 import com.studyplanner.backend.mapper.SuggestedTasksMapper;
 import com.studyplanner.backend.repository.SuggestedTaskRepository;
 import com.studyplanner.backend.repository.UserRepository;
 import com.studyplanner.backend.service.LlmService;
-
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.time.YearMonth;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
-@Slf4j // for logging
+@Slf4j
 public class LlmServiceImpl implements LlmService {
 
-    private final LlmClient llmClient;
+    private final ChatClient chatClient;
     private final UserRepository userRepository;
     private final SuggestedTaskRepository suggestedTaskRepository;
-    private final ObjectMapper objectMapper; // Used to convert between Java objects and JSON
-    private final int monthlyQuota; // The maximum number of tasks that can be generated per month
+    private final ObjectMapper objectMapper;
+    private final int monthlyQuota;
 
-    public LlmServiceImpl(LlmClient llmClient,
-            UserRepository userRepository,
-            SuggestedTaskRepository suggestedTaskRepository,
-            ObjectMapper objectMapper,
-            @Value("${app.llm.monthly-quota:50}") int monthlyQuota) {
-        this.llmClient = llmClient;
+    public LlmServiceImpl(ChatClient.Builder chatClientBuilder,
+                          UserRepository userRepository,
+                          SuggestedTaskRepository suggestedTaskRepository,
+                          ObjectMapper objectMapper,
+                          @Value("${app.llm.monthly-quota:50}") int monthlyQuota) {
+        this.chatClient = chatClientBuilder.build();
         this.userRepository = userRepository;
         this.suggestedTaskRepository = suggestedTaskRepository;
         this.objectMapper = objectMapper;
@@ -59,23 +55,32 @@ public class LlmServiceImpl implements LlmService {
 
         if (!canUserRequestMoreSuggestions(userId)) {
             throw new IllegalStateException(
-                    "Monthly LLM limit reached. You can request up to " + monthlyQuota + " suggestions per month.");
+                    "Monthly LLM quota exceeded. You can request more suggestions next month.");
         }
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
+        // Build prompts
         String systemPrompt = buildSystemPrompt();
-        String userPromt = request.getPrompt();
+        String userPrompt = "User request: " + request.getPrompt();
         if (request.getAdditionalContext() != null && !request.getAdditionalContext().isBlank()) {
-            userPromt += "\n\nAdditional context: " + request.getAdditionalContext();
+            userPrompt += "\nAdditional context: " + request.getAdditionalContext();
         }
 
-        String rawResponse = llmClient.sendPrompt(systemPrompt + "\n\nUser request: " + userPromt);
+        // Call Spring AI ChatClient — replaces your manual HTTP client
+        String rawResponse = chatClient.prompt()
+                .system(systemPrompt)
+                .user(userPrompt)
+                .call()
+                .content();
+
         log.info("LLM raw response: {}", rawResponse);
 
+        // Parse response
         List<SuggestedTasksDto> parsedTasks = parseLlmResponse(rawResponse);
 
+        // Save to database
         List<SuggestedTasksDto> savedSuggestions = new ArrayList<>();
         for (SuggestedTasksDto taskDto : parsedTasks) {
             SuggestedLLM entity = SuggestedLLM.builder()
@@ -83,11 +88,11 @@ public class LlmServiceImpl implements LlmService {
                     .taskName(taskDto.getTaskName())
                     .taskDescription(taskDto.getTaskDescription())
                     .taskDeadline(taskDto.getTaskDeadline())
-                    .priority(taskDto.getPriority())
+                    .priority(taskDto.getPriority() != null ? taskDto.getPriority() : Priority.MEDIUM)
                     .status(Status.PENDING)
                     .suggestedStatus(SuggestedStatus.PENDING)
                     .llmResponse(rawResponse)
-                    .llmModel("gemini-1.5-pro")
+                    .llmModel("gemini-1.5-flash")
                     .build();
 
             SuggestedLLM saved = suggestedTaskRepository.save(entity);
@@ -97,7 +102,7 @@ public class LlmServiceImpl implements LlmService {
         return LlmTaskGenerationResponse.builder()
                 .suggestions(savedSuggestions)
                 .totalGenerated(savedSuggestions.size())
-                .message("Generated" + savedSuggestions.size() + " task suggestions for you")
+                .message("Generated " + savedSuggestions.size() + " task suggestions for you")
                 .build();
     }
 
@@ -110,89 +115,82 @@ public class LlmServiceImpl implements LlmService {
     public int getRemainingMonthlyQuota(Long userId) {
         YearMonth currentMonth = YearMonth.now();
         LocalDateTime start = currentMonth.atDay(1).atStartOfDay();
-        LocalDateTime end = currentMonth.atEndOfMonth().atTime(23, 59, 59);
+        LocalDateTime end   = currentMonth.atEndOfMonth().atTime(23, 59, 59);
 
-        Long used = suggestedTaskRepository.countByUserIdAndTaskDeadlineBetween(userId, start, end);
-        return Math.max(0, monthlyQuota - used.intValue());
+        long used = suggestedTaskRepository.countByUserIdAndTaskDeadlineBetween(userId, start, end);
+        return Math.max(0, monthlyQuota - (int) used);
     }
 
-    // -------------- Private helper functions -------------- //
+    // ─────────────────────────────────────────────────────────────────────────────
+    // Private helpers
+    // ─────────────────────────────────────────────────────────────────────────────
 
     private String buildSystemPrompt() {
         return """
-                You are a study planner assistant. When a user describes what they want to study, generate a list of concrete, actionable study tasks.
-
+                You are a study planner assistant. Generate concrete, actionable study tasks.
+                
                 CRITICAL: Respond ONLY with valid JSON. No markdown, no explanations, no code blocks.
-
+                
                 Format:
                 {
                   "tasks": [
                     {
-                      "taskName": "...",
-                      "taskDescription": "...",
+                      "taskName": "Read Docker documentation chapters 1-3",
+                      "taskDescription": "Focus on containers, images, and basic commands",
                       "taskDeadline": "2026-03-15T18:00:00",
                       "priority": "HIGH"
                     }
                   ]
                 }
-
+                
                 Rules:
                 - taskName: Short title (10-20 words max)
-                - taskDescription: Clear action item (3-4 sentences)
-                - taskDeadline: ISO 8601 format, realistic dates
-                - priority: HIGH, MEDIUM or LOW
-                - Generate 3-8 tasks depending on the user's request
-                - Make deadlines progressive (spread over time)
-                - Be realistic about study timelines
-                """;
+                - taskDescription: Clear action (3-4 sentences)
+                - taskDeadline: ISO 8601 format (YYYY-MM-DDTHH:mm:ss), realistic future dates
+                - priority: HIGH, MEDIUM, or LOW
+                - Generate 3-8 tasks spread over time
+                - Today's date is """ + LocalDateTime.now().toLocalDate();
     }
 
-    // Parse the LLM response and return a list of suggested tasks
     private List<SuggestedTasksDto> parseLlmResponse(String rawResponse) {
         List<SuggestedTasksDto> tasks = new ArrayList<>();
 
         try {
-            JsonNode root = objectMapper.readTree(rawResponse);
-            JsonNode candidates = root.path("candidates");
+            // Strip markdown code blocks if Gemini adds them
+            String cleaned = rawResponse.trim();
+            if (cleaned.startsWith("```json")) cleaned = cleaned.substring(7);
+            if (cleaned.startsWith("```")) cleaned = cleaned.substring(3);
+            if (cleaned.endsWith("```")) cleaned = cleaned.substring(0, cleaned.length() - 3);
+            cleaned = cleaned.trim();
 
-            // Ensure LLM returned at least one candidate before accessing index
-            if (candidates.isArray() && candidates.size() > 0) {
-                JsonNode firstCandiate = candidates.get(0);
-                JsonNode content = firstCandiate.path("content");
-                JsonNode parts = content.path("parts");
+            // Parse JSON
+            JsonNode root = objectMapper.readTree(cleaned);
+            JsonNode taskArray = root.path("tasks");
 
-                // Ensure candidate contains content parts before extracting text
-                if (parts.isArray() && parts.size() > 0) {
-                    String textContent = parts.get(0).path("text").asText();
-                    JsonNode taskData = objectMapper.readTree(textContent);
-                    JsonNode taskArray = taskData.path("parts");
-
-                    // Ensure parsed LLM JSON contains a valid tasks array
-                    if (taskArray.isArray()) {
-                        for (JsonNode taskNode : taskArray) {
-                            try {
-                                SuggestedTasksDto task = SuggestedTasksDto.builder()
-                                        .taskName(taskNode.path("taskName").asText())
-                                        .taskDescription(taskNode.path("taskDescription").asText())
-                                        .taskDeadline(LocalDateTime.parse(taskNode.path("taskDeadline").asText()))
-                                        .priority(Priority.valueOf(taskNode.path("priority").asText("MEDIUM")))
-                                        .build();
-                                tasks.add(task);
-                            } catch (Exception e) {
-                                log.warn("Failed to parse individual task: {}", e.getMessage());
-                            }
-                        }
+            if (taskArray.isArray()) {
+                for (JsonNode taskNode : taskArray) {
+                    try {
+                        tasks.add(SuggestedTasksDto.builder()
+                                .taskName(taskNode.path("taskName").asText())
+                                .taskDescription(taskNode.path("taskDescription").asText())
+                                .taskDeadline(LocalDateTime.parse(
+                                        taskNode.path("taskDeadline").asText()))
+                                .priority(Priority.valueOf(
+                                        taskNode.path("priority").asText("MEDIUM")))
+                                .build());
+                    } catch (Exception e) {
+                        log.warn("Failed to parse task: {}", e.getMessage());
                     }
                 }
             }
-
         } catch (Exception e) {
-            log.error("failed to parse LLM response as JSON: {}", e.getMessage());
-            throw new RuntimeException("LLM returned invalid JSON", e);
+            log.error("Parse error: {}", e.getMessage());
+            log.error("Raw response: {}", rawResponse);
+            throw new RuntimeException("Invalid LLM response: " + e.getMessage(), e);
         }
 
         if (tasks.isEmpty()) {
-            throw new RuntimeException("LLM did not generate any valid tasks");
+            throw new RuntimeException("LLM generated no valid tasks");
         }
 
         return tasks;
