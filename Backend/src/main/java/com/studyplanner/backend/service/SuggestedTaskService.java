@@ -1,5 +1,6 @@
 package com.studyplanner.backend.service;
 
+<<<<<<< HEAD
 import java.util.List;
 import java.util.Map;
 
@@ -41,4 +42,8 @@ public interface SuggestedTaskService {
      */
 
     Map<String, Object> getUserAnalytics(Long userId);
+=======
+public interface SuggestedTaskService {
+
+>>>>>>> b21b7d8 (google calendar)
 }

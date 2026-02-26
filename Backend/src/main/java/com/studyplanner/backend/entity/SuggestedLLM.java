@@ -8,11 +8,16 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+<<<<<<< HEAD
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name = "suggested_tasks")
+=======
+@Entity
+@Table(name = "suggested")
+>>>>>>> b21b7d8 (google calendar)
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -20,15 +25,19 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 public class SuggestedLLM {
 
+<<<<<<< HEAD
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "task_id")
     private Long id;
 
+=======
+>>>>>>> b21b7d8 (google calendar)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
+<<<<<<< HEAD
     @Column(name = "task_name", nullable = false)
     private String taskName;
 
@@ -42,12 +51,29 @@ public class SuggestedLLM {
     @Column(name = "priority")
     private Priority priority;
 
+=======
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "task_id", nullable = false)
+    private Long id;
+
+    @Column(name = "task_name", nullable = false)
+    private String taskName;
+
+    @Column(name = "task_description", nullable = false)
+    private String taskDescription;
+
+    @Column(name = "task_deadline", nullable = true)
+    private LocalDateTime taskDeadline;
+
+>>>>>>> b21b7d8 (google calendar)
     public enum Priority {
         HIGH,
         MEDIUM,
         LOW
     }
 
+<<<<<<< HEAD
     // To check the LLMs task status if the task is accepted or not
     @Enumerated(EnumType.STRING)
     @Column(name = "suggested_status")
@@ -95,4 +121,21 @@ public class SuggestedLLM {
     // when user responds to the suggested task, time of the response
     @Column(name = "responded_at")
     private LocalDateTime respondedAt;
+=======
+    @Column(name = "priority", nullable = true)
+    private Priority priority;
+
+    @Column(name = "status", nullable = false) // approved by the user or not
+    private boolean status;
+
+    @Column(name = "response", nullable = false)
+    private String response;
+
+    @Column(name = "created_at")
+    private String createdAt;
+
+    @Column(name = "updated_at")
+    private String updatedAt;
+
+>>>>>>> b21b7d8 (google calendar)
 }

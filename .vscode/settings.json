@@ -1,4 +1,8 @@
 {
+<<<<<<< HEAD
     "java.configuration.updateBuildConfiguration": "automatic",
+=======
+    "java.configuration.updateBuildConfiguration": "interactive",
+>>>>>>> b21b7d8 (google calendar)
     "java.compile.nullAnalysis.mode": "disabled"
 }

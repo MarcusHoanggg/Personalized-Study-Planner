@@ -28,4 +28,8 @@ public class TaskDto {
     private Task.Priority priority;
     private Task.Status status;
     private boolean completed;
+<<<<<<< HEAD
+=======
+
+>>>>>>> b21b7d8 (google calendar)
 }

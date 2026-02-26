@@ -6,7 +6,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+<<<<<<< HEAD
 import org.hibernate.annotations.UpdateTimestamp;
+=======
+>>>>>>> b21b7d8 (google calendar)
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,11 +23,14 @@ import java.util.List;
 
 public class Task {
 
+<<<<<<< HEAD
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "task_id")
     private Long id;
 
+=======
+>>>>>>> b21b7d8 (google calendar)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
@@ -32,6 +38,14 @@ public class Task {
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
     private List<Reminder> reminders;
 
+<<<<<<< HEAD
+=======
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "task_id")
+    private Long id;
+
+>>>>>>> b21b7d8 (google calendar)
     @Column(name = "task_name", nullable = false)
     private String taskName;
 
@@ -41,6 +55,20 @@ public class Task {
     @Column(name = "task_deadline")
     private LocalDateTime taskDeadline;
 
+<<<<<<< HEAD
+=======
+    @Column(name = "created_at", updatable = false, nullable = false)
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    @CreationTimestamp
+    private LocalDateTime updatedAt;
+
+    @Column(name = "google_event_id")
+    private String googleEventId;
+
+>>>>>>> b21b7d8 (google calendar)
     public enum Priority {
         LOW,
         MEDIUM,
@@ -62,6 +90,7 @@ public class Task {
     @Column(name = "completed", nullable = false)
     private boolean completed;
 
+<<<<<<< HEAD
     // New fields for LLM integration
     // Indicates if the task has been accepted from the LLM
     @Column(name = "from_llm_suggestion")
@@ -80,4 +109,6 @@ public class Task {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+=======
+>>>>>>> b21b7d8 (google calendar)
 }

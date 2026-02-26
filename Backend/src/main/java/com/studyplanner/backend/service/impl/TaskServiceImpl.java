@@ -1,10 +1,19 @@
 package com.studyplanner.backend.service.impl;
 
+<<<<<<< HEAD
+=======
+import java.io.IOException;
+>>>>>>> b21b7d8 (google calendar)
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+<<<<<<< HEAD
+=======
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+>>>>>>> b21b7d8 (google calendar)
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,16 +30,70 @@ import com.studyplanner.backend.repository.UserRepository;
 import com.studyplanner.backend.service.ReminderService;
 import com.studyplanner.backend.service.TaskService;
 
+<<<<<<< HEAD
 import lombok.AllArgsConstructor;
 
 @Service
 @AllArgsConstructor
+=======
+
+
+@Service
+>>>>>>> b21b7d8 (google calendar)
 public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
     private final ReminderService reminderService;
 
+<<<<<<< HEAD
+=======
+    private CalendarServiceImpl googleCalendarService; // Helper to talk to Google
+
+    @Autowired
+    public TaskServiceImpl(
+            TaskRepository taskRepository,
+            UserRepository userRepository,
+            ReminderService reminderService,
+            @Qualifier("calendarService") CalendarServiceImpl googleCalendarService) { // Use the name from SecurityConfig
+        this.taskRepository = taskRepository;
+        this.userRepository = userRepository;
+        this.reminderService = reminderService;
+        this.googleCalendarService = googleCalendarService;
+    }
+
+
+    // --- CREATE ---
+    @Override
+    @Transactional
+    public TaskDto createTask(TaskDto taskDto) {
+        User user = findUser(taskDto.getUserId());
+        Task task = TaskMapper.mapToTask(taskDto, user);
+
+        // 1. Save and overwrite 'task' so it has the DB ID
+        task = taskRepository.save(task);
+
+        try {
+            // 2. Call your Google service
+            String googleEventId = googleCalendarService.pushToCalendar(task);
+
+            if (googleEventId != null) {
+                // 3. Update the task object
+                task.setGoogleEventId(googleEventId);
+            }
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+
+        // 4. Use the updated task for reminders
+        reminderService.createReminderForTask(task);
+
+        // 5. Return the DTO made from the UPDATED task
+        return TaskMapper.mapToTaskDto(task);
+    }
+
+
+>>>>>>> b21b7d8 (google calendar)
     // --- Helper ---
     // Load a User
     private User findUser(Long userId) {
@@ -51,6 +114,7 @@ public class TaskServiceImpl implements TaskService {
         }
     }
 
+<<<<<<< HEAD
     // --- CREAT ---
     @Override
     @Transactional
@@ -64,6 +128,8 @@ public class TaskServiceImpl implements TaskService {
 
         return TaskMapper.mapToTaskDto(saved);
     }
+=======
+>>>>>>> b21b7d8 (google calendar)
 
     // --- READ ---
     // Get Task by Id
@@ -120,8 +186,13 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional(readOnly = true)
     public List<TaskDto> getTasksByDateRange(Long userId,
+<<<<<<< HEAD
             LocalDateTime start,
             LocalDateTime end) {
+=======
+                                             LocalDateTime start,
+                                             LocalDateTime end) {
+>>>>>>> b21b7d8 (google calendar)
         findUser(userId);
         return taskRepository
                 .findByUserIdAndTaskDeadlineBetween(userId, start, end)

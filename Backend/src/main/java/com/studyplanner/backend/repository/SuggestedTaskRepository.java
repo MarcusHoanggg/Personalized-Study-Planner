@@ -1,5 +1,6 @@
 package com.studyplanner.backend.repository;
 
+<<<<<<< HEAD
 import com.studyplanner.backend.entity.SuggestedLLM;
 import com.studyplanner.backend.entity.SuggestedLLM.SuggestedStatus;
 
@@ -49,4 +50,12 @@ public interface SuggestedTaskRepository extends JpaRepository<SuggestedLLM, Lon
                         @Param("userId") Long userId,
                         @Param("since") LocalDateTime since);
 
+=======
+
+import com.studyplanner.backend.entity.SuggestedLLM;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface SuggestedTaskRepository extends JpaRepository<SuggestedLLM, Long> {
+
+>>>>>>> b21b7d8 (google calendar)
 }

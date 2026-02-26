@@ -1,5 +1,6 @@
 package com.studyplanner.backend.service.impl;
 
+<<<<<<< HEAD
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -167,4 +168,8 @@ public class SuggestedTaskServiceImpl implements SuggestedTaskService {
                 .collect(Collectors.toList());
     }
 
+=======
+public class SuggestedTaskServiceImpl {
+    
+>>>>>>> b21b7d8 (google calendar)
 }
