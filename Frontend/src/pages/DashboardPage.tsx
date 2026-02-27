@@ -10,6 +10,7 @@ import TaskCard from "../components/TaskCard";
 import NewTaskModal from "../components/NewTaskModal";
 import EditTaskModal from "../components/EditTaskModal";
 import ShareTaskModal from "../components/ShareTaskModal";
+import LLMTaskGeneratorModal from "./LLMTaskGeneratorModal";
 
 type StatusFilter = "all" | TaskStatus;
 type SortBy = "created" | "deadline" | "priority";
@@ -24,6 +25,10 @@ export default function DashboardPage() {
   const [showShareModal, setShowShareModal] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [showLLMModal, setShowLLMModal] = useState(false);
+
+  
+
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
 
   const handleCreateTask = (task: Task) => {
@@ -115,6 +120,20 @@ export default function DashboardPage() {
           Share Tasks
         </Button>
 
+        <button
+          onClick={() => setShowLLMModal(true)}
+          className="
+    fixed bottom-6 right-6 z-40
+    bg-purple-500 hover:bg-purple-600
+    text-white text-2xl
+    w-14 h-14 rounded-full
+    shadow-lg flex items-center justify-center
+    dark:bg-purple-600 dark:hover:bg-purple-700
+  "
+        >
+          🤖
+        </button>
+
         <Button
           className="bg-purple-500 hover:bg-purple-600 text-white shadow-md"
           onClick={() => setShowNewModal(true)}
@@ -149,6 +168,13 @@ export default function DashboardPage() {
           onSave={handleUpdateTask}
         />
       )}
+
+      {
+    showLLMModal && (
+      <LLMTaskGeneratorModal onClose={() => setShowLLMModal(false)}
+       onAddTask={handleCreateTask} />
+    )
+  }
 
       {/* DELETE CONFIRMATION */}
       {deleteId && (
