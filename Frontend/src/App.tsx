@@ -27,7 +27,7 @@ import CalendarPage from "./pages/CalendarPage";
 import ProfilePage from "./pages/ProfilePage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
-
+import LLMTaskGeneratorModal from "./pages/LLMTaskGeneratorModal";
 export default function App() {
   return (
     <Routes>
@@ -38,6 +38,8 @@ export default function App() {
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/calendar" element={<CalendarPage />} />
         <Route path="/profile" element={<ProfilePage />} />
+        {/* <Route path="/llm-task-generator" element={<LLMTaskGeneratorModal />} /> */}
+
       </Route>
     </Routes>
   );
