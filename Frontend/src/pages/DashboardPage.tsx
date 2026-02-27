@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import PageHeader from "../ui/PageHeader";
 import StatsCard from "../ui/StatsCard";
@@ -10,6 +9,7 @@ import type { Task, TaskStatus } from "../types";
 import TaskCard from "../components/TaskCard";
 import NewTaskModal from "../components/NewTaskModal";
 import EditTaskModal from "../components/EditTaskModal";
+import ShareTaskModal from "../components/ShareTaskModal";
 
 type StatusFilter = "all" | TaskStatus;
 type SortBy = "created" | "deadline" | "priority";
@@ -21,10 +21,40 @@ export default function DashboardPage() {
   const [sortBy, setSortBy] = useState<SortBy>("created");
 
   const [showNewModal, setShowNewModal] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
   const [editingTask, setEditingTask] = useState<Task | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
-
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
+
+  const handleCreateTask = (task: Task) => {
+    setTasks((prev) => [...prev, task]);
+  };
+
+  const handleUpdateTask = (updated: Task) => {
+    setTasks((prev) => prev.map((t) => (t.id === updated.id ? updated : t)));
+  };
+
+  const handleDeleteTask = (id: string) => {
+    setDeleteId(id);
+  };
+
+  const confirmDelete = () => {
+    if (!deleteId) return;
+    setTasks((prev) => prev.filter((t) => t.id !== deleteId));
+    setDeleteId(null);
+  };
+
+  const handleShareTasks = async (
+    selectedTaskIds: string[],
+    recipientEmail: string
+  ) => {
+    // TODO: Replace with actual API call to your backend
+    console.log(
+      `Sharing tasks ${selectedTaskIds.join(", ")} to ${recipientEmail}`
+    );
+    // Remove the alert() line below:
+    // alert(`Tasks shared with ${recipientEmail}`);
+  };
 
   // Load tasks
   useEffect(() => {
@@ -69,24 +99,6 @@ export default function DashboardPage() {
     );
   }
 
-  const handleCreateTask = (task: Task) => {
-    setTasks((prev) => [...prev, task]);
-  };
-
-  const handleUpdateTask = (updated: Task) => {
-    setTasks((prev) => prev.map((t) => (t.id === updated.id ? updated : t)));
-  };
-
-  const handleDeleteTask = (id: string) => {
-    setDeleteId(id);
-  };
-
-  const confirmDelete = () => {
-    if (!deleteId) return;
-    setTasks((prev) => prev.filter((t) => t.id !== deleteId));
-    setDeleteId(null);
-  };
-
   return (
     <div className="animate-pageFade space-y-8">
 
@@ -95,12 +107,21 @@ export default function DashboardPage() {
         title="Dashboard"
         subtitle="Overview of your study tasks"
       >
+        <div className="flex items-center gap-3">
+        <Button
+          className="bg-purple-500 hover:bg-purple-600 text-white shadow-md"
+          onClick={() => setShowShareModal(true)}
+        >
+          Share Tasks
+        </Button>
+
         <Button
           className="bg-purple-500 hover:bg-purple-600 text-white shadow-md"
           onClick={() => setShowNewModal(true)}
         >
           + New Task
         </Button>
+        </div>
       </PageHeader>
 
       {/* NEW TASK MODAL */}
@@ -108,6 +129,15 @@ export default function DashboardPage() {
         <NewTaskModal
           onClose={() => setShowNewModal(false)}
           onCreate={handleCreateTask}
+        />
+      )}
+
+      {/* SHARE TASKS MODAL */}
+      {showShareModal && (
+        <ShareTaskModal
+          tasks={tasks}
+          onClose={() => setShowShareModal(false)}
+          onShare={handleShareTasks}
         />
       )}
 
