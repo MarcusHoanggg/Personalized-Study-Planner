@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.studyplanner.backend.dto.SuggestedTasksDto;
+import com.studyplanner.backend.dto.SuggestionBatchResponseDto;
+import com.studyplanner.backend.dto.SuggestionResponseDto;
 import com.studyplanner.backend.dto.TaskDto;
 import com.studyplanner.backend.entity.SuggestedLLM;
 import com.studyplanner.backend.entity.Task;
@@ -115,6 +117,48 @@ public class SuggestedTaskServiceImpl implements SuggestedTaskService {
         return SuggestedTasksMapper.toDto(updated);
     }
 
+    // Single batch endpoint for accept AND decline
+    @Override
+    @Transactional
+    public SuggestionBatchResponseDto respondToSuggestions(
+            SuggestionResponseDto response, Long userId) {
+
+        List<TaskDto> acceptedTasks = new ArrayList<>();
+        List<SuggestedTasksDto> declinedSuggestions = new ArrayList<>();
+
+        // Process acceptances
+        if (response.getAcceptedIds() != null && !response.getAcceptedIds().isEmpty()) {
+            for (Long id : response.getAcceptedIds()) {
+                try {
+                    acceptedTasks.add(acceptSuggestion(id, userId));
+                } catch (Exception e) {
+                    log.warn("Failed to accept suggestion {}: {}", id, e.getMessage());
+                    // Continue processing other IDs even if one fails
+                }
+            }
+        }
+
+        // Process declines
+        if (response.getDeclinedIds() != null && !response.getDeclinedIds().isEmpty()) {
+            for (Long id : response.getDeclinedIds()) {
+                try {
+                    declinedSuggestions.add(declineSuggestion(id, userId));
+                } catch (Exception e) {
+                    log.warn("Failed to decline suggestion {}: {}", id, e.getMessage());
+                    // Continue processing other IDs even if one fails
+                }
+            }
+        }
+
+        return SuggestionBatchResponseDto.builder()
+                .acceptedTasks(acceptedTasks)
+                .declined(declinedSuggestions)
+                .totalProcessed(acceptedTasks.size() + declinedSuggestions.size())
+                .acceptedCount(acceptedTasks.size())
+                .declinedCount(declinedSuggestions.size())
+                .build();
+    }
+
     @Override
     @Transactional
     public List<TaskDto> acceptMultipleSuggestions(List<Long> suggestionIds, Long userId) {
@@ -138,8 +182,7 @@ public class SuggestedTaskServiceImpl implements SuggestedTaskService {
         long pending = suggestedTaskRepository.countByUserIdAndSuggestedStatus(userId, SuggestedStatus.PENDING);
 
         Double acceptanceRate = suggestedTaskRepository.getAcceptanceRateByUserId(userId);
-        if (acceptanceRate == null)
-            acceptanceRate = 0.0;
+        acceptanceRate = acceptanceRate == null ? 0.0 : acceptanceRate;
 
         Map<String, Object> analytics = new HashMap<>();
         analytics.put("totalSuggestions", total);

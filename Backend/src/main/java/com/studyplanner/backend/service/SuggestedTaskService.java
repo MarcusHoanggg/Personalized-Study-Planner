@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.studyplanner.backend.dto.SuggestedTasksDto;
+import com.studyplanner.backend.dto.SuggestionBatchResponseDto;
+import com.studyplanner.backend.dto.SuggestionResponseDto;
 import com.studyplanner.backend.dto.TaskDto;
 
 public interface SuggestedTaskService {
@@ -20,6 +22,9 @@ public interface SuggestedTaskService {
 
     // reject a suggested task
     SuggestedTasksDto declineSuggestion(Long suggestionId, Long userId);
+
+    // accept multiple suggestion at once.
+    SuggestionBatchResponseDto respondToSuggestions(SuggestionResponseDto response, Long userId);
 
     // accept multiple suggestion at once.
     List<TaskDto> acceptMultipleSuggestions(List<Long> suggestionIds, Long userId);
