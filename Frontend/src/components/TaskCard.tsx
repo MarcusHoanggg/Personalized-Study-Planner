@@ -118,10 +118,6 @@ export default function TaskCard({
             ⏰ Set Reminder
           </button>
 
-          <button className="block w-full text-left px-4 py-2 hover:bg-purple-50">
-            🔗 Share
-          </button>
-
           <button
             className="block w-full text-left px-4 py-2 text-red-600 hover:bg-red-50"
             onClick={() => {
