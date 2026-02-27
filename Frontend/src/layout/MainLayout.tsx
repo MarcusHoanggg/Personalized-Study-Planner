@@ -1,12 +1,37 @@
 
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { logout, getCurrentUser } from "../services/auth";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import LLMTaskGeneratorModal from "../pages/LLMTaskGeneratorModal";
 
 export default function MainLayout() {
   const navigate = useNavigate();
   const user = getCurrentUser();
   const [open, setOpen] = useState(false);
+  const [showLLMModal, setShowLLMModal] = useState(false);
+
+//   {showLLMModal && (
+//   <LLMTaskGeneratorModal onClose={() => setShowLLMModal(false)} />
+// )}
+
+  
+  const [theme, setTheme] = useState(
+    localStorage.getItem("theme") || "light"
+  );
+
+  useEffect(() => {
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+    localStorage.setItem("theme", theme);
+  }, [theme]);
+
+  const toggleTheme = () => {
+    setTheme(theme === "light" ? "dark" : "light");
+  };
+
 
   const handleLogout = () => {
     logout();
@@ -68,10 +93,9 @@ export default function MainLayout() {
             to="/dashboard"
             onClick={() => setOpen(false)}
             className={({ isActive }) =>
-              `px-4 py-2 rounded-xl transition ${
-                isActive
-                  ? "bg-purple-100 text-purple-700 shadow-sm"
-                  : "text-gray-600 hover:bg-purple-50"
+              `px-4 py-2 rounded-xl transition ${isActive
+                ? "bg-purple-100 text-purple-700 shadow-sm"
+                : "text-gray-600 hover:bg-purple-50"
               }`
             }
           >
@@ -82,10 +106,9 @@ export default function MainLayout() {
             to="/calendar"
             onClick={() => setOpen(false)}
             className={({ isActive }) =>
-              `px-4 py-2 rounded-xl transition ${
-                isActive
-                  ? "bg-purple-100 text-purple-700 shadow-sm"
-                  : "text-gray-600 hover:bg-purple-50"
+              `px-4 py-2 rounded-xl transition ${isActive
+                ? "bg-purple-100 text-purple-700 shadow-sm"
+                : "text-gray-600 hover:bg-purple-50"
               }`
             }
           >
@@ -96,10 +119,9 @@ export default function MainLayout() {
             to="/profile"
             onClick={() => setOpen(false)}
             className={({ isActive }) =>
-              `px-4 py-2 rounded-xl transition ${
-                isActive
-                  ? "bg-purple-100 text-purple-700 shadow-sm"
-                  : "text-gray-600 hover:bg-purple-50"
+              `px-4 py-2 rounded-xl transition ${isActive
+                ? "bg-purple-100 text-purple-700 shadow-sm"
+                : "text-gray-600 hover:bg-purple-50"
               }`
             }
           >
@@ -118,6 +140,7 @@ export default function MainLayout() {
             {user?.username?.[0]?.toUpperCase()}
           </div>
 
+
           <button
             onClick={handleLogout}
             className="
@@ -126,8 +149,10 @@ export default function MainLayout() {
               hover:bg-purple-100 transition
             "
           >
+            
             Logout
           </button>
+
         </div>
       </aside>
 
