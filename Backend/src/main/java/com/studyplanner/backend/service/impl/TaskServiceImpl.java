@@ -1,19 +1,13 @@
 package com.studyplanner.backend.service.impl;
 
-<<<<<<< HEAD
-=======
 import java.io.IOException;
->>>>>>> b21b7d8 (google calendar)
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-<<<<<<< HEAD
-=======
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
->>>>>>> b21b7d8 (google calendar)
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,24 +24,15 @@ import com.studyplanner.backend.repository.UserRepository;
 import com.studyplanner.backend.service.ReminderService;
 import com.studyplanner.backend.service.TaskService;
 
-<<<<<<< HEAD
-import lombok.AllArgsConstructor;
-
-@Service
-@AllArgsConstructor
-=======
 
 
 @Service
->>>>>>> b21b7d8 (google calendar)
 public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
     private final ReminderService reminderService;
 
-<<<<<<< HEAD
-=======
     private CalendarServiceImpl googleCalendarService; // Helper to talk to Google
 
     @Autowired
@@ -93,7 +78,6 @@ public class TaskServiceImpl implements TaskService {
     }
 
 
->>>>>>> b21b7d8 (google calendar)
     // --- Helper ---
     // Load a User
     private User findUser(Long userId) {
@@ -114,22 +98,6 @@ public class TaskServiceImpl implements TaskService {
         }
     }
 
-<<<<<<< HEAD
-    // --- CREAT ---
-    @Override
-    @Transactional
-    public TaskDto createTask(TaskDto taskDto) {
-        User user = findUser(taskDto.getUserId());
-        Task task = TaskMapper.mapToTask(taskDto, user);
-        Task saved = taskRepository.save(task);
-
-        // Auto create a reminder for the task
-        reminderService.createReminderForTask(saved);
-
-        return TaskMapper.mapToTaskDto(saved);
-    }
-=======
->>>>>>> b21b7d8 (google calendar)
 
     // --- READ ---
     // Get Task by Id
@@ -186,13 +154,8 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional(readOnly = true)
     public List<TaskDto> getTasksByDateRange(Long userId,
-<<<<<<< HEAD
-            LocalDateTime start,
-            LocalDateTime end) {
-=======
                                              LocalDateTime start,
                                              LocalDateTime end) {
->>>>>>> b21b7d8 (google calendar)
         findUser(userId);
         return taskRepository
                 .findByUserIdAndTaskDeadlineBetween(userId, start, end)

@@ -34,9 +34,6 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
     // by status and priority
     List<Task> findByUserIdAndStatusAndPriority(Long userId, Status status, Priority priority);
-<<<<<<< HEAD
-=======
 
 
->>>>>>> b21b7d8 (google calendar)
 }
