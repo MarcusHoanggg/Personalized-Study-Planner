@@ -8,6 +8,7 @@ import { BookOpenIcon } from "@heroicons/react/24/solid";
 export default function SignupPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   const handleSignup = () => {
@@ -58,6 +59,17 @@ export default function SignupPage() {
           placeholder="Enter your email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          className="mb-6 bg-purple-50/40 border-purple-200 focus:border-purple-400"
+        />
+
+        
+        {/* Password */}
+        <label className="block mb-1 text-sm text-gray-700">Password</label>
+        <Input
+          placeholder="Create your password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
           className="mb-6 bg-purple-50/40 border-purple-200 focus:border-purple-400"
         />
 
