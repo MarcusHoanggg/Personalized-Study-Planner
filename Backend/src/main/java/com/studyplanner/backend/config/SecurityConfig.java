@@ -23,44 +23,53 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-        private final JwtAuthFilter jwtAuthFilter;
-        private final OAuth2SuccessHandler oAuth2SuccessHandler;
+    private final JwtAuthFilter jwtAuthFilter;
+    private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
-        @Bean
-        public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-                http
-                                // Disable CSRF
-                                .csrf(AbstractHttpConfigurer::disable)
-                                // Session management
-                                .sessionManagement(sess -> sess
-                                                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED))
-                                // Authorize requests
-                                .authorizeHttpRequests(auth -> auth
-                                                .requestMatchers(
-                                                                "/api/v1/users/register",
-                                                                "/api/v1/users/login",
-                                                                "/oauth2/**",
-                                                                "/",
-                                                                "/login/oauth2/**")
-                                                .permitAll()
-                                                .requestMatchers("/api/llm/**").permitAll()
-                                                .anyRequest().authenticated())
-                                // OAuth2 login with custom success handler
-                                .oauth2Login(oauth2 -> oauth2
-                                                .successHandler(oAuth2SuccessHandler))
-                                // JWT filter
-                                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+            // Disable CSRF
+            .csrf(AbstractHttpConfigurer::disable)
 
-                return http.build();
-        }
+            // Session management
+            .sessionManagement(sess -> sess
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+            )
 
-        @Bean
-        public PasswordEncoder passwordEncoder() {
-                return new BCryptPasswordEncoder();
-        }
+            // Authorize requests
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers(
+                    "/api/v1/users/register",
+                    "/api/v1/users/login",
+                    "/oauth2/**",
+                    "/login/oauth2/**",
+                    "/actuator/**",          
+                    "/"
+                ).permitAll()
+                .requestMatchers("/api/llm/**").permitAll()
+                .anyRequest().authenticated()
+            )
 
-        @Bean
-        public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
-                return authConfig.getAuthenticationManager();
-        }
+
+            // OAuth2 login with custom success handler
+            .oauth2Login(oauth2 -> oauth2
+                .successHandler(oAuth2SuccessHandler)
+            )
+
+            // JWT filter
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
+        return authConfig.getAuthenticationManager();
+    }
 }
