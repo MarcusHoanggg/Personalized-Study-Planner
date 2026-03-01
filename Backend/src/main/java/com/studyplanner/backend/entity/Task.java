@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,17 +20,17 @@ import java.util.List;
 
 public class Task {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "task_id")
+    private Long id;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
     private List<Reminder> reminders;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "task_id")
-    private Long id;
 
     @Column(name = "task_name", nullable = false)
     private String taskName;
@@ -40,16 +41,9 @@ public class Task {
     @Column(name = "task_deadline")
     private LocalDateTime taskDeadline;
 
-    @Column(name = "created_at", updatable = false, nullable = false)
-    @CreationTimestamp
-    private LocalDateTime createdAt;
+    public void setGoogleEventId(String googleEventId) {
 
-    @Column(name = "updated_at")
-    @CreationTimestamp
-    private LocalDateTime updatedAt;
-
-    @Column(name = "google_event_id")
-    private String googleEventId;
+    }
 
     public enum Priority {
         LOW,
@@ -71,5 +65,23 @@ public class Task {
 
     @Column(name = "completed", nullable = false)
     private boolean completed;
+
+    // New fields for LLM integration
+    // Indicates if the task has been accepted from the LLM
+    @Column(name = "from_llm_suggestion")
+    private boolean fromLlmSuggestion;
+
+    // If this task came from LLM, points to the suggested task
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "suggested_task_id")
+    private SuggestedLLM suggestedTask;
+
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false, nullable = false)
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 
 }

@@ -1,13 +1,10 @@
 package com.studyplanner.backend.service.impl;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,59 +21,15 @@ import com.studyplanner.backend.repository.UserRepository;
 import com.studyplanner.backend.service.ReminderService;
 import com.studyplanner.backend.service.TaskService;
 
-
+import lombok.AllArgsConstructor;
 
 @Service
+@AllArgsConstructor
 public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
     private final ReminderService reminderService;
-
-    private CalendarServiceImpl googleCalendarService; // Helper to talk to Google
-
-    @Autowired
-    public TaskServiceImpl(
-            TaskRepository taskRepository,
-            UserRepository userRepository,
-            ReminderService reminderService,
-            @Qualifier("calendarService") CalendarServiceImpl googleCalendarService) { // Use the name from SecurityConfig
-        this.taskRepository = taskRepository;
-        this.userRepository = userRepository;
-        this.reminderService = reminderService;
-        this.googleCalendarService = googleCalendarService;
-    }
-
-
-    // --- CREATE ---
-    @Override
-    @Transactional
-    public TaskDto createTask(TaskDto taskDto) {
-        User user = findUser(taskDto.getUserId());
-        Task task = TaskMapper.mapToTask(taskDto, user);
-
-        // 1. Save and overwrite 'task' so it has the DB ID
-        task = taskRepository.save(task);
-
-        try {
-            // 2. Call your Google service
-            String googleEventId = googleCalendarService.pushToCalendar(task);
-
-            if (googleEventId != null) {
-                // 3. Update the task object
-                task.setGoogleEventId(googleEventId);
-            }
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-
-        // 4. Use the updated task for reminders
-        reminderService.createReminderForTask(task);
-
-        // 5. Return the DTO made from the UPDATED task
-        return TaskMapper.mapToTaskDto(task);
-    }
-
 
     // --- Helper ---
     // Load a User
@@ -98,6 +51,19 @@ public class TaskServiceImpl implements TaskService {
         }
     }
 
+    // --- CREAT ---
+    @Override
+    @Transactional
+    public TaskDto createTask(TaskDto taskDto) {
+        User user = findUser(taskDto.getUserId());
+        Task task = TaskMapper.mapToTask(taskDto, user);
+        Task saved = taskRepository.save(task);
+
+        // Auto create a reminder for the task
+        reminderService.createReminderForTask(saved);
+
+        return TaskMapper.mapToTaskDto(saved);
+    }
 
     // --- READ ---
     // Get Task by Id

@@ -1,9 +1,9 @@
-
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Input from "../ui/Input";
 import Button from "../ui/Button";
 import { BookOpenIcon } from "@heroicons/react/24/solid";
+import { signup } from "../services/auth";
 
 export default function SignupPage() {
   const [name, setName] = useState("");
@@ -11,16 +11,20 @@ export default function SignupPage() {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleSignup = () => {
-    if (!name || !email) return;
-    navigate("/dashboard");
+  const handleSignup = async () => {
+    try {
+      if (!name || !email || !password) return;
+
+      await signup(name, email, password);
+      navigate("/dashboard");
+    } catch (err: any) {
+      alert(err?.message || "Signup failed");
+    }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-100 via-pink-100 to-blue-100 px-4">
-
       <div className="bg-white rounded-3xl shadow-xl p-10 w-full max-w-md border border-purple-100">
-
         <BookOpenIcon className="w-12 h-12 text-purple-600 mx-auto mb-4" />
 
         <h2 className="text-3xl font-bold mb-2 text-center text-purple-700">
@@ -31,7 +35,6 @@ export default function SignupPage() {
           Start organizing your studies and tracking your progress
         </p>
 
-        {/* Google Button */}
         <Button
           variant="outline"
           className="w-full mb-4 flex items-center justify-center gap-2 border-purple-300 text-purple-700 hover:bg-purple-50"
@@ -44,7 +47,6 @@ export default function SignupPage() {
           OR SIGN UP WITH EMAIL
         </div>
 
-        {/* Name */}
         <label className="block mb-1 text-sm text-gray-700">Full Name</label>
         <Input
           placeholder="Enter your name"
@@ -53,7 +55,6 @@ export default function SignupPage() {
           className="mb-4 bg-purple-50/40 border-purple-200 focus:border-purple-400"
         />
 
-        {/* Email */}
         <label className="block mb-1 text-sm text-gray-700">Email</label>
         <Input
           placeholder="Enter your email"
@@ -62,8 +63,6 @@ export default function SignupPage() {
           className="mb-6 bg-purple-50/40 border-purple-200 focus:border-purple-400"
         />
 
-        
-        {/* Password */}
         <label className="block mb-1 text-sm text-gray-700">Password</label>
         <Input
           placeholder="Create your password"
@@ -73,7 +72,6 @@ export default function SignupPage() {
           className="mb-6 bg-purple-50/40 border-purple-200 focus:border-purple-400"
         />
 
-        {/* Submit */}
         <Button
           className="w-full mb-4 bg-purple-500 hover:bg-purple-600 text-white shadow-md"
           onClick={handleSignup}
