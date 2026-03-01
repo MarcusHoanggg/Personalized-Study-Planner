@@ -31,7 +31,7 @@ export default function DashboardPage() {
 
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
 
-  // ===== NOTI (chỉ thêm phần này) =====
+  // ===== NOTI  =====
   const [notiOpen, setNotiOpen] = useState(false);
   const [notiType, setNotiType] = useState<NotificationType>("info");
   const [notiTitle, setNotiTitle] = useState("");
@@ -115,7 +115,7 @@ export default function DashboardPage() {
 
   return (
     <div className="animate-pageFade space-y-8">
-      {/* NOTI POPUP (chỉ thêm block này) */}
+      {/* NOTI POPUP  */}
       <NotificationPopup
         open={notiOpen}
         type={notiType}
@@ -145,7 +145,7 @@ export default function DashboardPage() {
               dark:bg-purple-600 dark:hover:bg-purple-700
             "
           >
-            🤖
+            
           </button>
 
           <Button
