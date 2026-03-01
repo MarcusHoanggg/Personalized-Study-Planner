@@ -41,6 +41,10 @@ public class Task {
     @Column(name = "task_deadline")
     private LocalDateTime taskDeadline;
 
+    public void setGoogleEventId(String googleEventId) {
+
+    }
+
     public enum Priority {
         LOW,
         MEDIUM,

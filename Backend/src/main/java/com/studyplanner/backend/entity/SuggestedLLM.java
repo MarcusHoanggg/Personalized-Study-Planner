@@ -57,7 +57,7 @@ public class SuggestedLLM {
         PENDING, // The user has not accepted or declined the LLM suggested task
         ACCEPTED, // user has accepted the task - the task will be added to the user's calendar
         DECLINED // user has declined the task - the task will not be added to the user's
-                 // calendar
+        // calendar
     }
 
     @Enumerated(EnumType.STRING)

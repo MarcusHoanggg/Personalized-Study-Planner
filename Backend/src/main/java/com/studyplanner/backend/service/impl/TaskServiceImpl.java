@@ -23,6 +23,8 @@ import com.studyplanner.backend.service.TaskService;
 
 import lombok.AllArgsConstructor;
 
+import static org.hibernate.query.sqm.tree.SqmNode.log;
+
 @Service
 @AllArgsConstructor
 public class TaskServiceImpl implements TaskService {
@@ -30,6 +32,7 @@ public class TaskServiceImpl implements TaskService {
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
     private final ReminderService reminderService;
+    private final CalendarServiceImpl calendarService;
 
     // --- Helper ---
     // Load a User
@@ -61,7 +64,14 @@ public class TaskServiceImpl implements TaskService {
 
         // Auto create a reminder for the task
         reminderService.createReminderForTask(saved);
-
+        try {
+            String eventId = calendarService.pushToCalendar(saved);
+            if (eventId != null) {
+                log.info("Task synced to Google Calendar with event ID: {}");
+            }
+        } catch (Exception e) {
+            log.error("Failed to sync task to Google Calendar: {}", e.getMessage(), e);
+        }
         return TaskMapper.mapToTaskDto(saved);
     }
 
@@ -120,8 +130,8 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional(readOnly = true)
     public List<TaskDto> getTasksByDateRange(Long userId,
-            LocalDateTime start,
-            LocalDateTime end) {
+                                             LocalDateTime start,
+                                             LocalDateTime end) {
         findUser(userId);
         return taskRepository
                 .findByUserIdAndTaskDeadlineBetween(userId, start, end)
