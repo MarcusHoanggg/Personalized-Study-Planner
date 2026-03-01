@@ -39,7 +39,6 @@ spring:
               - email
               - profile
               - https://www.googleapis.com/auth/calendar
-
   ai:
     # Enable Google GenAI chat model (google-genai is default, but set explicitly)
     model:
@@ -60,7 +59,7 @@ server:
 
 jwt:
   secret: ${JWT_SECRET}
-  expiration: 3600000
+  expiration: 36000000
 
 app:
   frontend:
