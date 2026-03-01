@@ -29,8 +29,7 @@ import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import LandingPage from "./pages/LandingPage";
 import NotFoundPage from "./pages/NotFoundPage";
-
-// import LLMTaskGeneratorModal from "./pages/LLMTaskGeneratorModal";
+import OAuth2RedirectPage from "./pages/OAuth2RedirectPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 export default function App() {
@@ -40,37 +39,19 @@ export default function App() {
       <Route path="/signup" element={<SignupPage />} />
       <Route path="/login" element={<LoginPage />} />
 
-      <Route element={<MainLayout />}>
-        <Route path="/" element={<LandingPage />} />
+      <Route path="/oauth2/redirect" element={<OAuth2RedirectPage />} />
 
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <DashboardPage />
-            </ProtectedRoute>
-          }
-        />
 
-        <Route
-          path="/calendar"
-          element={
-            <ProtectedRoute>
-              <CalendarPage />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/profile"
-          element={
-            <ProtectedRoute>
-              <ProfilePage />
-            </ProtectedRoute>
-          }
-        />
-
-        {/* <Route path="/llm-task-generator" element={<LLMTaskGeneratorModal />} /> */}
+      <Route
+        element={
+          <ProtectedRoute>
+            <MainLayout />
+          </ProtectedRoute>
+        }
+      >
+        <Route path="/dashboard" element={<DashboardPage />} />
+        <Route path="/calendar" element={<CalendarPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
       </Route>
 
       <Route path="*" element={<NotFoundPage />} />

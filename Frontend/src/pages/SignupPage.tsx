@@ -5,11 +5,17 @@ import Button from "../ui/Button";
 import { BookOpenIcon } from "@heroicons/react/24/solid";
 import { signup } from "../services/auth";
 
+const API_URL = import.meta.env.VITE_API_URL; // http://localhost:8081
+
 export default function SignupPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+
+  const handleGoogleSignup = () => {
+    window.location.href = `${API_URL}/oauth2/authorization/google`;
+  };
 
   const handleSignup = async () => {
     try {
@@ -38,6 +44,8 @@ export default function SignupPage() {
         <Button
           variant="outline"
           className="w-full mb-4 flex items-center justify-center gap-2 border-purple-300 text-purple-700 hover:bg-purple-50"
+          onClick={handleGoogleSignup}
+          type="button"
         >
           <img src="/Google-Logo.svg" alt="Google" className="w-5 h-5" />
           Sign up with Google
