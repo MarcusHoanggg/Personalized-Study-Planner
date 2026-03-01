@@ -19,12 +19,17 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClient;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
+
+    private final OAuth2AuthorizedClientService authorizedClientService;
     private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
     private final UserDetailsService userDetailsService;
@@ -46,7 +51,6 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         // Check if user already exists in the database
         User user = userRepository.findByGoogleId(googleId).orElseGet(() -> {
-
             // Check if email is already registered with a local account
             return userRepository.findByEmail(email).map(existingUser -> {
                 existingUser.setGoogleId(googleId);
@@ -70,6 +74,24 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                 return saved;
             });
         });
+
+        try {
+            OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;
+            OAuth2AuthorizedClient client = authorizedClientService.loadAuthorizedClient(
+                    oauthToken.getAuthorizedClientRegistrationId(),
+                    oauthToken.getName()
+            );
+            if (client != null && client.getAccessToken() != null) {
+                user.setGoogleAccessToken(client.getAccessToken().getTokenValue());
+                userRepository.save(user);
+                log.info("Google access token saved for user: {}", email);
+            }
+        } catch (Exception e) {
+            log.warn("Could not save Google access token: {}", e.getMessage());
+        }
+
+
+
 
         // Generate JWT token for the authenticated user
         UserDetails userDetails = userDetailsService.loadUserByUsername(user.getEmail());

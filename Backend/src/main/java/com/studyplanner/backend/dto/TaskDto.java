@@ -28,4 +28,5 @@ public class TaskDto {
     private Task.Priority priority;
     private Task.Status status;
     private boolean completed;
+
 }
