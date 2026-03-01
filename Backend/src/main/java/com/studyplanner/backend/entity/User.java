@@ -72,6 +72,9 @@ public class User {
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
+    @Column(name = "google_access_token", length = 2048)
+    private String googleAccessToken;
+
     // auto generate publicId when creating a new user
     @PrePersist
     public void generatePublicId() {
