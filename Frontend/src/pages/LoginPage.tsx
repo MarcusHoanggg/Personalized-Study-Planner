@@ -5,10 +5,16 @@ import Button from "../ui/Button";
 import { BookOpenIcon } from "@heroicons/react/24/solid";
 import { loginWithEmail } from "../services/auth";
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+
+  const handleGoogleLogin = () => {
+    window.location.href = `${API_URL}/oauth2/authorization/google`;
+  };
 
   const handleLogin = async () => {
     try {
@@ -37,6 +43,8 @@ export default function LoginPage() {
         <Button
           variant="outline"
           className="w-full mb-4 flex items-center justify-center gap-2 border-purple-300 text-purple-700 hover:bg-purple-50"
+          onClick={handleGoogleLogin}
+          type="button"
         >
           <img src="/Google-Logo.svg" alt="Google" className="w-5 h-5" />
           Continue with Google
