@@ -83,14 +83,13 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             );
             if (client != null && client.getAccessToken() != null) {
                 user.setGoogleAccessToken(client.getAccessToken().getTokenValue());
+
                 userRepository.save(user);
                 log.info("Google access token saved for user: {}", email);
             }
         } catch (Exception e) {
             log.warn("Could not save Google access token: {}", e.getMessage());
         }
-
-
 
 
         // Generate JWT token for the authenticated user

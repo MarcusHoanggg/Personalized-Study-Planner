@@ -1,3 +1,4 @@
+// src/components/NotificationPopup.tsx
 import React from "react";
 
 export type NotificationType = "success" | "error" | "info" | "warning";

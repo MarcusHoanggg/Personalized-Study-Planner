@@ -1,3 +1,4 @@
+// src/pages/DashboardPage.tsx
 import { useEffect, useState } from "react";
 import PageHeader from "../ui/PageHeader";
 import StatsCard from "../ui/StatsCard";
@@ -13,6 +14,7 @@ import ShareTaskModal from "../components/ShareTaskModal";
 import NotificationBell from "../components/NotificationBell";
 import LLMTaskGeneratorModal from "./LLMTaskGeneratorModal";
 import { getTasks, deleteTask } from "../services/tasks";
+import NotificationPopup, { NotificationType } from "../components/NotificationPopup";
 
 type StatusFilter = "all" | TaskStatus;
 type SortBy = "created" | "deadline" | "priority";
@@ -29,16 +31,30 @@ export default function DashboardPage() {
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [showLLMModal, setShowLLMModal] = useState(false);
 
-  
-
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
+
+  // ===== NOTI  =====
+  const [notiOpen, setNotiOpen] = useState(false);
+  const [notiType, setNotiType] = useState<NotificationType>("info");
+  const [notiTitle, setNotiTitle] = useState("");
+  const [notiMessage, setNotiMessage] = useState<string | undefined>(undefined);
+
+  const showNoti = (type: NotificationType, title: string, message?: string) => {
+    setNotiType(type);
+    setNotiTitle(title);
+    setNotiMessage(message);
+    setNotiOpen(true);
+  };
+  // ================================
 
   const handleCreateTask = (task: Task) => {
     setTasks((prev) => [...prev, task]);
+    showNoti("success", "Success!", "Task created successfully.");
   };
 
   const handleUpdateTask = (updated: Task) => {
     setTasks((prev) => prev.map((t) => (t.id === updated.id ? updated : t)));
+    showNoti("success", "Updated!", "Task updated successfully.");
   };
 
   const handleDeleteTask = (id: string) => {
@@ -54,6 +70,7 @@ export default function DashboardPage() {
       console.error("Failed to delete task:", error);
     }
     setDeleteId(null);
+    showNoti("error", "Deleted", "Task has been deleted.");
   };
 
   // Load tasks from backend API
@@ -68,6 +85,10 @@ export default function DashboardPage() {
       // Don't use localStorage fallback - it may have wrong user's tasks
       setTasks([]);
     }
+  const handleShareTasks = async (selectedTaskIds: string[], recipientEmail: string) => {
+    console.log(`Sharing tasks ${selectedTaskIds.join(", ")} to ${recipientEmail}`);
+    showNoti("info", "Shared!", `Tasks shared with ${recipientEmail}`);
+    setShowShareModal(false);
   };
 
   useEffect(() => {
@@ -94,26 +115,29 @@ export default function DashboardPage() {
   } else if (sortBy === "deadline") {
     sorted.sort(
       (a, b) =>
-        new Date(a.deadline ?? 0).getTime() -
-        new Date(b.deadline ?? 0).getTime()
+        new Date(a.deadline ?? 0).getTime() - new Date(b.deadline ?? 0).getTime()
     );
   } else if (sortBy === "priority") {
     const order = { high: 3, medium: 2, low: 1 };
     sorted.sort(
       (a, b) =>
-        (order[b.priority ?? "medium"] ?? 2) -
-        (order[a.priority ?? "medium"] ?? 2)
+        (order[b.priority ?? "medium"] ?? 2) - (order[a.priority ?? "medium"] ?? 2)
     );
   }
 
   return (
     <div className="animate-pageFade space-y-8">
+      {/* NOTI POPUP  */}
+      <NotificationPopup
+        open={notiOpen}
+        type={notiType}
+        title={notiTitle}
+        message={notiMessage}
+        onClose={() => setNotiOpen(false)}
+      />
 
       {/* HEADER */}
-      <PageHeader
-        title="Dashboard"
-        subtitle="Overview of your study tasks"
-      >
+      <PageHeader title="Dashboard" subtitle="Overview of your study tasks">
         <div className="flex items-center gap-3">
         <NotificationBell
           onTaskAccepted={() => {
@@ -128,26 +152,26 @@ export default function DashboardPage() {
           Share Tasks
         </Button>
 
-        <button
-          onClick={() => setShowLLMModal(true)}
-          className="
-    fixed bottom-6 right-6 z-40
-    bg-purple-500 hover:bg-purple-600
-    text-white text-2xl
-    w-14 h-14 rounded-full
-    shadow-lg flex items-center justify-center
-    dark:bg-purple-600 dark:hover:bg-purple-700
-  "
-        >
-          🤖
-        </button>
+          <button
+            onClick={() => setShowLLMModal(true)}
+            className="
+              fixed bottom-6 right-6 z-40
+              bg-purple-500 hover:bg-purple-600
+              text-white text-2xl
+              w-14 h-14 rounded-full
+              shadow-lg flex items-center justify-center
+              dark:bg-purple-600 dark:hover:bg-purple-700
+            "
+          >
+            
+          </button>
 
-        <Button
-          className="bg-purple-500 hover:bg-purple-600 text-white shadow-md"
-          onClick={() => setShowNewModal(true)}
-        >
-          + New Task
-        </Button>
+          <Button
+            className="bg-purple-500 hover:bg-purple-600 text-white shadow-md"
+            onClick={() => setShowNewModal(true)}
+          >
+            + New Task
+          </Button>
         </div>
       </PageHeader>
 
@@ -155,7 +179,10 @@ export default function DashboardPage() {
       {showNewModal && (
         <NewTaskModal
           onClose={() => setShowNewModal(false)}
-          onCreate={handleCreateTask}
+          onCreate={(task) => {
+            handleCreateTask(task);
+            setShowNewModal(false);
+          }}
         />
       )}
 
@@ -172,24 +199,28 @@ export default function DashboardPage() {
         <EditTaskModal
           task={editingTask}
           onClose={() => setEditingTask(null)}
-          onSave={handleUpdateTask}
+          onSave={(updated) => {
+            handleUpdateTask(updated);
+            setEditingTask(null);
+          }}
         />
       )}
 
-      {
-    showLLMModal && (
-      <LLMTaskGeneratorModal onClose={() => setShowLLMModal(false)}
-       onAddTask={handleCreateTask} />
-    )
-  }
+      {showLLMModal && (
+        <LLMTaskGeneratorModal
+          onClose={() => setShowLLMModal(false)}
+          onAddTask={(task) => {
+            handleCreateTask(task);
+            setShowLLMModal(false);
+          }}
+        />
+      )}
 
       {/* DELETE CONFIRMATION */}
       {deleteId && (
         <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="bg-white rounded-3xl p-6 w-full max-w-sm shadow-xl border border-purple-100">
-            <h3 className="text-lg font-semibold text-purple-700 mb-2">
-              Delete task?
-            </h3>
+            <h3 className="text-lg font-semibold text-purple-700 mb-2">Delete task?</h3>
             <p className="text-sm text-gray-600 mb-4">
               Are you sure you want to delete this task?
             </p>
@@ -201,10 +232,7 @@ export default function DashboardPage() {
               >
                 Cancel
               </Button>
-              <Button
-                className="bg-red-500 hover:bg-red-600 text-white"
-                onClick={confirmDelete}
-              >
+              <Button className="bg-red-500 hover:bg-red-600 text-white" onClick={confirmDelete}>
                 Delete
               </Button>
             </div>
