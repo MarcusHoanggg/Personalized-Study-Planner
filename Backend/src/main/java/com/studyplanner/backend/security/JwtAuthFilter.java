@@ -29,6 +29,18 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         final String authHeader = request.getHeader("Authorization");
+        String path = request.getRequestURI();
+
+        // Skip JWT for public endpoints
+        if (path.startsWith("/api/v1/suggestions") ||
+                path.startsWith("/oauth2") ||
+                path.startsWith("/login/oauth2") ||
+                path.startsWith("/api/v1/users/login") ||
+                path.startsWith("/api/v1/users/register")) {
+
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         // No token present — skip (Spring Security will block if route is protected)
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {

@@ -1,5 +1,6 @@
 export const API_URL = import.meta.env.VITE_API_URL;
 
+
 function getToken() {
   return localStorage.getItem("token");
 }

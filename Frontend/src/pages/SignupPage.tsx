@@ -55,14 +55,21 @@ export default function SignupPage() {
           OR SIGN UP WITH EMAIL
         </div>
 
-        <label className="block mb-1 text-sm text-gray-700">Full Name</label>
+        <label className="block mb-1 text-sm text-gray-700">First Name</label>
         <Input
-          placeholder="Enter your name"
+          placeholder="Enter your First Name"
           value={name}
           onChange={(e) => setName(e.target.value)}
           className="mb-4 bg-purple-50/40 border-purple-200 focus:border-purple-400"
         />
 
+        <label className="block mb-1 text-sm text-gray-700">Last Name</label>
+        <Input
+          placeholder="Enter your Last Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="mb-4 bg-purple-50/40 border-purple-200 focus:border-purple-400"
+        />
         <label className="block mb-1 text-sm text-gray-700">Email</label>
         <Input
           placeholder="Enter your email"

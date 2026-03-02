@@ -27,7 +27,7 @@ import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 @RestController
-@RequestMapping("api/v1/suggestions")
+@RequestMapping("/api/v1/suggestions")
 @AllArgsConstructor
 public class SuggestedTasksController {
 
