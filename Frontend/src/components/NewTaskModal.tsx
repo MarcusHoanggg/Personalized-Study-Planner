@@ -4,6 +4,7 @@ import type { Task, TaskStatus } from "../types";
 import Button from "../ui/Button";
 import Input from "../ui/Input";
 import Select from "../ui/Select";
+import { createTask } from "../services/tasks";
 
 interface NewTaskModalProps {
   onClose: () => void;
@@ -16,22 +17,31 @@ export default function NewTaskModal({ onClose, onCreate }: NewTaskModalProps) {
   const [priority, setPriority] = useState<"low" | "medium" | "high">("medium");
   const [status, setStatus] = useState<TaskStatus>("todo");
   const [deadline, setDeadline] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!title.trim()) return;
 
-    const newTask: Task = {
-      id: crypto.randomUUID(),
-      title,
-      description,
-      priority,
-      status,
-      deadline: deadline || undefined,
-      createdAt: new Date().toISOString(),
-    };
+    setLoading(true);
+    setError("");
+    try {
+      const newTask = await createTask({
+        title,
+        description,
+        priority,
+        status,
+        deadline: deadline || undefined,
+      });
 
-    onCreate(newTask);
-    onClose();
+      onCreate(newTask);
+      onClose();
+    } catch (err) {
+      console.error("Failed to create task:", err);
+      setError(err instanceof Error ? err.message : "Failed to create task");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -108,11 +118,19 @@ export default function NewTaskModal({ onClose, onCreate }: NewTaskModalProps) {
           </div>
         </div>
 
+        {/* Error Message */}
+        {error && (
+          <div className="mb-4 p-3 rounded-lg bg-red-50 border border-red-200">
+            <p className="text-sm text-red-700">{error}</p>
+          </div>
+        )}
+
         {/* Buttons */}
         <div className="flex justify-end gap-3 mt-8">
           <Button
             variant="outline"
             onClick={onClose}
+            disabled={loading}
             className="border-purple-300 text-purple-600 hover:bg-purple-100"
           >
             Cancel
@@ -120,9 +138,10 @@ export default function NewTaskModal({ onClose, onCreate }: NewTaskModalProps) {
 
           <Button
             onClick={handleSubmit}
+            disabled={loading}
             className="bg-purple-500 hover:bg-purple-600 text-white shadow-md"
           >
-            Create Task
+            {loading ? "Creating..." : "Create Task"}
           </Button>
         </div>
       </div>

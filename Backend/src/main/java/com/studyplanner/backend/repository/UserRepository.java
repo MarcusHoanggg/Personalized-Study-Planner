@@ -18,14 +18,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     boolean existsByEmail(String email); // Check if a user with the given email already exists
 
-    // Search by name or email
+    // Search by name or email (handles null firstName/lastName)
     @Query("SELECT u FROM User u " +
             "WHERE u.id <> :excludeUserId " +
             "AND (" +
-            "LOWER(u.firstName) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
-            "LOWER(u.lastName)  LIKE LOWER(CONCAT('%', :query, '%')) OR " +
-            "LOWER(CONCAT(u.firstName, ' ', u.lastName)) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
-            "LOWER(u.email)     LIKE LOWER(CONCAT('%', :query, '%'))" +
+            "LOWER(COALESCE(u.firstName, '')) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
+            "LOWER(COALESCE(u.lastName, ''))  LIKE LOWER(CONCAT('%', :query, '%')) OR " +
+            "LOWER(CONCAT(COALESCE(u.firstName, ''), ' ', COALESCE(u.lastName, ''))) LIKE LOWER(CONCAT('%', :query, '%')) OR " +
+            "LOWER(u.email) LIKE LOWER(CONCAT('%', :query, '%'))" +
             ")")
     List<User> searchUsers(@Param("query") String query,
             @Param("excludeUserId") Long excludeUserId);

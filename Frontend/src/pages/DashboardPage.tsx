@@ -10,7 +10,9 @@ import TaskCard from "../components/TaskCard";
 import NewTaskModal from "../components/NewTaskModal";
 import EditTaskModal from "../components/EditTaskModal";
 import ShareTaskModal from "../components/ShareTaskModal";
+import NotificationBell from "../components/NotificationBell";
 import LLMTaskGeneratorModal from "./LLMTaskGeneratorModal";
+import { getTasks, deleteTask } from "../services/tasks";
 
 type StatusFilter = "all" | TaskStatus;
 type SortBy = "created" | "deadline" | "priority";
@@ -43,34 +45,34 @@ export default function DashboardPage() {
     setDeleteId(id);
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (!deleteId) return;
-    setTasks((prev) => prev.filter((t) => t.id !== deleteId));
+    try {
+      await deleteTask(deleteId);
+      setTasks((prev) => prev.filter((t) => t.id !== deleteId));
+    } catch (error) {
+      console.error("Failed to delete task:", error);
+    }
     setDeleteId(null);
   };
 
-  const handleShareTasks = async (
-    selectedTaskIds: string[],
-    recipientEmail: string
-  ) => {
-    // TODO: Replace with actual API call to your backend
-    console.log(
-      `Sharing tasks ${selectedTaskIds.join(", ")} to ${recipientEmail}`
-    );
-    // Remove the alert() line below:
-    // alert(`Tasks shared with ${recipientEmail}`);
+  // Load tasks from backend API
+  const loadTasks = async () => {
+    try {
+      const tasksFromApi = await getTasks();
+      setTasks(tasksFromApi);
+      // Clear any old localStorage tasks to prevent confusion
+      localStorage.removeItem("tasks");
+    } catch (error) {
+      console.error("Failed to load tasks:", error);
+      // Don't use localStorage fallback - it may have wrong user's tasks
+      setTasks([]);
+    }
   };
 
-  // Load tasks
   useEffect(() => {
-    const saved = localStorage.getItem("tasks");
-    if (saved) setTasks(JSON.parse(saved));
+    loadTasks();
   }, []);
-
-  // Save tasks
-  useEffect(() => {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-  }, [tasks]);
 
   const stats = {
     total: tasks.length,
@@ -113,6 +115,12 @@ export default function DashboardPage() {
         subtitle="Overview of your study tasks"
       >
         <div className="flex items-center gap-3">
+        <NotificationBell
+          onTaskAccepted={() => {
+            // Refresh tasks from backend to get the accepted task with all fields
+            loadTasks();
+          }}
+        />
         <Button
           className="bg-purple-500 hover:bg-purple-600 text-white shadow-md"
           onClick={() => setShowShareModal(true)}
@@ -156,7 +164,6 @@ export default function DashboardPage() {
         <ShareTaskModal
           tasks={tasks}
           onClose={() => setShowShareModal(false)}
-          onShare={handleShareTasks}
         />
       )}
 

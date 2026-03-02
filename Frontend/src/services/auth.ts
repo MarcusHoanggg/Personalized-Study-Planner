@@ -65,4 +65,5 @@ export function logout(): void {
   currentUser = null;
   localStorage.removeItem('token');
   localStorage.removeItem('user');
+  localStorage.removeItem('tasks'); // Clear any cached tasks to prevent cross-user contamination
 }

@@ -129,7 +129,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public List<UserSearchdto> searchUsers(String query, Long excludeUserId) {
-        if (query == null || query.trim().length() < 2) {
+        if (query == null || query.trim().isEmpty()) {
             return List.of();
         }
         return userRepository.searchUsers(query.trim(), excludeUserId)
@@ -242,6 +242,7 @@ public class UserServiceImpl implements UserService {
                 .priority(original.getPriority())
                 .status(Task.Status.PENDING)
                 .completed(false)
+                .sharedByEmail(invite.getSender().getEmail())
                 .build();
 
         Task savedTask = taskRepository.save(copiedTask);
@@ -290,7 +291,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public List<TaskShareInviteDto> getPendingInvites(Long userId) {
-        return inviteRepository.findByReceiverIdAndStatus(userId, InviteStatus.PENDING)
+        return inviteRepository.findByReceiverIdAndStatusWithDetails(userId, InviteStatus.PENDING)
                 .stream()
                 .map(TaskShareInviteMapper::mapToDto)
                 .collect(Collectors.toList());
@@ -299,7 +300,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional(readOnly = true)
     public List<TaskShareInviteDto> getAllReceivedInvites(Long userId) {
-        return inviteRepository.findByReceiverId(userId)
+        return inviteRepository.findByReceiverIdWithDetails(userId)
                 .stream()
                 .map(TaskShareInviteMapper::mapToDto)
                 .collect(Collectors.toList());

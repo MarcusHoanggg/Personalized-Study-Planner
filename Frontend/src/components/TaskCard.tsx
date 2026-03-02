@@ -167,6 +167,12 @@ export default function TaskCard({
             Created on: {new Date(task.createdAt).toLocaleDateString()}
           </p>
 
+          {task.sharedByEmail && (
+            <p className="text-xs text-purple-500 mt-1 bg-purple-50 px-2 py-1 rounded-lg inline-block">
+              Received: {task.sharedByEmail}
+            </p>
+          )}
+
           <div className="flex items-center gap-3 mt-3">
             <span
               className={`
