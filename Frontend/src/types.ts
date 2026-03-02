@@ -14,6 +14,7 @@ export interface Task {
   deadline?: string;
   createdAt: string;
   priority?: "low" | "medium" | "high";
+  sharedByEmail?: string;
 }
 
 // =========================

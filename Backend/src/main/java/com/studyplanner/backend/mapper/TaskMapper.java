@@ -16,6 +16,7 @@ public class TaskMapper {
                 .priority(task.getPriority())
                 .status(task.getStatus())
                 .completed(task.isCompleted())
+                .sharedByEmail(task.getSharedByEmail())
                 .build();
     }
 

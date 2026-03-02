@@ -3,7 +3,7 @@ import Button from "../ui/Button";
 
 export default function NotFoundPage() {
   return (
-    <div className="min-h-[70vh] flex items-center justify-center px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-100 via-pink-100 to-blue-100 px-4">
       <div className="text-center space-y-6">
         <div className="mx-auto w-24 h-24 rounded-full bg-purple-100 flex items-center justify-center">
           <span className="text-5xl font-bold text-purple-600">?</span>

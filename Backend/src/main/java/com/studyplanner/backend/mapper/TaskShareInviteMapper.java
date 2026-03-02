@@ -13,6 +13,7 @@ public class TaskShareInviteMapper {
 
         return TaskShareInviteDto.builder()
                 .inviteId(invite.getId())
+                .inviteToken(invite.getInviteToken())
                 .status(invite.getStatus())
                 .createdAt(invite.getCreatedAt())
                 .respondedAt(invite.getRespondedAt())
