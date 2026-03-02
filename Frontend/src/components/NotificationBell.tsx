@@ -1,17 +1,19 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from "react";
 import {
   getPendingInvites,
   acceptInvite,
   declineInvite,
   type TaskShareInvite,
-} from '../services/notifications';
-import Button from '../ui/Button';
+} from "../services/notifications";
+import Button from "../ui/Button";
 
 interface NotificationBellProps {
   onTaskAccepted?: () => void;
 }
 
-export default function NotificationBell({ onTaskAccepted }: NotificationBellProps) {
+export default function NotificationBell({
+  onTaskAccepted,
+}: NotificationBellProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [invites, setInvites] = useState<TaskShareInvite[]>([]);
   const [loading, setLoading] = useState(false);
@@ -25,7 +27,7 @@ export default function NotificationBell({ onTaskAccepted }: NotificationBellPro
       const data = await getPendingInvites();
       setInvites(data);
     } catch (error) {
-      console.error('Failed to fetch invites:', error);
+      console.error("Failed to fetch invites:", error);
     } finally {
       setLoading(false);
     }
@@ -41,15 +43,18 @@ export default function NotificationBell({ onTaskAccepted }: NotificationBellPro
   // Close panel when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (panelRef.current && !panelRef.current.contains(event.target as Node)) {
+      if (
+        panelRef.current &&
+        !panelRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
 
     if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
+      document.addEventListener("mousedown", handleClickOutside);
     }
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen]);
 
   const handleAccept = async (invite: TaskShareInvite) => {
@@ -59,7 +64,7 @@ export default function NotificationBell({ onTaskAccepted }: NotificationBellPro
       setInvites((prev) => prev.filter((i) => i.inviteId !== invite.inviteId));
       onTaskAccepted?.();
     } catch (error) {
-      console.error('Failed to accept invite:', error);
+      console.error("Failed to accept invite:", error);
     } finally {
       setActionLoading(null);
     }
@@ -71,7 +76,7 @@ export default function NotificationBell({ onTaskAccepted }: NotificationBellPro
       await declineInvite(invite.inviteToken);
       setInvites((prev) => prev.filter((i) => i.inviteId !== invite.inviteId));
     } catch (error) {
-      console.error('Failed to decline invite:', error);
+      console.error("Failed to decline invite:", error);
     } finally {
       setActionLoading(null);
     }
@@ -109,7 +114,7 @@ export default function NotificationBell({ onTaskAccepted }: NotificationBellPro
         {/* Notification Badge */}
         {pendingCount > 0 && (
           <span className="absolute -top-0.5 -right-0.5 flex items-center justify-center min-w-[18px] h-[18px] px-1 text-xs font-bold text-white bg-red-500 rounded-full">
-            {pendingCount > 99 ? '99+' : pendingCount}
+            {pendingCount > 99 ? "99+" : pendingCount}
           </span>
         )}
       </button>
@@ -119,9 +124,13 @@ export default function NotificationBell({ onTaskAccepted }: NotificationBellPro
         <div className="absolute right-0 top-full mt-2 w-80 max-h-96 overflow-y-auto bg-white rounded-2xl shadow-xl border border-purple-100 z-50">
           {/* Header */}
           <div className="sticky top-0 bg-white px-4 py-3 border-b border-purple-100 rounded-t-2xl">
-            <h3 className="text-lg font-semibold text-purple-700">Notifications</h3>
+            <h3 className="text-lg font-semibold text-purple-700">
+              Notifications
+            </h3>
             {pendingCount > 0 && (
-              <p className="text-sm text-gray-500">{pendingCount} pending invite{pendingCount !== 1 ? 's' : ''}</p>
+              <p className="text-sm text-gray-500">
+                {pendingCount} pending invite{pendingCount !== 1 ? "s" : ""}
+              </p>
             )}
           </div>
 
@@ -146,7 +155,9 @@ export default function NotificationBell({ onTaskAccepted }: NotificationBellPro
                     <path d="M13.73 21a2 2 0 0 1-3.46 0" />
                   </svg>
                 </div>
-                <p className="text-sm text-gray-500">No pending notifications</p>
+                <p className="text-sm text-gray-500">
+                  No pending notifications
+                </p>
               </div>
             ) : (
               <div className="space-y-2">
@@ -172,7 +183,8 @@ export default function NotificationBell({ onTaskAccepted }: NotificationBellPro
                       )}
                       {invite.taskDeadline && (
                         <p className="text-xs text-gray-500 mt-1">
-                          Due: {new Date(invite.taskDeadline).toLocaleDateString()}
+                          Due:{" "}
+                          {new Date(invite.taskDeadline).toLocaleDateString()}
                         </p>
                       )}
                     </div>
@@ -185,7 +197,9 @@ export default function NotificationBell({ onTaskAccepted }: NotificationBellPro
                         onClick={() => handleAccept(invite)}
                         disabled={actionLoading === invite.inviteId}
                       >
-                        {actionLoading === invite.inviteId ? 'Processing...' : 'Accept'}
+                        {actionLoading === invite.inviteId
+                          ? "Processing..."
+                          : "Accept"}
                       </Button>
                       <Button
                         size="sm"
