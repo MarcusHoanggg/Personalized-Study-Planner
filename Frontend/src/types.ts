@@ -26,7 +26,11 @@ export interface User {
   email: string;
   name?: string;
   bio?: string;
+  firstName?: string;
+  lastName?: string;
+  profilePicture?: string;
 }
+
 
 // =========================
 // Calendar Event Types
