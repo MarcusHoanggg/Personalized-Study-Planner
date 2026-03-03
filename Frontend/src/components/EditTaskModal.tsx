@@ -19,7 +19,8 @@ export default function EditTaskModal({ task, onClose, onSave }: EditTaskModalPr
     task.priority ?? "medium"
   );
   const [status, setStatus] = useState<TaskStatus>(task.status);
-  const [deadline, setDeadline] = useState(task.deadline ?? "");
+  const [deadline, setDeadline] = useState(
+      task.deadline ? task.deadline : "" );
   const [loading, setLoading] = useState(false);
 
   const handleSave = async () => {
