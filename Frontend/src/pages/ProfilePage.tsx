@@ -8,8 +8,8 @@ import StatsCard from "../ui/StatsCard";
 
 export default function ProfilePage() {
   const user = {
-    username: "mahatomahi2062",
-    email: "mahatomahi2062@gmail.com",
+    username: "Mustafa",
+    email: "swe.musti@gmail.com",
     bio: "",
   };
 
@@ -108,7 +108,7 @@ export default function ProfilePage() {
               variant="outline"
               className="border-purple-300 text-purple-600 hover:bg-purple-100"
             >
-              Configure
+              Configured
             </Button>
           </div>
 
@@ -124,7 +124,7 @@ export default function ProfilePage() {
               variant="outline"
               className="border-purple-300 text-purple-600 hover:bg-purple-100"
             >
-              Connect
+              Connected
             </Button>
           </div>
         </div>

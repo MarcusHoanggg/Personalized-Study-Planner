@@ -118,7 +118,7 @@ export default function CalendarPage() {
             onChange={handleICSImport}
           />
 
-          <Button
+          {/* <Button
             variant="outline"
             className="border-purple-300 text-purple-600 hover:bg-purple-100"
             onClick={() =>
@@ -126,7 +126,7 @@ export default function CalendarPage() {
             }
           >
             Import from Google Calendar
-          </Button>
+          </Button> */}
 
           <Button
             className="bg-purple-500 hover:bg-purple-600 text-white"
