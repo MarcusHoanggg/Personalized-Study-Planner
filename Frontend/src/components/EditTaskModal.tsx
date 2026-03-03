@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import type { Task, TaskStatus } from "../types";
 import Button from "../ui/Button";
@@ -22,28 +21,29 @@ export default function EditTaskModal({ task, onClose, onSave }: EditTaskModalPr
   const [deadline, setDeadline] = useState(task.deadline ?? "");
   const [loading, setLoading] = useState(false);
 
-  const handleSave = async () => {
-    if (!title.trim()) return;
+const handleSave = async () => {
+  if (!title.trim()) return;
 
-    setLoading(true);
-    try {
-      const updatedTask = await updateTask({
-        ...task,
-        title,
-        description,
-        priority,
-        status,
-        deadline: deadline || undefined,
-      });
+  setLoading(true);
+  try {
+    const updatedTask = await updateTask({
+      ...task,
+      title,
+      description,
+      priority,
+      status,
+      deadline: deadline || undefined,
+    });
 
-      onSave(updatedTask);
-      onClose();
-    } catch (error) {
-      console.error("Failed to update task:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
+    onSave(updatedTask);
+    onClose();
+  } catch (error) {
+    console.error("Failed to update task:", error);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50">

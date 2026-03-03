@@ -126,7 +126,7 @@ export async function createTask(partial: Omit<Task, 'id' | 'createdAt'>): Promi
 export async function updateTask(task: Task): Promise<Task> {
   try {
     const backendTask = mapFrontendToBackend(task);
-    const response = await request<ApiResponse<BackendTask>>(`/api/v1/task/${task.id}`, {
+    const response = await request<ApiResponse<BackendTask>>(`/api/v1/task/update/${task.id}`, {
       method: 'PUT',
       body: JSON.stringify(backendTask),
     });
@@ -144,7 +144,7 @@ export async function updateTaskStatus(id: string, status: TaskStatus): Promise<
       'in_progress': 'IN_PROGRESS',
       'completed': 'COMPLETED',
     };
-    const response = await request<ApiResponse<BackendTask>>(`/api/v1/task/${id}/status?status=${statusMap[status]}`, {
+    const response = await request<ApiResponse<BackendTask>>(`/api/v1/task/update/${id}/status?status=${statusMap[status]}`, {
       method: 'PATCH',
     });
     return mapBackendToFrontend(response.data);
@@ -154,9 +154,15 @@ export async function updateTaskStatus(id: string, status: TaskStatus): Promise<
   }
 }
 
+export async function updateTaskCompleted(id: string, completed: boolean): Promise<Task | null> {
+   const response = await request<ApiResponse<BackendTask>>( `/api/v1/task/update/${id}/complete?completed=${completed}`,
+     { method: 'PATCH' }
+     ); 
+     return mapBackendToFrontend(response.data); }
+
 export async function deleteTask(id: string): Promise<boolean> {
   try {
-    await request<ApiResponse<void>>(`/api/v1/task/${id}`, {
+    await request<ApiResponse<void>>(`/api/v1/task/delete/${id}`, {
       method: 'DELETE',
     });
     return true;
@@ -165,4 +171,3 @@ export async function deleteTask(id: string): Promise<boolean> {
     return false;
   }
 }
-
