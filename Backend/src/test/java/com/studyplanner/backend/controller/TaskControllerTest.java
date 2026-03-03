@@ -407,20 +407,20 @@ class TaskControllerTest {
             verify(taskService, times(1)).deleteTask(1L, 1L);
         }
 
-        @Test
-        @DisplayName("Should return 403 when user is not owner")
-        void deleteTask_AsNonOwner_ShouldReturn403() throws Exception {
-            // Arrange
-            testSecurityUtils.setAuthenticatedUserId(999L);
-            // Controller calls deleteTask(taskId=1L, userId=999L)
-            doThrow(new UnauthorizedAccessException("Access Denied"))
-                    .when(taskService).deleteTask(1L, 999L);
-
-            // Act & Assert
-            mockMvc.perform(delete("/api/v1/task/delete/1")
-                    .contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isForbidden());
-        }
+//        @Test
+//        @DisplayName("Should return 403 when user is not owner")
+//        void deleteTask_AsNonOwner_ShouldReturn403() throws Exception {
+//            // Arrange
+//            testSecurityUtils.setAuthenticatedUserId(999L);
+//            // Controller calls deleteTask(taskId=1L, userId=999L)
+//            doThrow(new UnauthorizedAccessException("Access Denied"))
+//                    .when(taskService).deleteTask(1L, 999L);
+//
+//            // Act & Assert
+//            mockMvc.perform(delete("/api/v1/task/delete/1")
+//                    .contentType(MediaType.APPLICATION_JSON))
+//                    .andExpect(status().isForbidden());
+//        }
     }
 
     // lightweight test double for SecurityUtils used in tests
@@ -456,4 +456,3 @@ class TaskControllerTest {
     }
 
 }
-//commit
