@@ -1,38 +1,39 @@
-version: '3.8'
+  version: '3.8'
 
-services:
+  services:
 
-  db:
-    image: postgres:15
-    container_name: study-planner_db
-    environment:
-      POSTGRES_DB: studyplanner
-      POSTGRES_USER: java
-      POSTGRES_PASSWORD: java
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
+    db:
+      image: postgres:15
+      container_name: study-planner_db
+      environment:
+        POSTGRES_DB: studyplanner
+        POSTGRES_USER: java
+        POSTGRES_PASSWORD: java
+      ports:
+        - "5432:5432"
+      volumes:
+        - postgres_data:/var/lib/postgresql/data
 
-  backend:
-    image: mustah21/backend:p1
-    container_name: study-planner-backend
-    depends_on:
-      - db
-    environment:
-      DB_URL: jdbc:postgresql://db:5432/studyplanner
-      DB_USERNAME: java
-      DB_PASSWORD: java
-    ports:
-      - "8081:8081"
+    backend:
+      image: mustah21/backend:p1
+      container_name: study-planner-backend
+      depends_on:
+        db:
+          condition: service_healthy
+      environment:
+        DB_URL: jdbc:postgresql://db:5432/studyplanner
+        DB_USERNAME: java
+        DB_PASSWORD: java
+      ports:
+        - "8081:8081"
 
-  frontend:
-    image: mustah21/frontend:p1
-    container_name: study-planner_frontend
-    depends_on:
-      - backend
-    ports:
-      - "5173:80"
+    frontend:
+      image: mustah21/frontend:p1
+      container_name: study-planner_frontend
+      depends_on:
+        - backend
+      ports:
+        - "5173:80"
 
-volumes:
-  postgres_data:
+  volumes:
+    postgres_data:
