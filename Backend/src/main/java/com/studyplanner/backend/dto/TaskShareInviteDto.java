@@ -20,6 +20,7 @@ import lombok.Setter;
 public class TaskShareInviteDto {
 
     private Long inviteId;
+    private String inviteToken;
     private InviteStatus status;
     private LocalDateTime createdAt;
     private LocalDateTime respondedAt;

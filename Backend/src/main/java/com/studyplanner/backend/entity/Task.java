@@ -41,6 +41,10 @@ public class Task {
     @Column(name = "task_deadline")
     private LocalDateTime taskDeadline;
 
+    public void setGoogleEventId(String googleEventId) {
+
+    }
+
     public enum Priority {
         LOW,
         MEDIUM,
@@ -61,6 +65,10 @@ public class Task {
 
     @Column(name = "completed", nullable = false)
     private boolean completed;
+
+    // Email of the user who shared this task (null if created by owner)
+    @Column(name = "shared_by_email")
+    private String sharedByEmail;
 
     // New fields for LLM integration
     // Indicates if the task has been accepted from the LLM

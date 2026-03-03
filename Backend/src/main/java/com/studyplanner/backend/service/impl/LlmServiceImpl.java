@@ -121,6 +121,11 @@ public class LlmServiceImpl implements LlmService {
         return Math.max(0, monthlyQuota - (int) used);
     }
 
+    @Override
+    public LlmTaskGenerationResponse chat(LlmTaskGenerationRequest prompt) {
+        return null;
+    }
+
     // ─────────────────────────────────────────────────────────────────────────────
     // Private helpers
     // ─────────────────────────────────────────────────────────────────────────────
@@ -195,4 +200,7 @@ public class LlmServiceImpl implements LlmService {
 
         return tasks;
     }
+
+
+
 }

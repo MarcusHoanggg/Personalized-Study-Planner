@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 
 import com.studyplanner.backend.entity.Task;
 
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,7 +19,7 @@ import lombok.Setter;
 public class TaskDto {
 
     private Long taskId;
-    @NotNull(message = "User ID is required")
+    // userId is set by the controller from the JWT token, not from client request
     private Long userId;
     private String taskName;
     private String taskDescription;
@@ -28,4 +27,6 @@ public class TaskDto {
     private Task.Priority priority;
     private Task.Status status;
     private boolean completed;
+    private String sharedByEmail;
+
 }

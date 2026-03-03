@@ -192,7 +192,7 @@ public class SuggestedTaskServiceImpl implements SuggestedTaskService {
         analytics.put("acceptanceRate", Math.round(acceptanceRate * 100));
         analytics.put("mostRecentSuggestions",
                 suggestedTaskRepository.findRecentSuggestionsByUserId(
-                        userId, LocalDateTime.now().minusDays(30))
+                                userId, LocalDateTime.now().minusDays(30))
                         .stream()
                         .map(SuggestedTasksMapper::toDto)
                         .collect(Collectors.toList()));

@@ -15,5 +15,6 @@ public interface LlmService {
 
     // return the number of suggestions left for the user
     int getRemainingMonthlyQuota(Long userId);
+    LlmTaskGenerationResponse chat(LlmTaskGenerationRequest prompt);
 
 }

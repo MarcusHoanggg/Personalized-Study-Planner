@@ -1,9 +1,9 @@
-
 import { useState } from "react";
 import type { Task, TaskStatus } from "../types";
 import Button from "../ui/Button";
 import Input from "../ui/Input";
 import Select from "../ui/Select";
+import { updateTask } from "../services/tasks";
 
 interface EditTaskModalProps {
   task: Task;
@@ -19,11 +19,14 @@ export default function EditTaskModal({ task, onClose, onSave }: EditTaskModalPr
   );
   const [status, setStatus] = useState<TaskStatus>(task.status);
   const [deadline, setDeadline] = useState(task.deadline ?? "");
+  const [loading, setLoading] = useState(false);
 
-  const handleSave = () => {
-    if (!title.trim()) return;
+const handleSave = async () => {
+  if (!title.trim()) return;
 
-    onSave({
+  setLoading(true);
+  try {
+    const updatedTask = await updateTask({
       ...task,
       title,
       description,
@@ -31,8 +34,16 @@ export default function EditTaskModal({ task, onClose, onSave }: EditTaskModalPr
       status,
       deadline: deadline || undefined,
     });
+
+    onSave(updatedTask);
     onClose();
-  };
+  } catch (error) {
+    console.error("Failed to update task:", error);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50">
@@ -111,6 +122,7 @@ export default function EditTaskModal({ task, onClose, onSave }: EditTaskModalPr
           <Button
             variant="outline"
             onClick={onClose}
+            disabled={loading}
             className="border-purple-300 text-purple-600 hover:bg-purple-100"
           >
             Cancel
@@ -118,9 +130,10 @@ export default function EditTaskModal({ task, onClose, onSave }: EditTaskModalPr
 
           <Button
             onClick={handleSave}
+            disabled={loading}
             className="bg-purple-500 hover:bg-purple-600 text-white shadow-md"
           >
-            Save Changes
+            {loading ? "Saving..." : "Save Changes"}
           </Button>
         </div>
       </div>

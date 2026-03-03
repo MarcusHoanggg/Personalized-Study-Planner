@@ -18,8 +18,26 @@ public interface TaskShareInviteRepository extends JpaRepository<TaskShareInvite
     // All pending invites for a given receiver in app notifications
     List<TaskShareInvite> findByReceiverIdAndStatus(Long receiverId, InviteStatus status);
 
+    // All pending invites with eager loading of sender and task details
+    @Query("SELECT i FROM TaskShareInvite i " +
+            "JOIN FETCH i.sender s " +
+            "JOIN FETCH i.receiver r " +
+            "JOIN FETCH i.task t " +
+            "WHERE i.receiver.id = :receiverId AND i.status = :status")
+    List<TaskShareInvite> findByReceiverIdAndStatusWithDetails(
+            @Param("receiverId") Long receiverId, 
+            @Param("status") InviteStatus status);
+
     // All invites received by a user full history
     List<TaskShareInvite> findByReceiverId(Long receiverId);
+
+    // All invites received with eager loading
+    @Query("SELECT i FROM TaskShareInvite i " +
+            "JOIN FETCH i.sender s " +
+            "JOIN FETCH i.receiver r " +
+            "JOIN FETCH i.task t " +
+            "WHERE i.receiver.id = :receiverId")
+    List<TaskShareInvite> findByReceiverIdWithDetails(@Param("receiverId") Long receiverId);
 
     // All invites sent by a user full history
     List<TaskShareInvite> findBySenderId(Long senderId);

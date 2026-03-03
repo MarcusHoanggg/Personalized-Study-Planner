@@ -11,8 +11,12 @@ import TaskCard from "../components/TaskCard";
 import NewTaskModal from "../components/NewTaskModal";
 import EditTaskModal from "../components/EditTaskModal";
 import ShareTaskModal from "../components/ShareTaskModal";
+import NotificationBell from "../components/NotificationBell";
 import LLMTaskGeneratorModal from "./LLMTaskGeneratorModal";
-import NotificationPopup, { NotificationType } from "../components/NotificationPopup";
+import { getTasks, deleteTask } from "../services/tasks";
+import NotificationPopup, {
+  NotificationType,
+} from "../components/NotificationPopup";
 
 type StatusFilter = "all" | TaskStatus;
 type SortBy = "created" | "deadline" | "priority";
@@ -31,19 +35,38 @@ export default function DashboardPage() {
 
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
 
-  // ===== NOTI  =====
+  // ===== NOTIFICATION =====
   const [notiOpen, setNotiOpen] = useState(false);
   const [notiType, setNotiType] = useState<NotificationType>("info");
   const [notiTitle, setNotiTitle] = useState("");
   const [notiMessage, setNotiMessage] = useState<string | undefined>(undefined);
 
-  const showNoti = (type: NotificationType, title: string, message?: string) => {
+  const showNoti = (
+    type: NotificationType,
+    title: string,
+    message?: string,
+  ) => {
     setNotiType(type);
     setNotiTitle(title);
     setNotiMessage(message);
     setNotiOpen(true);
   };
   // ================================
+
+  const loadTasks = async () => {
+    try {
+      const tasksFromApi = await getTasks();
+      setTasks(tasksFromApi);
+      localStorage.removeItem("tasks");
+    } catch (error) {
+      console.error("Failed to load tasks:", error);
+      setTasks([]);
+    }
+  };
+
+  useEffect(() => {
+    loadTasks();
+  }, []);
 
   const handleCreateTask = (task: Task) => {
     setTasks((prev) => [...prev, task]);
@@ -59,30 +82,21 @@ export default function DashboardPage() {
     setDeleteId(id);
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = async () => {
     if (!deleteId) return;
-    setTasks((prev) => prev.filter((t) => t.id !== deleteId));
+
+    try {
+      await deleteTask(deleteId);
+      setTasks((prev) => prev.filter((t) => t.id !== deleteId));
+      showNoti("error", "Deleted", "Task has been deleted.");
+    } catch (error) {
+      console.error("Failed to delete task:", error);
+    }
+
     setDeleteId(null);
-    showNoti("error", "Deleted", "Task has been deleted.");
   };
 
-  const handleShareTasks = async (selectedTaskIds: string[], recipientEmail: string) => {
-    console.log(`Sharing tasks ${selectedTaskIds.join(", ")} to ${recipientEmail}`);
-    showNoti("info", "Shared!", `Tasks shared with ${recipientEmail}`);
-    setShowShareModal(false);
-  };
-
-  // Load tasks
-  useEffect(() => {
-    const saved = localStorage.getItem("tasks");
-    if (saved) setTasks(JSON.parse(saved));
-  }, []);
-
-  // Save tasks
-  useEffect(() => {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-  }, [tasks]);
-
+  // ===== Stats =====
   const stats = {
     total: tasks.length,
     todo: tasks.filter((t) => t.status === "todo").length,
@@ -90,32 +104,39 @@ export default function DashboardPage() {
     completed: tasks.filter((t) => t.status === "completed").length,
   };
 
+  // ===== Filtering =====
   const filtered = tasks.filter((t) => {
     const matchesStatus = statusFilter === "all" || t.status === statusFilter;
     const matchesSearch = t.title.toLowerCase().includes(search.toLowerCase());
     return matchesStatus && matchesSearch;
   });
 
+  // ===== Sorting =====
   let sorted = [...filtered];
 
   if (sortBy === "created") {
-    sorted.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    sorted.sort(
+      (a, b) =>
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    );
   } else if (sortBy === "deadline") {
     sorted.sort(
       (a, b) =>
-        new Date(a.deadline ?? 0).getTime() - new Date(b.deadline ?? 0).getTime()
+        new Date(a.deadline ?? 0).getTime() -
+        new Date(b.deadline ?? 0).getTime(),
     );
   } else if (sortBy === "priority") {
     const order = { high: 3, medium: 2, low: 1 };
     sorted.sort(
       (a, b) =>
-        (order[b.priority ?? "medium"] ?? 2) - (order[a.priority ?? "medium"] ?? 2)
+        (order[b.priority ?? "medium"] ?? 2) -
+        (order[a.priority ?? "medium"] ?? 2),
     );
   }
 
   return (
     <div className="animate-pageFade space-y-8">
-      {/* NOTI POPUP  */}
+      {/* NOTIFICATION */}
       <NotificationPopup
         open={notiOpen}
         type={notiType}
@@ -127,6 +148,8 @@ export default function DashboardPage() {
       {/* HEADER */}
       <PageHeader title="Dashboard" subtitle="Overview of your study tasks">
         <div className="flex items-center gap-3">
+          <NotificationBell onTaskAccepted={loadTasks} />
+
           <Button
             className="bg-purple-500 hover:bg-purple-600 text-white shadow-md"
             onClick={() => setShowShareModal(true)}
@@ -136,16 +159,9 @@ export default function DashboardPage() {
 
           <button
             onClick={() => setShowLLMModal(true)}
-            className="
-              fixed bottom-6 right-6 z-40
-              bg-purple-500 hover:bg-purple-600
-              text-white text-2xl
-              w-14 h-14 rounded-full
-              shadow-lg flex items-center justify-center
-              dark:bg-purple-600 dark:hover:bg-purple-700
-            "
+            className="fixed bottom-6 right-6 z-40 bg-purple-500 hover:bg-purple-600 text-white text-2xl w-14 h-14 rounded-full shadow-lg flex items-center justify-center"
           >
-            
+            🤖
           </button>
 
           <Button
@@ -157,7 +173,7 @@ export default function DashboardPage() {
         </div>
       </PageHeader>
 
-      {/* NEW TASK MODAL */}
+      {/* MODALS */}
       {showNewModal && (
         <NewTaskModal
           onClose={() => setShowNewModal(false)}
@@ -168,16 +184,13 @@ export default function DashboardPage() {
         />
       )}
 
-      {/* SHARE TASKS MODAL */}
       {showShareModal && (
         <ShareTaskModal
           tasks={tasks}
           onClose={() => setShowShareModal(false)}
-          onShare={handleShareTasks}
         />
       )}
 
-      {/* EDIT TASK MODAL */}
       {editingTask && (
         <EditTaskModal
           task={editingTask}
@@ -203,19 +216,20 @@ export default function DashboardPage() {
       {deleteId && (
         <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="bg-white rounded-3xl p-6 w-full max-w-sm shadow-xl border border-purple-100">
-            <h3 className="text-lg font-semibold text-purple-700 mb-2">Delete task?</h3>
+            <h3 className="text-lg font-semibold text-purple-700 mb-2">
+              Delete task?
+            </h3>
             <p className="text-sm text-gray-600 mb-4">
               Are you sure you want to delete this task?
             </p>
             <div className="flex justify-end gap-3">
-              <Button
-                variant="outline"
-                className="border-purple-300 text-purple-600 hover:bg-purple-100"
-                onClick={() => setDeleteId(null)}
-              >
+              <Button variant="outline" onClick={() => setDeleteId(null)}>
                 Cancel
               </Button>
-              <Button className="bg-red-500 hover:bg-red-600 text-white" onClick={confirmDelete}>
+              <Button
+                className="bg-red-500 hover:bg-red-600 text-white"
+                onClick={confirmDelete}
+              >
                 Delete
               </Button>
             </div>
@@ -227,7 +241,11 @@ export default function DashboardPage() {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <StatsCard label="Total Tasks" value={stats.total} color="purple" />
         <StatsCard label="To Do" value={stats.todo} color="blue" />
-        <StatsCard label="In Progress" value={stats.inProgress} color="yellow" />
+        <StatsCard
+          label="In Progress"
+          value={stats.inProgress}
+          color="yellow"
+        />
         <StatsCard label="Completed" value={stats.completed} color="green" />
       </div>
 
@@ -237,13 +255,11 @@ export default function DashboardPage() {
           placeholder="Search tasks..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="bg-white border-purple-200 focus:border-purple-400"
         />
 
         <Select
           value={statusFilter}
           onChange={(e) => setStatusFilter(e.target.value as StatusFilter)}
-          className="bg-white border-purple-200 focus:border-purple-400"
         >
           <option value="all">All Status</option>
           <option value="todo">To Do</option>
@@ -254,7 +270,6 @@ export default function DashboardPage() {
         <Select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value as SortBy)}
-          className="bg-white border-purple-200 focus:border-purple-400"
         >
           <option value="created">Created Date</option>
           <option value="deadline">Deadline</option>
