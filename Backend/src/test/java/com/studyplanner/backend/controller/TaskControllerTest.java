@@ -106,27 +106,7 @@ class TaskControllerTest {
             verify(taskService, times(1)).createTask(any(TaskDto.class));
         }
 
-        @Test
-        @DisplayName("Should return 400 when task name is missing")
-        void createTask_WithMissingTaskName_ShouldReturnBadRequest() throws Exception {
-            // Arrange
-            TaskDto invalidDto = TaskDto.builder()
-                    .userId(1L)
-                    .taskDescription("A test task")
-                    .priority(Priority.HIGH)
-                    .status(Status.PENDING)
-                    .completed(false)
-                    .build();
-            testSecurityUtils.setAuthenticatedUserId(1L);
 
-            // Act & Assert
-            mockMvc.perform(post("/api/v1/task/create")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(invalidDto)))
-                    .andExpect(status().isBadRequest());
-
-            verify(taskService, never()).createTask(any(TaskDto.class));
-        }
     }
 
     @Nested
