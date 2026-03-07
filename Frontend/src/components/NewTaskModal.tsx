@@ -108,7 +108,7 @@ export default function NewTaskModal({ onClose, onCreate }: NewTaskModalProps) {
 
           {/* Deadline */}
           <div>
-            <label className="text-sm font-medium text-gray-600">Deadline</label>
+            <label className="text-sm font-medium text-gray-600">`Deadline`</label>
             <Input
               type="date"
               value={deadline}

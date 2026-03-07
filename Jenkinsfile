@@ -4,31 +4,38 @@ pipeline {
         maven 'maven'
         jdk 'jdk-21'
     }
-
     environment {
         PATH = "C:\\Program Files\\Docker\\Docker\\resources\\bin;${env.PATH}"
         DOCKERHUB_CREDENTIALS_ID = 'docker-hub'
-        DOCKERHUB_REPO = 'mustah21'
+        DOCKERHUB_REPO_BACKEND = 'mustah21/study-planner-backend'
+        DOCKERHUB_REPO_FRONTEND = 'mustah21/study-planner-frontend'
         DOCKER_IMAGE_TAG = 'p1'
     }
-
     stages {
         stage('Checkout') {
             steps {
                 git credentialsId: 'Github', url: 'https://github.com/MarcusHoanggg/Personalized-Study-Planner', branch: 'musti'
             }
         }
+
         stage('Build') {
             steps {
-                dir('Backend') {
-                    bat 'mvn clean install'
+                withCredentials([file(credentialsId: 'application-yaml', variable: 'APP_YAML')]) {
+                    bat """
+                        copy "%APP_YAML%" "Backend\\src\\main\\resources\\application.yaml"
+                        cd Backend
+                        mvn clean install -DskipTests
+                    """
                 }
             }
         }
+
         stage('Test') {
             steps {
                 dir('Backend') {
                     bat 'mvn test'
+                    bat 'if exist target\\site\\jacoco\\jacoco.xml (echo JACOCO FOUND) else (echo JACOCO NOT FOUND)'
+
                 }
             }
         }
@@ -39,24 +46,20 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Build and Push Docker Image') {
             steps {
                 script {
-                    docker.build("${DOCKERHUB_REPO}/backend:${DOCKER_IMAGE_TAG}", "./Backend")
-                    docker.build("${DOCKERHUB_REPO}/frontend:${DOCKER_IMAGE_TAG}", "./Frontend")
-                }
-            }
-        }
-
-        stage('Push Docker Image to Docker Hub') {
-            steps {
-                script {
-                    docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CREDENTIALS_ID) {
-                        docker.image("${DOCKERHUB_REPO}/backend:${DOCKER_IMAGE_TAG}").push()
-                        docker.image("${DOCKERHUB_REPO}/frontend:${DOCKER_IMAGE_TAG}").push()
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                        bat 'docker logout'
+                        bat 'docker login -u %DOCKER_USER% -p %DOCKER_PASS%'
+                        bat 'docker build -t %DOCKER_USER%/study-planner-backend:p1 ./Backend'
+                        bat 'docker build -t %DOCKER_USER%/study-planner-frontend:p1 ./Frontend'
+                        bat 'docker push %DOCKER_USER%/study-planner-backend:p1'
+                        bat 'docker push %DOCKER_USER%/study-planner-frontend:p1'
                     }
                 }
             }
         }
+
     }
 }

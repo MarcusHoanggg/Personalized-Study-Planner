@@ -54,7 +54,7 @@ public class TaskServiceImpl implements TaskService {
         }
     }
 
-    // --- CREAT ---
+    // --- CREATE ---
     @Override
     @Transactional
     public TaskDto createTask(TaskDto taskDto) {
@@ -181,6 +181,16 @@ public class TaskServiceImpl implements TaskService {
             reminderService.createReminderForTask(updated);
         }
 
+        // updated tasks
+        try {
+            String eventId = calendarService.pushToCalendar(updated);
+            if (eventId != null) {
+                log.info("Task synced to Google Calendar with event ID: {}");
+            }
+        } catch (Exception e) {
+            log.error("Failed to sync task to Google Calendar: {}", e.getMessage(), e);
+        }
+
         return TaskMapper.mapToTaskDto(updated);
     }
 
@@ -207,7 +217,7 @@ public class TaskServiceImpl implements TaskService {
         return TaskMapper.mapToTaskDto(taskRepository.save(task));
     }
 
-    // upate task priority
+    // update task priority
     @Override
     @Transactional
     public TaskDto updateTaskPriority(Long taskId, Long userId, Priority priority) {
@@ -223,8 +233,10 @@ public class TaskServiceImpl implements TaskService {
     public void deleteTask(Long taskId, Long userId) {
         Task task = findTask(taskId);
         verifyOwnership(task, userId);
-        // cancle reminder before deleting task
+        // cancel reminder before deleting task
         reminderService.cancelReminderForTask(taskId);
         taskRepository.delete(task);
+
+
     }
 }
