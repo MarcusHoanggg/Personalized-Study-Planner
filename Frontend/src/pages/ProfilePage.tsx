@@ -161,6 +161,48 @@ export default function ProfilePage() {
           <StatsCard label="Tasks Shared" value={0} color="blue" />
         </div>
       </Card>
+
+      {/* PREFERENCES */}
+      <Card className="rounded-3xl border border-purple-100 shadow-sm p-6">
+        <h3 className="text-lg font-semibold text-purple-700 mb-4">
+          Preferences
+        </h3>
+
+        <div className="space-y-6">
+
+          {/* Email Notifications */}
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="font-medium text-gray-700">Email Notifications</p>
+              <p className="text-sm text-gray-500">
+                Receive email reminders for tasks
+              </p>
+            </div>
+            <Button
+              variant="outline"
+              className="border-purple-300 text-purple-600 hover:bg-purple-100"
+            >
+              Configured
+            </Button>
+          </div>
+
+          {/* Calendar Integration */}
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="font-medium text-gray-700">Calendar Integration</p>
+              <p className="text-sm text-gray-500">
+                Sync with Google Calendar
+              </p>
+            </div>
+            <Button
+              variant="outline"
+              className="border-purple-300 text-purple-600 hover:bg-purple-100"
+            >
+              Connected
+            </Button>
+          </div>
+        </div>
+      </Card>
     </div>
   );
 }
