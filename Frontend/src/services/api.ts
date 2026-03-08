@@ -1,3 +1,4 @@
+// src/services/api.ts
 export const API_URL = import.meta.env.VITE_API_URL;
 
 function getToken() {
@@ -27,10 +28,18 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
 }
 
 export async function healthCheck() {
-  // giữ y như code cũ nhưng dùng helper
   return request(`/actuator/health`, { method: "GET" });
 }
 
 export async function postJSON<T>(path: string, body: any) {
   return request<T>(path, { method: "POST", body: JSON.stringify(body) });
+}
+
+
+export async function getJSON<T>(path: string) {
+  return request<T>(path, { method: "GET" });
+}
+
+export async function putJSON<T>(path: string, body: any) {
+  return request<T>(path, { method: "PUT", body: JSON.stringify(body) });
 }
