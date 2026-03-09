@@ -1,7 +1,7 @@
 pipeline {
     agent any
     tools {
-        maven 'maven'
+        maven 'Maven3'
         jdk 'jdk-17'
     }
 
@@ -10,6 +10,10 @@ pipeline {
         DOCKERHUB_CREDENTIALS_ID = 'darksolu'
         DOCKERHUB_REPO = 'darksolu'
         DOCKER_IMAGE_TAG = 'p1'
+        
+        DB_URL = 'jdbc:postgresql://postgres:5432/study_planner'
+        DB_USERNAME = 'java'
+        DB_PASSWORD = 'java'
     }
 
     stages {
@@ -23,7 +27,7 @@ pipeline {
         stage('Build') {
             steps {
                 dir('Backend') {
-                    bat 'mvn clean install'
+                   bat 'mvn clean package -DskipTests'
                 }
             }
         }

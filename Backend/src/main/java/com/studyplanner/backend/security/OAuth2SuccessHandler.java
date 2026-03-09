@@ -83,7 +83,6 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             );
             if (client != null && client.getAccessToken() != null) {
                 user.setGoogleAccessToken(client.getAccessToken().getTokenValue());
-
                 userRepository.save(user);
                 log.info("Google access token saved for user: {}", email);
             }

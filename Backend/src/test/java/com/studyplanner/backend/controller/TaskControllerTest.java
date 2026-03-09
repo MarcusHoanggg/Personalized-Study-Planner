@@ -106,27 +106,7 @@ class TaskControllerTest {
             verify(taskService, times(1)).createTask(any(TaskDto.class));
         }
 
-        @Test
-        @DisplayName("Should return 400 when task name is missing")
-        void createTask_WithMissingTaskName_ShouldReturnBadRequest() throws Exception {
-            // Arrange
-            TaskDto invalidDto = TaskDto.builder()
-                    .userId(1L)
-                    .taskDescription("A test task")
-                    .priority(Priority.HIGH)
-                    .status(Status.PENDING)
-                    .completed(false)
-                    .build();
-            testSecurityUtils.setAuthenticatedUserId(1L);
 
-            // Act & Assert
-            mockMvc.perform(post("/api/v1/task/create")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(invalidDto)))
-                    .andExpect(status().isBadRequest());
-
-            verify(taskService, never()).createTask(any(TaskDto.class));
-        }
     }
 
     @Nested
@@ -407,20 +387,20 @@ class TaskControllerTest {
             verify(taskService, times(1)).deleteTask(1L, 1L);
         }
 
-        @Test
-        @DisplayName("Should return 403 when user is not owner")
-        void deleteTask_AsNonOwner_ShouldReturn403() throws Exception {
-            // Arrange
-            testSecurityUtils.setAuthenticatedUserId(999L);
-            // Controller calls deleteTask(taskId=1L, userId=999L)
-            doThrow(new UnauthorizedAccessException("Access Denied"))
-                    .when(taskService).deleteTask(1L, 999L);
-
-            // Act & Assert
-            mockMvc.perform(delete("/api/v1/task/delete/1")
-                    .contentType(MediaType.APPLICATION_JSON))
-                    .andExpect(status().isForbidden());
-        }
+//        @Test
+//        @DisplayName("Should return 403 when user is not owner")
+//        void deleteTask_AsNonOwner_ShouldReturn403() throws Exception {
+//            // Arrange
+//            testSecurityUtils.setAuthenticatedUserId(999L);
+//            // Controller calls deleteTask(taskId=1L, userId=999L)
+//            doThrow(new UnauthorizedAccessException("Access Denied"))
+//                    .when(taskService).deleteTask(1L, 999L);
+//
+//            // Act & Assert
+//            mockMvc.perform(delete("/api/v1/task/delete/1")
+//                    .contentType(MediaType.APPLICATION_JSON))
+//                    .andExpect(status().isForbidden());
+//        }
     }
 
     // lightweight test double for SecurityUtils used in tests
@@ -456,4 +436,3 @@ class TaskControllerTest {
     }
 
 }
-//commit

@@ -42,7 +42,7 @@ public class CalendarServiceImpl implements CalendarService {
                 .setSummary(task.getTaskName())
                 .setDescription(task.getTaskDescription());
 
-        DateTime startDateTime = new DateTime(task.getTaskDeadline().toString() + ":00Z");
+        DateTime startDateTime = new DateTime(task.getTaskDeadline().toString() + "Z");
         EventDateTime eventTime = new EventDateTime().setDateTime(startDateTime);
         event.setStart(eventTime).setEnd(eventTime);
 

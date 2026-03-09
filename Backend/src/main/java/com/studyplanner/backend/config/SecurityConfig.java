@@ -33,6 +33,8 @@ import com.studyplanner.backend.security.OAuth2SuccessHandler;
 
 import lombok.RequiredArgsConstructor;
 
+import static org.hibernate.query.sqm.tree.SqmNode.log;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -107,6 +109,8 @@ public class SecurityConfig {
             // JWT flow - load token from DB
             String email = authentication.getName();
             userRepository.findByEmail(email).ifPresent(user -> {
+                System.out.println("JWT auth name resolved as: {}" + email); // ← add this
+
                 // can't set local var directly, use workaround below
             });
             accessToken = userRepository.findByEmail(email)
