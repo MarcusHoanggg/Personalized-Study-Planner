@@ -1,26 +1,45 @@
 services:
+
   postgres:
     image: postgres:17
-    ports:
-      - '5432:5432'
+    container_name: study_planner_db
     environment:
-      - POSTGRES_DB=study_planner
-      - POSTGRES_USER=java
-      - POSTGRES_PASSWORD=java
-    container_name: study_planner_Db
-  
-  backend: 
-    image: Backend:latest
+      POSTGRES_DB: study_planner
+      POSTGRES_USER: java
+      POSTGRES_PASSWORD: java
     ports:
-      -'8081:8081'
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U java -d study_planner"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    image: darksolu/backend:p1
+    container_name: study_planner_backend
     environment:
-      - spring_application_name=study_planner
-      - spring_datasource_url=jdbc:postgresql://postgres:5432/study_planner
-      - spring_datasource_username=java
-      - spring_datasource_password=java
-      - server_port=8081
-    
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/study_planner
+      SPRING_DATASOURCE_USERNAME: java
+      SPRING_DATASOURCE_PASSWORD: java
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    ports:
+      - "8080:8080"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: on-failure
+
   frontend:
-    image: Frontend:latest
+    image: darksolu/frontend:p1
+    container_name: study_planner_frontend
     ports:
-      -'8080:8080'
+      - "3000:80"
+    depends_on:
+      - backend
+    restart: on-failure
+
+volumes:
+  postgres_data:

@@ -4,48 +4,45 @@ pipeline {
         maven 'Maven3'
         jdk 'jdk-17'
     }
-
     environment {
-        PATH = "C:\\Program Files\\Docker\\Docker\\resources\\bin;${env.PATH}"
         DOCKERHUB_CREDENTIALS_ID = 'darksolu'
         DOCKERHUB_REPO = 'darksolu'
         DOCKER_IMAGE_TAG = 'p1'
-        
-        DB_URL = 'jdbc:postgresql://postgres:5432/study_planner'
-        DB_USERNAME = 'java'
-        DB_PASSWORD = 'java'
     }
-
     stages {
+
         stage('Checkout') {
             steps {
-                git credentialsId: 'Github', 
-                url: 'https://github.com/MarcusHoanggg/Personalized-Study-Planner', 
-                branch: 'docker'
+                git credentialsId: 'Github',
+                    url: 'https://github.com/MarcusHoanggg/Personalized-Study-Planner',
+                    branch: 'docker'
             }
         }
-        stage('Build') {
+
+        stage('Build Backend') {
             steps {
                 dir('Backend') {
-                   bat 'mvn clean package -DskipTests'
+                    // Use 'bat' on Windows Jenkins agent, 'sh' on Linux
+                    bat 'mvn clean package -DskipTests'
                 }
             }
         }
-        stage('Test') {
+
+        stage('Test Backend') {
             steps {
                 dir('Backend') {
                     bat 'mvn test'
                 }
             }
-        }
-
-        stage('Publish Test Results') {
-            steps {
-                junit 'Backend/**/target/surefire-reports/*.xml'
+            post {
+                always {
+                    junit allowEmptyResults: true,
+                          testResults: 'Backend/**/target/surefire-reports/*.xml'
+                }
             }
         }
 
-        stage('Build Docker Image') {
+        stage('Build Docker Images') {
             steps {
                 script {
                     docker.build("${DOCKERHUB_REPO}/backend:${DOCKER_IMAGE_TAG}", "./Backend")
@@ -54,7 +51,7 @@ pipeline {
             }
         }
 
-        stage('Push Docker Image to Docker Hub') {
+        stage('Push Docker Images') {
             steps {
                 script {
                     docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CREDENTIALS_ID) {
@@ -63,6 +60,25 @@ pipeline {
                     }
                 }
             }
+        }
+
+        stage('Deploy with Docker Compose') {
+            steps {
+                // Bring down any existing stack, then start fresh
+                bat 'docker compose down --remove-orphans'
+                bat 'docker compose up -d'
+            }
+        }
+    }
+
+    post {
+        failure {
+            echo 'Pipeline failed. Check the logs above.'
+        }
+        success {
+            echo 'Pipeline succeeded! App is running.'
+            echo 'Frontend: http://localhost:3000'
+            echo 'Backend:  http://localhost:8081'
         }
     }
 }
