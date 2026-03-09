@@ -2,20 +2,22 @@ pipeline {
     agent any
     tools {
         maven 'maven'
-        jdk 'jdk-21'
+        jdk 'jdk-17'
     }
 
     environment {
         PATH = "C:\\Program Files\\Docker\\Docker\\resources\\bin;${env.PATH}"
-        DOCKERHUB_CREDENTIALS_ID = 'docker-hub'
-        DOCKERHUB_REPO = 'mustah21'
+        DOCKERHUB_CREDENTIALS_ID = 'darksolu'
+        DOCKERHUB_REPO = 'darksolu'
         DOCKER_IMAGE_TAG = 'p1'
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git credentialsId: 'Github', url: 'https://github.com/MarcusHoanggg/Personalized-Study-Planner', branch: 'musti'
+                git credentialsId: 'Github', 
+                url: 'https://github.com/MarcusHoanggg/Personalized-Study-Planner', 
+                branch: 'docker'
             }
         }
         stage('Build') {

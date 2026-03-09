@@ -1,0 +1,26 @@
+services:
+  postgres:
+    image: postgres:7
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_DB=study_planner
+      - POSTGRES_USER=java
+      - POSTGRES_PASSWORD=java
+    container_name: study_planner_Db
+  
+  backend: 
+    image: Backend:latest
+    ports:
+      -'8081:8081'
+    environment:
+      - spring_application_name=study_planner
+      - spring_datasource_url=jdbc:postgresql://postgres:5432/study_planner
+      - spring_datasource_username=java
+      - spring_datasource_password=java
+      - server_port=8081
+    
+  frontend:
+    image: Frontend:latest
+    ports:
+      -'8080:8080'
