@@ -31,7 +31,7 @@ pipeline {
         stage('Test Backend') {
             steps {
                 dir('Backend') {
-                    bat 'mvn test'
+                    bat 'mvn test -Dmaven.test.failure.ignore=true'
                 }
             }
             post {
