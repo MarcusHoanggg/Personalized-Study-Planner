@@ -72,7 +72,7 @@ pipeline {
         }
         success {
             echo 'Pipeline succeeded!'
-            echo 'Frontend: http://localhost:3000'
+            echo 'Frontend: http://localhost:5173'
             echo 'Backend:  http://localhost:8081'
         }
     }
