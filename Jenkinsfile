@@ -10,7 +10,6 @@ pipeline {
         DOCKER_IMAGE_TAG = 'p1'
     }
     stages {
-
         stage('Checkout') {
             steps {
                 git credentialsId: 'Github',
@@ -18,16 +17,13 @@ pipeline {
                     branch: 'docker'
             }
         }
-
         stage('Build Backend') {
             steps {
                 dir('Backend') {
-                    // Use 'bat' on Windows Jenkins agent, 'sh' on Linux
                     bat 'mvn clean package -DskipTests'
                 }
             }
         }
-
         stage('Test Backend') {
             steps {
                 dir('Backend') {
@@ -41,7 +37,6 @@ pipeline {
                 }
             }
         }
-
         stage('Build Docker Images') {
             steps {
                 script {
@@ -50,7 +45,6 @@ pipeline {
                 }
             }
         }
-
         stage('Push Docker Images') {
             steps {
                 script {
@@ -61,22 +55,22 @@ pipeline {
                 }
             }
         }
-
         stage('Deploy with Docker Compose') {
             steps {
-                // Bring down any existing stack, then start fresh
-                bat 'docker compose down --remove-orphans'
-                bat 'docker compose up -d'
+                withCredentials([file(credentialsId: 'env-file', variable: 'ENV_FILE')]) {
+                    bat 'copy "%ENV_FILE%" .env'
+                    bat 'docker compose down --remove-orphans'
+                    bat 'docker compose up -d'
+                }
             }
         }
     }
-
     post {
         failure {
             echo 'Pipeline failed. Check the logs above.'
         }
         success {
-            echo 'Pipeline succeeded! App is running.'
+            echo 'Pipeline succeeded!'
             echo 'Frontend: http://localhost:3000'
             echo 'Backend:  http://localhost:8081'
         }
