@@ -1,5 +1,5 @@
 // src/services/api.ts
-export const API_URL = import.meta.env.VITE_API_URL;
+export const API_URL = ""; // empty - nginx will proxy /api to backend
 
 function getToken() {
   return localStorage.getItem("token");
@@ -34,7 +34,6 @@ export async function healthCheck() {
 export async function postJSON<T>(path: string, body: any) {
   return request<T>(path, { method: "POST", body: JSON.stringify(body) });
 }
-
 
 export async function getJSON<T>(path: string) {
   return request<T>(path, { method: "GET" });
