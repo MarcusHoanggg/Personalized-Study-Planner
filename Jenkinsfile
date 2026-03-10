@@ -59,6 +59,7 @@ pipeline {
             steps {
                 withCredentials([file(credentialsId: 'env-file', variable: 'ENV_FILE')]) {
                     bat 'copy "%ENV_FILE%" .env'
+                    bat 'docker rm -f study_planner_db study_planner_backend study_planner_frontend || exit 0'
                     bat 'docker compose down --remove-orphans'
                     bat 'docker compose up -d'
                 }
