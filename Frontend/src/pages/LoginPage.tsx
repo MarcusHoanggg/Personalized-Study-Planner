@@ -4,10 +4,12 @@ import Input from "../ui/Input";
 import Button from "../ui/Button";
 import { BookOpenIcon } from "@heroicons/react/24/solid";
 import { loginWithEmail } from "../services/auth";
+import { useTranslation } from "react-i18next";
 
 const API_URL = import.meta.env.VITE_API_URL;
 
 export default function LoginPage() {
+  const { t, i18n } = useTranslation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -33,11 +35,11 @@ export default function LoginPage() {
         <BookOpenIcon className="w-12 h-12 text-purple-600 mx-auto mb-4" />
 
         <h2 className="text-3xl font-bold mb-2 text-center text-purple-700">
-          Welcome Back
+          {t("login.title")}
         </h2>
 
         <p className="text-sm text-gray-600 mb-8 text-center">
-          Sign in to continue organizing your studies
+          {t("login.description")}
         </p>
 
         <Button
@@ -47,14 +49,14 @@ export default function LoginPage() {
           type="button"
         >
           <img src="/Google-Logo.svg" alt="Google" className="w-5 h-5" />
-          Continue with Google
+          {t("login.googleButton")}
         </Button>
 
         <div className="text-center text-xs text-gray-500 mb-4">
-          ----------OR CONTINUE WITH EMAIL----------
+          {t("login.altButton")}
         </div>
 
-        <label className="block mb-1 text-sm text-gray-700">Email</label>
+        <label className="block mb-1 text-sm text-gray-700">{t("login.email")}</label>
         <Input
           placeholder="Enter your email"
           value={email}
@@ -62,7 +64,7 @@ export default function LoginPage() {
           className="mb-6 bg-purple-50/40 border-purple-200 focus:border-purple-400"
         />
 
-        <label className="block mb-1 text-sm text-gray-700">Password</label>
+        <label className="block mb-1 text-sm text-gray-700">{t("login.password")}</label>
         <Input
           type="password"
           placeholder="Enter your password"
@@ -75,22 +77,22 @@ export default function LoginPage() {
           className="w-full mb-4 bg-purple-500 hover:bg-purple-600 text-white shadow-md"
           onClick={handleLogin}
         >
-          Sign In
+          {t("login.button")}
         </Button>
 
         <p className="text-sm text-center mb-2">
-          Don’t have an account?{" "}
+          {t("login.noAccount")}{" "}
           <button
             type="button"
             className="text-purple-600 font-medium"
             onClick={() => navigate("/signup")}
           >
-            Sign up
+            {t("login.signUp")}
           </button>
         </p>
 
         <p className="text-xs text-center text-gray-400">
-          Demo app – any email will work for testing
+          {t("login.demoNote")}
         </p>
       </div>
     </div>

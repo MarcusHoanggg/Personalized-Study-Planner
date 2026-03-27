@@ -8,8 +8,10 @@ import Avatar from "../ui/Avatar";
 import StatsCard from "../ui/StatsCard";
 import { getCurrentUser } from "../services/auth";
 import { fetchMe, saveProfile } from "../services/profile";
+import { useTranslation } from "react-i18next";
 
 export default function ProfilePage() {
+  const { t, i18n } = useTranslation();
   const cached = useMemo(() => getCurrentUser(), []);
 
   const [loading, setLoading] = useState(true);
@@ -67,7 +69,7 @@ export default function ProfilePage() {
 
   return (
     <div className="space-y-8">
-      <PageHeader title="Profile Settings" subtitle="Manage your account information" />
+      <PageHeader title={t("profile.title")} subtitle={t("profile.subtitle")} />
 
       <Card className="rounded-3xl border border-purple-100 shadow-sm p-6">
         <div className="flex items-center gap-6 mb-8">
