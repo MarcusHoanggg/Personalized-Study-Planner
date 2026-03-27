@@ -17,8 +17,10 @@ import Input from "../ui/Input";
 import Select from "../ui/Select";
 
 import type { CalendarEvent, EventType } from "../types";
+import { useTranslation } from "react-i18next";
 
 export default function CalendarPage() {
+  const { t, i18n } = useTranslation();
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(
     format(new Date(), "yyyy-MM-dd")
@@ -132,7 +134,7 @@ export default function CalendarPage() {
             className="bg-purple-500 hover:bg-purple-600 text-white"
             onClick={() => setShowAddEvent(true)}
           >
-            Add Event
+            {t("addevent.title")}
           </Button>
         </div>
       </PageHeader>
@@ -165,7 +167,7 @@ export default function CalendarPage() {
                 setCurrentMonth((prev) => addMonths(prev, 1))
               }
             >
-              Next
+              next
             </Button>
           </div>
 
@@ -205,12 +207,12 @@ export default function CalendarPage() {
             {format(new Date(selectedDate), "MMMM d, yyyy")}
           </h3>
           <p className="text-gray-500">
-            {selectedEvents.length} item(s) scheduled
+            {selectedEvents.length} item (s) scheduled
           </p>
 
           {selectedEvents.length === 0 ? (
             <p className="text-gray-500 mt-3">
-              No tasks or events scheduled for this day.
+              {t("eventtype.amounts")}
             </p>
           ) : (
             <ul className="mt-4 space-y-3">
@@ -234,12 +236,12 @@ export default function CalendarPage() {
           <Card className="w-full max-w-md rounded-3xl border border-purple-100 shadow-xl p-6">
 
             <h3 className="text-xl font-semibold text-purple-700 mb-4">
-              Add a new event to{" "}
+              {t("addevent.title")} to{" "}
               {format(new Date(selectedDate), "MMMM d, yyyy")}
             </h3>
 
             <label className="block text-sm font-medium text-gray-600 mb-1">
-              Event Title
+              {t("addevent.name")}
             </label>
             <Input
               placeholder="e.g., Physics Lecture"
@@ -249,7 +251,7 @@ export default function CalendarPage() {
             />
 
             <label className="block text-sm font-medium text-gray-600 mb-1">
-              Event Type
+              {t("addevent.type")}
             </label>
             <Select
               value={newType}
@@ -258,10 +260,10 @@ export default function CalendarPage() {
               }
               className="mb-4 bg-purple-50/40 border-purple-200 focus:border-purple-400"
             >
-              <option value="Class">Class</option>
-              <option value="Exam">Exam</option>
-              <option value="Assignment">Assignment</option>
-              <option value="Other">Other</option>
+              <option value="Class">{t("eventtype.class")}</option>
+              <option value="Exam">{t("eventtype.exam")}</option>
+              <option value="Assignment">{t("eventtype.assignment")}</option>
+              <option value="Other">{t("eventtype.other")}</option>
             </Select>
 
             <div className="flex justify-end gap-3 mt-6">
@@ -270,14 +272,14 @@ export default function CalendarPage() {
                 className="border-purple-300 text-purple-600 hover:bg-purple-100"
                 onClick={() => setShowAddEvent(false)}
               >
-                Cancel
+                {t("addevent.cancelButton")}
               </Button>
 
               <Button
                 className="bg-purple-500 hover:bg-purple-600 text-white"
                 onClick={handleAddEvent}
               >
-                Add Event
+                {t("addevent.saveButton")}
               </Button>
             </div>
           </Card>

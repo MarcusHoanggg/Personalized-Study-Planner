@@ -4,10 +4,12 @@ import Input from "../ui/Input";
 import Button from "../ui/Button";
 import { BookOpenIcon } from "@heroicons/react/24/solid";
 import { signup } from "../services/auth";
+import { useTranslation } from "react-i18next";
 
 const API_URL = import.meta.env.VITE_API_URL; // http://localhost:8081
 
 export default function SignupPage() {
+  const { t, i18n } = useTranslation();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -34,11 +36,11 @@ export default function SignupPage() {
         <BookOpenIcon className="w-12 h-12 text-purple-600 mx-auto mb-4" />
 
         <h2 className="text-3xl font-bold mb-2 text-center text-purple-700">
-          Create Your Account
+          {t("signup.title")}
         </h2>
 
         <p className="text-sm text-gray-600 mb-8 text-center">
-          Start organizing your studies and tracking your progress
+          {t("signup.description")}
         </p>
 
         <Button
@@ -48,14 +50,14 @@ export default function SignupPage() {
           type="button"
         >
           <img src="/Google-Logo.svg" alt="Google" className="w-5 h-5" />
-          Sign up with Google
+          {t("signup.googleButton")}
         </Button>
 
         <div className="text-center text-xs text-gray-500 mb-4">
-          OR SIGN UP WITH EMAIL
+          {t("signup.altButton")}
         </div>
 
-        <label className="block mb-1 text-sm text-gray-700">Full Name</label>
+        <label className="block mb-1 text-sm text-gray-700">{t("signup.name")}</label>
         <Input
           placeholder="Enter your name"
           value={name}
@@ -63,7 +65,7 @@ export default function SignupPage() {
           className="mb-4 bg-purple-50/40 border-purple-200 focus:border-purple-400"
         />
 
-        <label className="block mb-1 text-sm text-gray-700">Email</label>
+        <label className="block mb-1 text-sm text-gray-700">{t("signup.email")}</label>
         <Input
           placeholder="Enter your email"
           value={email}
@@ -71,7 +73,7 @@ export default function SignupPage() {
           className="mb-6 bg-purple-50/40 border-purple-200 focus:border-purple-400"
         />
 
-        <label className="block mb-1 text-sm text-gray-700">Password</label>
+        <label className="block mb-1 text-sm text-gray-700">{t("signup.password")}</label>
         <Input
           placeholder="Create your password"
           type="password"
@@ -84,22 +86,22 @@ export default function SignupPage() {
           className="w-full mb-4 bg-purple-500 hover:bg-purple-600 text-white shadow-md"
           onClick={handleSignup}
         >
-          Create Account
+          {t("signup.button")}
         </Button>
 
         <p className="text-sm text-center mb-2">
-          Already have an account?{" "}
+          {t("signup.alreadyHaveAccount")}{" "}
           <button
             type="button"
             className="text-purple-600 font-medium"
             onClick={() => navigate("/login")}
           >
-            Sign in
+            {t("signup.signIn")}
           </button>
         </p>
 
         <p className="text-xs text-center text-gray-400">
-          Demo app – any name and email will work for testing
+          {t("signup.demoNote")}
         </p>
       </div>
     </div>

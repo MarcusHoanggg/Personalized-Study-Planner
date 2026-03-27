@@ -1,10 +1,23 @@
 import { Link } from "react-router-dom";
 import Button from "../ui/Button";
+import { useTranslation } from "react-i18next";
 
 export default function LandingPage() {
+  const { t, i18n } = useTranslation();
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-100 via-pink-100 to-blue-100 flex items-center justify-center px-4">
       <div className="max-w-4xl mx-auto text-center space-y-8 animate-pageFade">
+        <div className="flex justify-end">
+          <Button
+            variant="outline"
+            className="border-purple-300 text-purple-700 hover:bg-purple-100"
+            onClick={() => i18n.changeLanguage("fi")}
+          >
+            Suomi
+          </Button>
+        </div>
+        
         {/* Hero Section */}
         <div className="space-y-4">
           <div className="inline-block">
@@ -26,11 +39,11 @@ export default function LandingPage() {
           </div>
           
           <h1 className="text-5xl md:text-6xl font-bold text-transparent bg-clip-text bg-linear-to-r from-purple-600 to-blue-600">
-            Welcome to Study Planner
+            {t("welcome")}
           </h1>
           
           <p className="text-xl md:text-2xl text-gray-600 max-w-2xl mx-auto">
-            Organize your studies, track your progress, and achieve your academic goals
+            {t("landing.description")}
           </p>
         </div>
 
@@ -52,9 +65,9 @@ export default function LandingPage() {
                 />
               </svg>
             </div>
-            <h3 className="font-semibold text-purple-700 mb-2">Task Management</h3>
+            <h3 className="font-semibold text-purple-700 mb-2">{t("landing.features.taskManagement.title")}</h3>
             <p className="text-sm text-gray-600">
-              Create, organize, and track your study tasks efficiently
+              {t("landing.features.taskManagement.description")}
             </p>
           </div>
 
@@ -74,9 +87,9 @@ export default function LandingPage() {
                 />
               </svg>
             </div>
-            <h3 className="font-semibold text-blue-700 mb-2">Calendar View</h3>
+            <h3 className="font-semibold text-blue-700 mb-2">{t("landing.features.calendar.title")}</h3>
             <p className="text-sm text-gray-600">
-              Visualize deadlines and plan your study schedule
+              {t("landing.features.calendar.description")}
             </p>
           </div>
 
@@ -96,9 +109,9 @@ export default function LandingPage() {
                 />
               </svg>
             </div>
-            <h3 className="font-semibold text-purple-700 mb-2">Collaboration</h3>
+            <h3 className="font-semibold text-purple-700 mb-2">{t("landing.features.collaboration.title")}</h3>
             <p className="text-sm text-gray-600">
-              Share tasks and collaborate with study partners
+              {t("landing.features.collaboration.description")}
             </p>
           </div>
         </div>
@@ -107,13 +120,13 @@ export default function LandingPage() {
         <div className="pt-8">
           <Link to="/signup">
             <Button className="bg-linear-to-r from-purple-500 to-blue-500 hover:from-purple-600 hover:to-blue-600 text-white shadow-lg px-8 py-3 text-lg">
-              Get Started
+              {t("landing.cta.getStarted")}
             </Button>
           </Link>
           <p className="mt-4 text-gray-600">
-            Already have an account?{" "}
+            {t("landing.cta.alreadyHaveAccount")}
             <Link to="/login" className="text-purple-600 hover:text-purple-700 font-medium">
-              Sign in
+              {t("landing.cta.signIn")}
             </Link>
           </p>
         </div>

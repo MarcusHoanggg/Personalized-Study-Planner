@@ -3,8 +3,10 @@ import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { logout, getCurrentUser } from "../services/auth";
 import { useEffect, useState } from "react";
 import LLMTaskGeneratorModal from "../pages/LLMTaskGeneratorModal";
+import { useTranslation } from "react-i18next";
 
 export default function MainLayout() {
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const user = getCurrentUser();
   const [open, setOpen] = useState(false);
@@ -43,7 +45,7 @@ export default function MainLayout() {
 
       {/* MOBILE TOP BAR */}
       <header className="md:hidden fixed top-0 left-0 w-full bg-white border-b border-purple-100 shadow-sm p-4 flex justify-between items-center z-40">
-        <h1 className="text-xl font-bold text-purple-700">Study Planner</h1>
+        <h1 className="text-xl font-bold text-purple-700">{t("layout.title")}</h1>
 
         {/* HAMBURGER */}
         <button
@@ -77,7 +79,7 @@ export default function MainLayout() {
       >
         {/* LOGO + CLOSE */}
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold text-purple-700">Study Planner</h1>
+          <h1 className="text-2xl font-bold text-purple-700">{t("layout.title")}</h1>
 
           <button
             onClick={() => setOpen(false)}
@@ -99,7 +101,7 @@ export default function MainLayout() {
               }`
             }
           >
-            Dashboard
+            {t("dashboard.title")}
           </NavLink>
 
           <NavLink
@@ -112,7 +114,7 @@ export default function MainLayout() {
               }`
             }
           >
-            Calendar
+            {t("calendar.title")}
           </NavLink>
 
           <NavLink
@@ -125,7 +127,7 @@ export default function MainLayout() {
               }`
             }
           >
-            Profile
+            {t("profile.title")}
           </NavLink>
         </nav>
 
@@ -150,7 +152,7 @@ export default function MainLayout() {
             "
           >
             
-            Logout
+            {t("logout.title")}
           </button>
 
         </div>
