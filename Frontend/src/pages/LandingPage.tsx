@@ -1,23 +1,30 @@
 import { Link } from "react-router-dom";
 import Button from "../ui/Button";
 import { useTranslation } from "react-i18next";
+import { useState } from "react";
+import LanguageDropdown from "../components/LanguageDropdown";
 
 export default function LandingPage() {
   const { t, i18n } = useTranslation();
 
+  const [open, setOpen] = useState(false);
+  const languages = [
+    { code: "en", label: "English" },
+    { code: "fi", label: "Suomi" },
+    { code: "vn", label: "Vietnamese" },
+    { code: "ne", label: "Nepalese" },
+  ];
+
+
+
+
+
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-100 via-pink-100 to-blue-100 flex items-center justify-center px-4">
       <div className="max-w-4xl mx-auto text-center space-y-8 animate-pageFade">
-        <div className="flex justify-end">
-          <Button
-            variant="outline"
-            className="border-purple-300 text-purple-700 hover:bg-purple-100"
-            onClick={() => i18n.changeLanguage("fi")}
-          >
-            Suomi
-          </Button>
-        </div>
-        
+        <LanguageDropdown />
+
         {/* Hero Section */}
         <div className="space-y-4">
           <div className="inline-block">
@@ -37,11 +44,11 @@ export default function LandingPage() {
               </svg>
             </div>
           </div>
-          
+
           <h1 className="text-5xl md:text-6xl font-bold text-transparent bg-clip-text bg-linear-to-r from-purple-600 to-blue-600">
             {t("welcome")}
           </h1>
-          
+
           <p className="text-xl md:text-2xl text-gray-600 max-w-2xl mx-auto">
             {t("landing.description")}
           </p>

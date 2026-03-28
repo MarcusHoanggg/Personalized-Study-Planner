@@ -9,6 +9,7 @@ import StatsCard from "../ui/StatsCard";
 import { getCurrentUser } from "../services/auth";
 import { fetchMe, saveProfile } from "../services/profile";
 import { useTranslation } from "react-i18next";
+import LanguageDropdown from "../components/LanguageDropdown";
 
 export default function ProfilePage() {
   const { t, i18n } = useTranslation();
@@ -69,7 +70,12 @@ export default function ProfilePage() {
 
   return (
     <div className="space-y-8">
+
       <PageHeader title={t("profile.title")} subtitle={t("profile.subtitle")} />
+    
+      <div className="flex justify-end mb-4">
+        <LanguageDropdown />
+      </div>
 
       <Card className="rounded-3xl border border-purple-100 shadow-sm p-6">
         <div className="flex items-center gap-6 mb-8">
@@ -203,6 +209,24 @@ export default function ProfilePage() {
               Connected
             </Button>
           </div>
+
+          {/* Language */}
+          {/* <div className="flex items-center justify-between">
+            <div>
+              <p className="font-medium text-gray-700">Language</p>
+              <p className="text-sm text-gray-500">
+                Change user language
+              </p>
+            </div>
+              <LanguageDropdown/>
+          </div> */}
+
+
+
+
+
+
+
         </div>
       </Card>
     </div>
