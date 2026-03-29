@@ -143,7 +143,7 @@ public class LlmServiceImpl implements LlmService {
                       "taskName": "Read Docker documentation chapters 1-3",
                       "taskDescription": "Focus on containers, images, and basic commands",
                       "taskDeadline": "2026-03-15T18:00:00",
-                      "priority": "HIGH"
+                      "Youtube Link": "Video name"
                     }
                   ]
                 }
@@ -154,6 +154,8 @@ public class LlmServiceImpl implements LlmService {
                 - taskDeadline: ISO 8601 format (YYYY-MM-DDTHH:mm:ss), realistic future dates
                 - priority: HIGH, MEDIUM, or LOW
                 - Generate 3-8 tasks spread over time
+                - Suggest a youtube video that aligns most with your suggestion
+                - Make a clickable link for the youtube video
                 - Today's date is """ + LocalDateTime.now().toLocalDate();
     }
 
