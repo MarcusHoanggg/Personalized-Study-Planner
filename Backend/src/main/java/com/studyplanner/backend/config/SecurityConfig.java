@@ -33,7 +33,6 @@ import com.studyplanner.backend.security.OAuth2SuccessHandler;
 
 import lombok.RequiredArgsConstructor;
 
-import static org.hibernate.query.sqm.tree.SqmNode.log;
 
 @Configuration
 @EnableWebSecurity
@@ -42,7 +41,7 @@ public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
     private final OAuth2SuccessHandler oAuth2SuccessHandler;
-    private final UserRepository userRepository;
+    // private final UserRepository userRepository;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

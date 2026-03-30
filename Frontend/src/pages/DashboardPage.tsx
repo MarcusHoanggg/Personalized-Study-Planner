@@ -1,5 +1,6 @@
 // src/pages/DashboardPage.tsx
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 import PageHeader from "../ui/PageHeader";
 import StatsCard from "../ui/StatsCard";
 import Input from "../ui/Input";
@@ -20,6 +21,8 @@ type StatusFilter = "all" | TaskStatus;
 type SortBy = "created" | "deadline" | "priority";
 
 export default function DashboardPage() {
+    const { t } = useTranslation();
+
     const [tasks, setTasks] = useState<Task[]>([]);
     const [search, setSearch] = useState("");
     const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
@@ -49,12 +52,12 @@ export default function DashboardPage() {
 
     const handleCreateTask = (task: Task) => {
         setTasks((prev) => [...prev, task]);
-        showNoti("success", "Success!", "Task created successfully.");
+        showNoti("success", t("noti.success"), t("noti.taskCreated"));
     };
 
     const handleUpdateTask = (updated: Task) => {
         setTasks((prev) => prev.map((t) => (t.id === updated.id ? updated : t)));
-        showNoti("success", "Updated!", "Task updated successfully.");
+        showNoti("success", t("noti.updated"), t("noti.taskUpdated"));
     };
 
     const handleDeleteTask = (id: string) => {
@@ -70,16 +73,15 @@ export default function DashboardPage() {
             console.error("Failed to delete task:", error);
         }
         setDeleteId(null);
-        showNoti("error", "Deleted", "Task has been deleted.");
+        showNoti("error", t("noti.deleted"), t("noti.taskDeleted"));
     };
 
     const handleShareTasks = async (selectedTaskIds: string[], recipientEmail: string) => {
         console.log(`Sharing tasks ${selectedTaskIds.join(", ")} to ${recipientEmail}`);
-        showNoti("info", "Shared!", `Tasks shared with ${recipientEmail}`);
+        showNoti("info", t("noti.shared"), t("noti.tasksSharedWith", { email: recipientEmail }));
         setShowShareModal(false);
     };
 
-    // Load tasks from backend API
     const loadTasks = async () => {
         try {
             const tasksFromApi = await getTasks();
@@ -91,12 +93,10 @@ export default function DashboardPage() {
         }
     };
 
-    // ✅ useEffect is now at the top level of the component
     useEffect(() => {
         loadTasks();
     }, []);
 
-    // ✅ These are now at the top level of the component
     const stats = {
         total: tasks.length,
         todo: tasks.filter((t) => t.status === "todo").length,
@@ -127,10 +127,9 @@ export default function DashboardPage() {
         );
     }
 
-    // ✅ return is now at the top level of the component
     return (
         <div className="animate-pageFade space-y-8">
-            {/* NOTI POPUP  */}
+            {/* NOTI POPUP */}
             <NotificationPopup
                 open={notiOpen}
                 type={notiType}
@@ -140,7 +139,7 @@ export default function DashboardPage() {
             />
 
             {/* HEADER */}
-            <PageHeader title="Dashboard" subtitle="Overview of your study tasks">
+            <PageHeader title={t("dashboard.title")} subtitle={t("dashboard.subtitle")}>
                 <div className="flex items-center gap-3">
                     <NotificationBell
                         onTaskAccepted={() => {
@@ -151,7 +150,7 @@ export default function DashboardPage() {
                         className="bg-purple-500 hover:bg-purple-600 text-white shadow-md"
                         onClick={() => setShowShareModal(true)}
                     >
-                        Share Tasks
+                        {t("dashboard.shareTasks")}
                     </Button>
 
                     <button
@@ -171,7 +170,7 @@ export default function DashboardPage() {
                         className="bg-purple-500 hover:bg-purple-600 text-white shadow-md"
                         onClick={() => setShowNewModal(true)}
                     >
-                        + New Task
+                        {t("dashboard.newTask")}
                     </Button>
                 </div>
             </PageHeader>
@@ -221,9 +220,11 @@ export default function DashboardPage() {
             {deleteId && (
                 <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50">
                     <div className="bg-white rounded-3xl p-6 w-full max-w-sm shadow-xl border border-purple-100">
-                        <h3 className="text-lg font-semibold text-purple-700 mb-2">Delete task?</h3>
+                        <h3 className="text-lg font-semibold text-purple-700 mb-2">
+                            {t("dashboard.deleteConfirmTitle")}
+                        </h3>
                         <p className="text-sm text-gray-600 mb-4">
-                            Are you sure you want to delete this task?
+                            {t("dashboard.deleteConfirmMessage")}
                         </p>
                         <div className="flex justify-end gap-3">
                             <Button
@@ -231,10 +232,10 @@ export default function DashboardPage() {
                                 className="border-purple-300 text-purple-600 hover:bg-purple-100"
                                 onClick={() => setDeleteId(null)}
                             >
-                                Cancel
+                                {t("dashboard.cancel")}
                             </Button>
                             <Button className="bg-red-500 hover:bg-red-600 text-white" onClick={confirmDelete}>
-                                Delete
+                                {t("dashboard.delete")}
                             </Button>
                         </div>
                     </div>
@@ -243,16 +244,16 @@ export default function DashboardPage() {
 
             {/* STATS */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                <StatsCard label="Total Tasks" value={stats.total} color="purple"/>
-                <StatsCard label="To Do" value={stats.todo} color="blue"/>
-                <StatsCard label="In Progress" value={stats.inProgress} color="yellow"/>
-                <StatsCard label="Completed" value={stats.completed} color="green"/>
+                <StatsCard label={t("dashboard.stats.total")} value={stats.total} color="purple" />
+                <StatsCard label={t("dashboard.stats.todo")} value={stats.todo} color="blue" />
+                <StatsCard label={t("dashboard.stats.inProgress")} value={stats.inProgress} color="yellow" />
+                <StatsCard label={t("dashboard.stats.completed")} value={stats.completed} color="green" />
             </div>
 
             {/* FILTERS */}
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full mt-6">
                 <Input
-                    placeholder="Search tasks..."
+                    placeholder={t("dashboard.searchPlaceholder")}
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     className="bg-white border-purple-200 focus:border-purple-400"
@@ -263,10 +264,10 @@ export default function DashboardPage() {
                     onChange={(e) => setStatusFilter(e.target.value as StatusFilter)}
                     className="bg-white border-purple-200 focus:border-purple-400"
                 >
-                    <option value="all">All Status</option>
-                    <option value="todo">To Do</option>
-                    <option value="in_progress">In Progress</option>
-                    <option value="completed">Completed</option>
+                    <option value="all">{t("dashboard.filter.all")}</option>
+                    <option value="todo">{t("dashboard.filter.todo")}</option>
+                    <option value="in_progress">{t("dashboard.filter.inProgress")}</option>
+                    <option value="completed">{t("dashboard.filter.completed")}</option>
                 </Select>
 
                 <Select
@@ -274,15 +275,15 @@ export default function DashboardPage() {
                     onChange={(e) => setSortBy(e.target.value as SortBy)}
                     className="bg-white border-purple-200 focus:border-purple-400"
                 >
-                    <option value="created">Created Date</option>
-                    <option value="deadline">Deadline</option>
-                    <option value="priority">Priority</option>
+                    <option value="created">{t("dashboard.sort.created")}</option>
+                    <option value="deadline">{t("dashboard.sort.deadline")}</option>
+                    <option value="priority">{t("dashboard.sort.priority")}</option>
                 </Select>
             </div>
 
             {/* TASK LIST */}
             {sorted.length === 0 ? (
-                <EmptyState message="No tasks yet. Create your first task to get started!"/>
+                <EmptyState message={t("dashboard.emptyState")} />
             ) : (
                 <div className="space-y-4 relative overflow-visible">
                     {sorted.map((t) => (

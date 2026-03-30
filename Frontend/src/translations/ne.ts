@@ -1,100 +1,145 @@
-export const ne = {
-    translation: {
-        LandingPage: {
-        translation: {
-            "welcome": "",
-            "landing.description": "",
-            "landing.features.taskManagement.title": "",
-            "landing.features.taskManagement.description": "",
-            "landing.features.calendar.title": "",
-            "landing.features.calendar.description": "",
-            "landing.features.collaboration.title": "",
-            "landing.features.collaboration.description": "",
-            "landing.cta.getStarted": "",
-            "landing.cta.alreadyHaveAccount": "",
-            "landing.cta.signIn": ""
+const ne = {
+  translation: {
+    // Layout / Nav
+    "layout.title": "अध्ययन योजनाकार",
+    "nav.dashboard": "ड्यासबोर्ड",
+    "nav.calendar": "क्यालेन्डर",
+    "nav.profile": "प्रोफाइल",
+    "nav.logout": "लगआउट",
 
-        }
-    },
-        LoginPage: {
-            translation: {
-                "login.title": "",
-                "login.description": "",
-                "login.googleButton": "",
-                "login.altButton": "",
-                "login.email": "",
-                "login.password": "",
-                "login.button": "",
-                "login.noAccount": "",
-                "login.signUp": "",
-                "login.demoNote": ""
-        }
-    },
-        SignupPage: {
-            translation: {
-                "signup.title": "",
-                "signup.description": "",
-                "signup.googleButton": "",
-                "signup.altButton": "",
-                "signup.name": "",
-                "signup.email": "",
-                "signup.password": "",
-                "signup.button": "",
-                "signup.alreadyHaveAccount": "",
-                "signup.signIn": "",
-                "signup.demoNote": ""
-            }
+    // Landing
+    "welcome": "व्यक्तिगत अध्ययन योजनाकारमा स्वागत छ!",
+    "landing.description": "आफ्नो अध्ययन व्यवस्थित गर्नुहोस्, प्रगति ट्र्याक गर्नुहोस् र शैक्षिक लक्ष्यहरू हासिल गर्नुहोस्",
+    "landing.features.taskManagement.title": "कार्य व्यवस्थापन",
+    "landing.features.taskManagement.description": "अध्ययन कार्यहरू सिर्जना, व्यवस्थित र ट्र्याक गर्नुहोस्",
+    "landing.features.calendar.title": "क्यालेन्डर दृश्य",
+    "landing.features.calendar.description": "समयसीमाहरू हेर्नुहोस् र अध्ययन तालिका बनाउनुहोस्",
+    "landing.features.collaboration.title": "सहकार्य",
+    "landing.features.collaboration.description": "अध्ययन साझेदारहरूसँग कार्यहरू साझा गर्नुहोस्",
+    "landing.cta.getStarted": "सुरु गर्नुहोस्",
+    "landing.cta.alreadyHaveAccount": "पहिले नै खाता छ?",
+    "landing.cta.signIn": "साइन इन गर्नुहोस्",
 
-        }
-    },
-        DashboardPage: {
-            translation: {
-                "dashboard.title": "",
+    // Login
+    "login.title": "फिर्ता स्वागत छ!",
+    "login.description": "अध्ययन व्यवस्थित गर्न जारी राख्न साइन इन गर्नुहोस्",
+    "login.googleButton": "Google सँग जारी राख्नुहोस्",
+    "login.altButton": "वा इमेलसँग जारी राख्नुहोस्",
+    "login.email": "इमेल",
+    "login.password": "पासवर्ड",
+    "login.button": "साइन इन",
+    "login.noAccount": "खाता छैन?",
+    "login.signUp": "साइन अप",
+    "login.demoNote": "डेमो एप – परीक्षणका लागि जुनसुकै इमेल काम गर्छ",
 
-        }
-    },
-        NotFoundPage: {
-            translation: {
-                "notfound.title": "",
-                "notfound.description": "",
-                "notfound.backToHome": ""
-        }
-    },
-        ProfilePage: {
-            translation: {
-                "profile.title": "",
-                "profile.name": "",
-                "profile.email": "",
-                "profile.updateButton": "",
-                "fname.name": "",
-                "lname.name": "",
-        }
-    },
-        CalendarPage: {
-            translation: {
-                "calendar.title": "",
-                "addevent.title": "",
-                "addevent.name": "",
-                "addevent.date": "",
-                "addevent.type": "",
-                "addevent.saveButton": "",
-                "addevent.cancelButton": "",
-                "eventtype.class": "",
-                "eventtype.study": "",
-                "eventtype.exam": "",
-                "eventtype.other": "",
-                "eventtype.amounts": "",
-        }
-    },
-        layout: {
-            translation: {
-                "layout.title": "",
-                "dashboard.title": "",
-                "calendar.title": "",
-                "profile.title": "",
-                "logout.title": ""
-            }
-    },
-}
+    // Signup
+    "signup.title": "आफ्नो खाता सिर्जना गर्नुहोस्",
+    "signup.description": "अध्ययन व्यवस्थित गर्न र प्रगति ट्र्याक गर्न सुरु गर्नुहोस्",
+    "signup.googleButton": "Google सँग साइन अप गर्नुहोस्",
+    "signup.altButton": "वा इमेलसँग साइन अप गर्नुहोस्",
+    "signup.name": "पूरा नाम",
+    "signup.email": "इमेल",
+    "signup.password": "पासवर्ड",
+    "signup.button": "खाता सिर्जना गर्नुहोस्",
+    "signup.alreadyHaveAccount": "पहिले नै खाता छ?",
+    "signup.signIn": "साइन इन गर्नुहोस्",
+    "signup.demoNote": "डेमो एप – परीक्षणका लागि जुनसुकै नाम र इमेल काम गर्छ",
+
+    // Dashboard
+    "dashboard.title": "ड्यासबोर्ड",
+    "dashboard.subtitle": "तपाईंका अध्ययन कार्यहरूको सारांश",
+    "dashboard.newTask": "+ नयाँ कार्य",
+    "dashboard.shareTasks": "कार्यहरू साझा गर्नुहोस्",
+    "dashboard.deleteConfirmTitle": "कार्य मेटाउने?",
+    "dashboard.deleteConfirmMessage": "के तपाईं यो कार्य मेटाउन निश्चित हुनुहुन्छ?",
+    "dashboard.cancel": "रद्द गर्नुहोस्",
+    "dashboard.delete": "मेटाउनुहोस्",
+    "dashboard.emptyState": "अहिले कुनै कार्य छैन। सुरु गर्न पहिलो कार्य सिर्जना गर्नुहोस्!",
+    "dashboard.searchPlaceholder": "कार्यहरू खोज्नुहोस्...",
+    "dashboard.stats.total": "कुल कार्यहरू",
+    "dashboard.stats.todo": "गर्नुपर्ने",
+    "dashboard.stats.inProgress": "प्रक्रियामा",
+    "dashboard.stats.completed": "पूरा भएको",
+    "dashboard.filter.all": "सबै स्थिति",
+    "dashboard.filter.todo": "गर्नुपर्ने",
+    "dashboard.filter.inProgress": "प्रक्रियामा",
+    "dashboard.filter.completed": "पूरा भएको",
+    "dashboard.sort.created": "सिर्जना मिति",
+    "dashboard.sort.deadline": "समयसीमा",
+    "dashboard.sort.priority": "प्राथमिकता",
+
+    // Notifications
+    "noti.success": "सफल!",
+    "noti.updated": "अपडेट भयो!",
+    "noti.deleted": "मेटाइयो",
+    "noti.shared": "साझा गरियो!",
+    "noti.taskCreated": "कार्य सफलतापूर्वक सिर्जना गरियो।",
+    "noti.taskUpdated": "कार्य सफलतापूर्वक अपडेट गरियो।",
+    "noti.taskDeleted": "कार्य मेटाइएको छ।",
+    "noti.tasksSharedWith": "{{email}} सँग कार्यहरू साझा गरियो",
+
+    // Share Tasks
+    "share.title": "कार्यहरू साझा गर्नुहोस्",
+    "share.searchRecipients": "प्राप्तकर्ताहरू खोज्नुहोस्",
+    "share.searchPlaceholder": "नाम वा इमेल द्वारा खोज्नुहोस्...",
+    "share.selectAll": "सबै साझा योग्य चयन गर्नुहोस् ({{selected}}/{{total}})",
+    "share.localOnly": "स्थानीय मात्र",
+    "share.noTasks": "कुनै कार्य उपलब्ध छैन",
+    "share.due": "समाप्ति मिति",
+    "share.cancel": "रद्द गर्नुहोस्",
+    "share.shareButton": "कार्य साझा गर्नुहोस्",
+    "share.sharing": "साझा गर्दै...",
+    "share.error.selectTask": "कम्तिमा एउटा कार्य चयन गर्नुहोस्",
+    "share.error.selectUser": "कम्तिमा एउटा प्राप्तकर्ता चयन गर्नुहोस्",
+    "share.error.invalidTasks": "चयन गरिएका कार्यहरू साझा गर्न सकिँदैन।",
+    "share.success": "{{count}} जनालाई कार्य सफलतापूर्वक पठाइयो।",
+    "share.localTask": "(स्थानीय मात्र - साझा गर्न सकिँदैन)",
+
+    // Not Found
+    "notfound.title": "पृष्ठ फेला परेन",
+    "notfound.description": "तपाईं खोज्नु भएको पृष्ठ अवस्थित छैन।",
+    "notfound.backToHome": "गृहपृष्ठमा फर्कनुहोस्",
+
+    // Profile
+    "profile.title": " प्रोफाइल",
+    "profile.subtitle": "आफ्नो खाता विवरण व्यवस्थित गर्नुहोस्",
+    "profile.name": "नाम",
+    "profile.email": "इमेल",
+    "profile.firstName": "पहिलो नाम",
+    "profile.lastName": "थर",
+    "profile.bio": "परिचय",
+    "profile.bioPlaceholder": "आफ्नो बारेमा बताउनुहोस्...",
+    "profile.pictureUrl": "प्रोफाइल तस्विर URL",
+    "profile.emailNote": "इमेल परिवर्तन गर्न सकिँदैन",
+    "profile.saving": "सुरक्षित गर्दै...",
+    "profile.save": "सुरक्षित गर्नुहोस्",
+    "profile.updateButton": "प्रोफाइल अपडेट गर्नुहोस्",
+    "profile.stats": "खाता तथ्याङ्क",
+    "profile.tasksCreated": "सिर्जना गरिएका कार्यहरू",
+    "profile.tasksCompleted": "पूरा गरिएका कार्यहरू",
+    "profile.tasksShared": "साझा गरिएका कार्यहरू",
+    "profile.preferences": "प्राथमिकताहरू",
+    "profile.emailNotifications": "इमेल सूचनाहरू",
+    "profile.emailNotificationsDesc": "कार्यहरूका लागि इमेल रिमाइन्डर प्राप्त गर्नुहोस्",
+    "profile.calendarIntegration": "क्यालेन्डर एकीकरण",
+    "profile.calendarIntegrationDesc": "Google क्यालेन्डरसँग सिंक गर्नुहोस्",
+    "profile.configured": "कन्फिगर गरिएको",
+    "profile.connected": "जोडिएको",
+
+    // Calendar
+    "calendar.title": "क्यालेन्डर",
+    "addevent.title": "नयाँ कार्यक्रम थप्नुहोस्",
+    "addevent.name": "कार्यक्रमको नाम",
+    "addevent.date": "कार्यक्रमको मिति",
+    "addevent.type": "कार्यक्रमको प्रकार",
+    "addevent.saveButton": "कार्यक्रम सुरक्षित गर्नुहोस्",
+    "addevent.cancelButton": "रद्द गर्नुहोस्",
+    "eventtype.class": "कक्षा",
+    "eventtype.study": "अध्ययन सत्र",
+    "eventtype.exam": "परीक्षा",
+    "eventtype.other": "अन्य",
+    "eventtype.amounts": "यस दिनका लागि कुनै कार्य वा कार्यक्रम तय गरिएको छैन।",
+  },
+};
 
 export default ne;

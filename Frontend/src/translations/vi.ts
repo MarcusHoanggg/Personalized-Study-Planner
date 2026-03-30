@@ -1,100 +1,145 @@
-export const vi = {
-    translation: {
-        LandingPage: {
-        translation: {
-            "welcome": "",
-            "landing.description": "",
-            "landing.features.taskManagement.title": "",
-            "landing.features.taskManagement.description": "",
-            "landing.features.calendar.title": "",
-            "landing.features.calendar.description": "",
-            "landing.features.collaboration.title": "",
-            "landing.features.collaboration.description": "",
-            "landing.cta.getStarted": "",
-            "landing.cta.alreadyHaveAccount": "",
-            "landing.cta.signIn": ""
+const vi = {
+  translation: {
+    // Layout / Nav
+    "layout.title": "Lịch Học",
+    "nav.dashboard": "Bảng điều khiển",
+    "nav.calendar": "Lịch",
+    "nav.profile": "Hồ sơ",
+    "nav.logout": "Đăng xuất",
 
-        }
-    },
-        LoginPage: {
-            translation: {
-                "login.title": "",
-                "login.description": "",
-                "login.googleButton": "",
-                "login.altButton": "",
-                "login.email": "",
-                "login.password": "",
-                "login.button": "",
-                "login.noAccount": "",
-                "login.signUp": "",
-                "login.demoNote": ""
-        }
-    },
-        SignupPage: {
-            translation: {
-                "signup.title": "",
-                "signup.description": "",
-                "signup.googleButton": "",
-                "signup.altButton": "",
-                "signup.name": "",
-                "signup.email": "",
-                "signup.password": "",
-                "signup.button": "",
-                "signup.alreadyHaveAccount": "",
-                "signup.signIn": "",
-                "signup.demoNote": ""
-            }
+    // Landing
+    "welcome": "Chào mừng đến với Lịch Học Cá Nhân!",
+    "landing.description": "Tổ chức việc học, theo dõi tiến độ và đạt được mục tiêu học tập của bạn",
+    "landing.features.taskManagement.title": "Quản lý nhiệm vụ",
+    "landing.features.taskManagement.description": "Tạo, tổ chức và theo dõi các nhiệm vụ học tập hiệu quả",
+    "landing.features.calendar.title": "Xem lịch",
+    "landing.features.calendar.description": "Xem trực quan các hạn chót và lên kế hoạch lịch học",
+    "landing.features.collaboration.title": "Cộng tác",
+    "landing.features.collaboration.description": "Chia sẻ nhiệm vụ và cộng tác với bạn học",
+    "landing.cta.getStarted": "Bắt đầu",
+    "landing.cta.alreadyHaveAccount": "Đã có tài khoản?",
+    "landing.cta.signIn": "Đăng nhập",
 
-        }
-    },
-        DashboardPage: {
-            translation: {
-                "dashboard.title": "",
+    // Login
+    "login.title": "Chào mừng trở lại!",
+    "login.description": "Vui lòng đăng nhập để tiếp tục tổ chức việc học",
+    "login.googleButton": "Tiếp tục với Google",
+    "login.altButton": "HOẶC TIẾP TỤC VỚI EMAIL",
+    "login.email": "Email",
+    "login.password": "Mật khẩu",
+    "login.button": "Đăng nhập",
+    "login.noAccount": "Chưa có tài khoản?",
+    "login.signUp": "Đăng ký",
+    "login.demoNote": "Ứng dụng demo – bất kỳ email nào cũng dùng được để thử nghiệm",
 
-        }
-    },
-        NotFoundPage: {
-            translation: {
-                "notfound.title": "",
-                "notfound.description": "",
-                "notfound.backToHome": ""
-        }
-    },
-        ProfilePage: {
-            translation: {
-                "profile.title": "",
-                "profile.name": "",
-                "profile.email": "",
-                "profile.updateButton": "",
-                "fname.name": "",
-                "lname.name": "",
-        }
-    },
-        CalendarPage: {
-            translation: {
-                "calendar.title": "",
-                "addevent.title": "",
-                "addevent.name": "",
-                "addevent.date": "",
-                "addevent.type": "",
-                "addevent.saveButton": "",
-                "addevent.cancelButton": "",
-                "eventtype.class": "",
-                "eventtype.study": "",
-                "eventtype.exam": "",
-                "eventtype.other": "",
-                "eventtype.amounts": "",
-        }
-    },
-        layout: {
-            translation: {
-                "layout.title": "",
-                "dashboard.title": "",
-                "calendar.title": "",
-                "profile.title": "",
-                "logout.title": ""
-            }
-    },
-}
+    // Signup
+    "signup.title": "Tạo tài khoản của bạn",
+    "signup.description": "Bắt đầu tổ chức việc học và theo dõi tiến độ của bạn",
+    "signup.googleButton": "Đăng ký với Google",
+    "signup.altButton": "HOẶC ĐĂNG KÝ VỚI EMAIL",
+    "signup.name": "Họ và tên",
+    "signup.email": "Email",
+    "signup.password": "Mật khẩu",
+    "signup.button": "Tạo tài khoản",
+    "signup.alreadyHaveAccount": "Đã có tài khoản?",
+    "signup.signIn": "Đăng nhập",
+    "signup.demoNote": "Ứng dụng demo – bất kỳ tên và email nào cũng dùng được",
+
+    // Dashboard
+    "dashboard.title": "Bảng điều khiển",
+    "dashboard.subtitle": "Tổng quan các nhiệm vụ học tập của bạn",
+    "dashboard.newTask": "+ Nhiệm vụ mới",
+    "dashboard.shareTasks": "Chia sẻ nhiệm vụ",
+    "dashboard.deleteConfirmTitle": "Xóa nhiệm vụ?",
+    "dashboard.deleteConfirmMessage": "Bạn có chắc muốn xóa nhiệm vụ này không?",
+    "dashboard.cancel": "Hủy",
+    "dashboard.delete": "Xóa",
+    "dashboard.emptyState": "Chưa có nhiệm vụ nào. Hãy tạo nhiệm vụ đầu tiên để bắt đầu!",
+    "dashboard.searchPlaceholder": "Tìm kiếm nhiệm vụ...",
+    "dashboard.stats.total": "Tổng nhiệm vụ",
+    "dashboard.stats.todo": "Cần làm",
+    "dashboard.stats.inProgress": "Đang làm",
+    "dashboard.stats.completed": "Hoàn thành",
+    "dashboard.filter.all": "Tất cả trạng thái",
+    "dashboard.filter.todo": "Cần làm",
+    "dashboard.filter.inProgress": "Đang làm",
+    "dashboard.filter.completed": "Hoàn thành",
+    "dashboard.sort.created": "Ngày tạo",
+    "dashboard.sort.deadline": "Hạn chót",
+    "dashboard.sort.priority": "Độ ưu tiên",
+
+    // Notifications
+    "noti.success": "Thành công!",
+    "noti.updated": "Đã cập nhật!",
+    "noti.deleted": "Đã xóa",
+    "noti.shared": "Đã chia sẻ!",
+    "noti.taskCreated": "Nhiệm vụ đã được tạo thành công.",
+    "noti.taskUpdated": "Nhiệm vụ đã được cập nhật thành công.",
+    "noti.taskDeleted": "Nhiệm vụ đã bị xóa.",
+    "noti.tasksSharedWith": "Đã chia sẻ nhiệm vụ với {{email}}",
+
+    // Share Task Modal
+    "share.title": "Chia sẻ công việc",
+    "share.searchRecipients": "Tìm người nhận",
+    "share.searchPlaceholder": "Tìm theo tên hoặc email...",
+    "share.selectAll": "Chọn tất cả có thể chia sẻ ({{selected}}/{{total}})",
+    "share.localOnly": "chỉ cục bộ",
+    "share.noTasks": "Không có công việc",
+    "share.due": "Hạn",
+    "share.cancel": "Hủy",
+    "share.shareButton": "Chia sẻ công việc",
+    "share.sharing": "Đang chia sẻ...",
+    "share.error.selectTask": "Vui lòng chọn ít nhất một công việc",
+    "share.error.selectUser": "Vui lòng chọn ít nhất một người nhận",
+    "share.error.invalidTasks": "Không thể chia sẻ các công việc đã chọn.",
+    "share.success": "Đã gửi công việc đến {{count}} người nhận.",
+    "share.localTask": "(Chỉ cục bộ - không thể chia sẻ)",
+
+    // Not Found
+    "notfound.title": "Không tìm thấy trang",
+    "notfound.description": "Trang bạn đang tìm kiếm không tồn tại.",
+    "notfound.backToHome": "Về trang chủ",
+
+    // Profile
+    "profile.title": "Hồ sơ của bạn",
+    "profile.subtitle": "Quản lý thông tin tài khoản",
+    "profile.name": "Tên",
+    "profile.email": "Email",
+    "profile.firstName": "Tên",
+    "profile.lastName": "Họ",
+    "profile.bio": "Giới thiệu",
+    "profile.bioPlaceholder": "Hãy giới thiệu về bản thân...",
+    "profile.pictureUrl": "URL ảnh đại diện",
+    "profile.emailNote": "Không thể thay đổi email",
+    "profile.saving": "Đang lưu...",
+    "profile.save": "Lưu",
+    "profile.updateButton": "Cập nhật hồ sơ",
+    "profile.stats": "Thống kê tài khoản",
+    "profile.tasksCreated": "Nhiệm vụ đã tạo",
+    "profile.tasksCompleted": "Nhiệm vụ hoàn thành",
+    "profile.tasksShared": "Nhiệm vụ đã chia sẻ",
+    "profile.preferences": "Tùy chọn",
+    "profile.emailNotifications": "Thông báo email",
+    "profile.emailNotificationsDesc": "Nhận nhắc nhở qua email cho các nhiệm vụ",
+    "profile.calendarIntegration": "Tích hợp lịch",
+    "profile.calendarIntegrationDesc": "Đồng bộ với Google Calendar",
+    "profile.configured": "Đã cấu hình",
+    "profile.connected": "Đã kết nối",
+
+    // Calendar
+    "calendar.title": "Lịch học của bạn",
+    "addevent.title": "Thêm sự kiện mới",
+    "addevent.name": "Tên sự kiện",
+    "addevent.date": "Ngày sự kiện",
+    "addevent.type": "Loại sự kiện",
+    "addevent.saveButton": "Lưu sự kiện",
+    "addevent.cancelButton": "Hủy",
+    "eventtype.class": "Lớp học",
+    "eventtype.study": "Buổi học",
+    "eventtype.exam": "Thi",
+    "eventtype.other": "Khác",
+    "eventtype.amounts": "Không có nhiệm vụ hoặc sự kiện nào được lên lịch cho ngày này.",
+  },
+};
 
 export default vi;
