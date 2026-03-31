@@ -26,7 +26,6 @@ import com.studyplanner.backend.entity.Task.Status;
 import com.studyplanner.backend.entity.User;
 import com.studyplanner.backend.exception.ResourceNotFoundException;
 import com.studyplanner.backend.exception.UnauthorizedAccessException;
-import com.studyplanner.backend.mapper.TaskMapper;
 import com.studyplanner.backend.repository.TaskRepository;
 import com.studyplanner.backend.repository.UserRepository;
 import com.studyplanner.backend.service.ReminderService;
