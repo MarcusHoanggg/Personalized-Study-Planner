@@ -1,13 +1,11 @@
 const vi = {
   translation: {
-    // Layout / Nav
     "layout.title": "Trình lập kế hoạch học tập",
     "nav.dashboard": "Bảng điều khiển",
     "nav.calendar": "Lịch",
     "nav.profile": "Hồ sơ",
     "nav.logout": "Đăng xuất",
 
-    // Landing
     "welcome": "Chào mừng bạn đến với Trình lập kế hoạch học tập cá nhân hóa!",
     "landing.description": "Sắp xếp việc học, theo dõi tiến độ và đạt được mục tiêu học tập của bạn",
     "landing.features.taskManagement.title": "Quản lý công việc",
@@ -20,7 +18,6 @@ const vi = {
     "landing.cta.alreadyHaveAccount": "Đã có tài khoản?",
     "landing.cta.signIn": "Đăng nhập",
 
-    // Login
     "login.title": "Chào mừng quay lại!",
     "login.description": "Vui lòng đăng nhập để tiếp tục quản lý việc học",
     "login.googleButton": "Tiếp tục với Google",
@@ -32,7 +29,6 @@ const vi = {
     "login.signUp": "Đăng ký",
     "login.demoNote": "Ứng dụng demo – có thể dùng bất kỳ email nào để thử nghiệm",
 
-    // Signup
     "signup.title": "Tạo tài khoản của bạn",
     "signup.description": "Bắt đầu quản lý việc học và theo dõi tiến độ",
     "signup.googleButton": "Đăng ký với Google",
@@ -45,7 +41,6 @@ const vi = {
     "signup.signIn": "Đăng nhập",
     "signup.demoNote": "Ứng dụng demo – có thể dùng bất kỳ tên và email nào để thử nghiệm",
 
-    // Dashboard
     "dashboard.title": "Bảng điều khiển",
     "dashboard.subtitle": "Tổng quan các nhiệm vụ học tập",
     "dashboard.newTask": "+ Nhiệm vụ mới",
@@ -68,7 +63,6 @@ const vi = {
     "dashboard.sort.deadline": "Hạn chót",
     "dashboard.sort.priority": "Độ ưu tiên",
 
-    // Notifications
     "noti.success": "Thành công!",
     "noti.updated": "Đã cập nhật!",
     "noti.deleted": "Đã xóa",
@@ -78,7 +72,6 @@ const vi = {
     "noti.taskDeleted": "Nhiệm vụ đã được xóa.",
     "noti.tasksSharedWith": "Đã chia sẻ nhiệm vụ với {{email}}",
 
-    // Share Tasks
     "share.title": "Chia sẻ nhiệm vụ",
     "share.searchRecipients": "Tìm người nhận",
     "share.searchPlaceholder": "Tìm theo tên hoặc email để thêm người nhận...",
@@ -95,12 +88,10 @@ const vi = {
     "share.success": "Đã gửi nhiệm vụ cho {{count}} người nhận thành công.",
     "share.localTask": "(Chỉ cục bộ - không thể chia sẻ)",
 
-    // Not Found
     "notfound.title": "Không tìm thấy trang",
     "notfound.description": "Trang bạn tìm không tồn tại.",
     "notfound.backToHome": "Quay về trang chủ",
 
-    // Profile
     "profile.title": "Hồ sơ",
     "profile.subtitle": "Quản lý thông tin tài khoản",
     "profile.name": "Tên",
@@ -126,12 +117,12 @@ const vi = {
     "profile.configured": "Đã cấu hình",
     "profile.connected": "Đã kết nối",
 
-    // Calendar
     "calendar.title": "Lịch",
     "calendar.subtitle": "Xem lịch trình và hạn chót",
     "calendar.previous": "Trước",
     "calendar.next": "Tiếp",
     "calendar.scheduledItems": "{{count}} mục đã được lên lịch",
+    "calendar.noEvents": "Không có nhiệm vụ hoặc sự kiện nào trong ngày này.",
     "addevent.title": "Thêm sự kiện mới",
     "addevent.name": "Tên sự kiện",
     "addevent.date": "Ngày",
@@ -145,9 +136,7 @@ const vi = {
     "eventtype.assignment": "Bài tập",
     "eventtype.other": "Khác",
     "eventtype.amounts": "Không có nhiệm vụ hoặc sự kiện nào trong ngày này.",
-    "calendar.noEvents": "Không có nhiệm vụ hoặc sự kiện nào trong ngày này.",
 
-    // LLM Task Generator
     "llm.title": "Tạo nhiệm vụ bằng AI",
     "llm.promptPlaceholder": "Bạn muốn học gì?",
     "llm.generateButton": "Tạo nhiệm vụ",
@@ -158,7 +147,6 @@ const vi = {
     "llm.reject": "Từ chối",
     "llm.close": "Đóng",
 
-    // New Task Modal
     "newtask.title": "Tạo nhiệm vụ mới",
     "newtask.labelTitle": "Tiêu đề *",
     "newtask.labelDescription": "Mô tả",
@@ -172,12 +160,10 @@ const vi = {
     "newtask.creating": "Đang tạo...",
     "newtask.error": "Không thể tạo nhiệm vụ",
 
-    // Edit Task Modal
     "edittask.title": "Chỉnh sửa nhiệm vụ",
     "edittask.save": "Lưu thay đổi",
     "edittask.saving": "Đang lưu...",
 
-    // Task Card
     "task.edit": "Chỉnh sửa",
     "task.setReminder": "Đặt nhắc nhở",
     "task.delete": "Xóa",
@@ -187,6 +173,10 @@ const vi = {
     "task.status.completed": "Hoàn thành",
     "task.status.in_progress": "Đang thực hiện",
     "task.status.todo": "Cần làm",
+
+    "priority.low": "Thấp",
+    "priority.medium": "Trung bình",
+    "priority.high": "Cao",
   },
 };
 

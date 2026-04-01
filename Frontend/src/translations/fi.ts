@@ -1,13 +1,11 @@
 const fi = {
   translation: {
-    // Layout / Nav
     "layout.title": "Opiskelusuunnittelija",
     "nav.dashboard": "Kojelauta",
     "nav.calendar": "Kalenteri",
     "nav.profile": "Profiili",
     "nav.logout": "Kirjaudu ulos",
 
-    // Landing
     "welcome": "Tervetuloa henkilökohtaiseen opiskelusuunnittelijaan!",
     "landing.description": "Järjestä opiskelusi, seuraa edistymistäsi ja saavuta akateemiset tavoitteesi",
     "landing.features.taskManagement.title": "Tehtävienhallinta",
@@ -20,7 +18,6 @@ const fi = {
     "landing.cta.alreadyHaveAccount": "Onko sinulla jo tili?",
     "landing.cta.signIn": "Kirjaudu sisään",
 
-    // Login
     "login.title": "Tervetuloa takaisin!",
     "login.description": "Kirjaudu sisään jatkaaksesi opiskelun järjestämistä",
     "login.googleButton": "Jatka Googlella",
@@ -32,7 +29,6 @@ const fi = {
     "login.signUp": "Rekisteröidy",
     "login.demoNote": "Demo-sovellus – mikä tahansa sähköposti toimii testaukseen",
 
-    // Signup
     "signup.title": "Luo tilisi",
     "signup.description": "Aloita opiskelun järjestäminen ja edistymisen seuranta",
     "signup.googleButton": "Rekisteröidy Googlella",
@@ -45,7 +41,6 @@ const fi = {
     "signup.signIn": "Kirjaudu sisään",
     "signup.demoNote": "Demo-sovellus – mikä tahansa nimi ja sähköposti toimii testaukseen",
 
-    // Dashboard
     "dashboard.title": "Kojelauta",
     "dashboard.subtitle": "Yleiskatsaus opiskelutehtävistäsi",
     "dashboard.newTask": "+ Uusi tehtävä",
@@ -68,7 +63,6 @@ const fi = {
     "dashboard.sort.deadline": "Määräaika",
     "dashboard.sort.priority": "Prioriteetti",
 
-    // Notifications
     "noti.success": "Onnistui!",
     "noti.updated": "Päivitetty!",
     "noti.deleted": "Poistettu",
@@ -78,7 +72,6 @@ const fi = {
     "noti.taskDeleted": "Tehtävä on poistettu.",
     "noti.tasksSharedWith": "Tehtävät jaettu käyttäjälle {{email}}",
 
-    // Share Tasks
     "share.title": "Jaa tehtäviä",
     "share.searchRecipients": "Etsi vastaanottajia",
     "share.searchPlaceholder": "Etsi nimellä tai sähköpostilla...",
@@ -95,13 +88,11 @@ const fi = {
     "share.success": "Tehtävät lähetetty {{count}} vastaanottajalle.",
     "share.localTask": "(Vain paikallinen - ei voi jakaa)",
 
-    // Not Found
     "notfound.title": "Sivua ei löydy",
     "notfound.description": "Etsimääsi sivua ei ole olemassa.",
     "notfound.backToHome": "Takaisin etusivulle",
 
-    // Profile
-    "profile.title": "Profiilisi",
+    "profile.title": "Profiili",
     "profile.subtitle": "Hallinnoi tilitietojasi",
     "profile.name": "Nimi",
     "profile.email": "Sähköposti",
@@ -126,12 +117,12 @@ const fi = {
     "profile.configured": "Määritetty",
     "profile.connected": "Yhdistetty",
 
-    // Calendar
     "calendar.title": "Opiskelukalenteri",
     "calendar.subtitle": "Näytä aikataulusi ja määräaikasi",
     "calendar.previous": "Edellinen",
     "calendar.next": "Seuraava",
     "calendar.scheduledItems": "{{count}} kohde(tta) aikataulutettu",
+    "calendar.noEvents": "Tälle päivälle ei ole aikataulutettuja tehtäviä tai tapahtumia.",
     "addevent.title": "Lisää uusi tapahtuma",
     "addevent.name": "Tapahtuman nimi",
     "addevent.date": "Tapahtuman päivämäärä",
@@ -145,9 +136,7 @@ const fi = {
     "eventtype.assignment": "Tehtävä",
     "eventtype.other": "Muu",
     "eventtype.amounts": "Tälle päivälle ei ole aikataulutettuja tehtäviä tai tapahtumia.",
-    "calendar.noEvents": "Tälle päivälle ei ole aikataulutettuja tehtäviä tai tapahtumia.",
 
-    // LLM Task Generator
     "llm.title": "AI-tehtävägeneraattori",
     "llm.promptPlaceholder": "Mitä haluat oppia?",
     "llm.generateButton": "Luo tehtävät",
@@ -158,7 +147,6 @@ const fi = {
     "llm.reject": "Hylkää",
     "llm.close": "Sulje",
 
-    // New Task Modal
     "newtask.title": "Luo uusi tehtävä",
     "newtask.labelTitle": "Otsikko *",
     "newtask.labelDescription": "Kuvaus",
@@ -172,12 +160,10 @@ const fi = {
     "newtask.creating": "Luodaan...",
     "newtask.error": "Tehtävän luominen epäonnistui",
 
-    // Edit Task Modal
     "edittask.title": "Muokkaa tehtävää",
     "edittask.save": "Tallenna muutokset",
     "edittask.saving": "Tallennetaan...",
 
-    // Task Card
     "task.edit": "Muokkaa",
     "task.setReminder": "Aseta muistutus",
     "task.delete": "Poista",
@@ -187,6 +173,10 @@ const fi = {
     "task.status.completed": "Valmis",
     "task.status.in_progress": "Kesken",
     "task.status.todo": "Tehtävänä",
+
+    "priority.low": "Matala",
+    "priority.medium": "Keskitaso",
+    "priority.high": "Korkea",
   },
 };
 

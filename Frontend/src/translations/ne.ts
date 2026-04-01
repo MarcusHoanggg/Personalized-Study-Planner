@@ -1,13 +1,11 @@
 const ne = {
   translation: {
-    // Layout / Nav
     "layout.title": "अध्ययन योजनाकार",
     "nav.dashboard": "ड्यासबोर्ड",
     "nav.calendar": "क्यालेन्डर",
     "nav.profile": "प्रोफाइल",
     "nav.logout": "लगआउट",
 
-    // Landing
     "welcome": "व्यक्तिगत अध्ययन योजनाकारमा स्वागत छ!",
     "landing.description": "आफ्नो अध्ययन व्यवस्थित गर्नुहोस्, प्रगति ट्र्याक गर्नुहोस् र शैक्षिक लक्ष्यहरू हासिल गर्नुहोस्",
     "landing.features.taskManagement.title": "कार्य व्यवस्थापन",
@@ -20,7 +18,6 @@ const ne = {
     "landing.cta.alreadyHaveAccount": "पहिले नै खाता छ?",
     "landing.cta.signIn": "साइन इन गर्नुहोस्",
 
-    // Login
     "login.title": "फिर्ता स्वागत छ!",
     "login.description": "अध्ययन व्यवस्थित गर्न जारी राख्न साइन इन गर्नुहोस्",
     "login.googleButton": "Google सँग जारी राख्नुहोस्",
@@ -32,7 +29,6 @@ const ne = {
     "login.signUp": "साइन अप",
     "login.demoNote": "डेमो एप – परीक्षणका लागि जुनसुकै इमेल काम गर्छ",
 
-    // Signup
     "signup.title": "आफ्नो खाता सिर्जना गर्नुहोस्",
     "signup.description": "अध्ययन व्यवस्थित गर्न र प्रगति ट्र्याक गर्न सुरु गर्नुहोस्",
     "signup.googleButton": "Google सँग साइन अप गर्नुहोस्",
@@ -45,7 +41,6 @@ const ne = {
     "signup.signIn": "साइन इन गर्नुहोस्",
     "signup.demoNote": "डेमो एप – परीक्षणका लागि जुनसुकै नाम र इमेल काम गर्छ",
 
-    // Dashboard
     "dashboard.title": "ड्यासबोर्ड",
     "dashboard.subtitle": "तपाईंका अध्ययन कार्यहरूको सारांश",
     "dashboard.newTask": "+ नयाँ कार्य",
@@ -68,7 +63,6 @@ const ne = {
     "dashboard.sort.deadline": "समयसीमा",
     "dashboard.sort.priority": "प्राथमिकता",
 
-    // Notifications
     "noti.success": "सफल!",
     "noti.updated": "अपडेट भयो!",
     "noti.deleted": "मेटाइयो",
@@ -78,7 +72,6 @@ const ne = {
     "noti.taskDeleted": "कार्य मेटाइएको छ।",
     "noti.tasksSharedWith": "{{email}} सँग कार्यहरू साझा गरियो",
 
-    // Share Tasks
     "share.title": "कार्यहरू साझा गर्नुहोस्",
     "share.searchRecipients": "प्राप्तकर्ताहरू खोज्नुहोस्",
     "share.searchPlaceholder": "नाम वा इमेल द्वारा खोज्नुहोस्...",
@@ -95,12 +88,10 @@ const ne = {
     "share.success": "{{count}} जनालाई कार्य सफलतापूर्वक पठाइयो।",
     "share.localTask": "(स्थानीय मात्र - साझा गर्न सकिँदैन)",
 
-    // Not Found
     "notfound.title": "पृष्ठ फेला परेन",
     "notfound.description": "तपाईं खोज्नु भएको पृष्ठ अवस्थित छैन।",
     "notfound.backToHome": "गृहपृष्ठमा फर्कनुहोस्",
 
-    // Profile
     "profile.title": "प्रोफाइल",
     "profile.subtitle": "आफ्नो खाता विवरण व्यवस्थित गर्नुहोस्",
     "profile.name": "नाम",
@@ -126,12 +117,12 @@ const ne = {
     "profile.configured": "कन्फिगर गरिएको",
     "profile.connected": "जोडिएको",
 
-    // Calendar
     "calendar.title": "क्यालेन्डर",
     "calendar.subtitle": "आफ्नो तालिका र समयसीमा हेर्नुहोस्",
     "calendar.previous": "अघिल्लो",
     "calendar.next": "अर्को",
     "calendar.scheduledItems": "{{count}} वस्तु तालिकामा राखिएको छ",
+    "calendar.noEvents": "यस दिनका लागि कुनै कार्य वा कार्यक्रम तय गरिएको छैन।",
     "addevent.title": "नयाँ कार्यक्रम थप्नुहोस्",
     "addevent.name": "कार्यक्रमको नाम",
     "addevent.date": "कार्यक्रमको मिति",
@@ -145,9 +136,7 @@ const ne = {
     "eventtype.assignment": "असाइनमेन्ट",
     "eventtype.other": "अन्य",
     "eventtype.amounts": "यस दिनका लागि कुनै कार्य वा कार्यक्रम तय गरिएको छैन।",
-    "calendar.noEvents": "यस दिनका लागि कुनै कार्य वा कार्यक्रम तय गरिएको छैन।",
 
-    // LLM Task Generator
     "llm.title": "AI कार्य जेनरेटर",
     "llm.promptPlaceholder": "तपाईं के सिक्न चाहनुहुन्छ?",
     "llm.generateButton": "कार्यहरू सिर्जना गर्नुहोस्",
@@ -158,7 +147,6 @@ const ne = {
     "llm.reject": "अस्वीकार गर्नुहोस्",
     "llm.close": "बन्द गर्नुहोस्",
 
-    // New Task Modal
     "newtask.title": "नयाँ कार्य सिर्जना गर्नुहोस्",
     "newtask.labelTitle": "शीर्षक *",
     "newtask.labelDescription": "विवरण",
@@ -172,12 +160,10 @@ const ne = {
     "newtask.creating": "सिर्जना हुँदैछ...",
     "newtask.error": "कार्य सिर्जना गर्न असफल",
 
-    // Edit Task Modal
     "edittask.title": "कार्य सम्पादन गर्नुहोस्",
     "edittask.save": "परिवर्तनहरू सुरक्षित गर्नुहोस्",
     "edittask.saving": "सुरक्षित हुँदैछ...",
 
-    // Task Card
     "task.edit": "सम्पादन गर्नुहोस्",
     "task.setReminder": "रिमाइन्डर सेट गर्नुहोस्",
     "task.delete": "मेटाउनुहोस्",
@@ -187,6 +173,10 @@ const ne = {
     "task.status.completed": "पूरा भएको",
     "task.status.in_progress": "प्रक्रियामा",
     "task.status.todo": "गर्नुपर्ने",
+
+    "priority.low": "कम",
+    "priority.medium": "मध्यम",
+    "priority.high": "उच्च",
   },
 };
 
