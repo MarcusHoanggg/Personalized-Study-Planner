@@ -1,10 +1,10 @@
-
 import { useState } from "react";
 import type { Task, TaskStatus } from "../types";
 import Button from "../ui/Button";
 import Input from "../ui/Input";
 import Select from "../ui/Select";
 import { createTask } from "../services/tasks";
+import { useTranslation } from "react-i18next";
 
 interface NewTaskModalProps {
   onClose: () => void;
@@ -12,6 +12,8 @@ interface NewTaskModalProps {
 }
 
 export default function NewTaskModal({ onClose, onCreate }: NewTaskModalProps) {
+  const { t } = useTranslation();
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState<"low" | "medium" | "high">("medium");
@@ -38,7 +40,7 @@ export default function NewTaskModal({ onClose, onCreate }: NewTaskModalProps) {
       onClose();
     } catch (err) {
       console.error("Failed to create task:", err);
-      setError(err instanceof Error ? err.message : "Failed to create task");
+      setError(err instanceof Error ? err.message : t("task.errorCreate"));
     } finally {
       setLoading(false);
     }
@@ -46,107 +48,96 @@ export default function NewTaskModal({ onClose, onCreate }: NewTaskModalProps) {
 
   return (
     <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50">
-      <div className="bg-white rounded-3xl p-7 w-full max-w-md shadow-xl border border-purple-100 animate-fadeIn">
+      <div className="bg-white rounded-3xl p-7 w-full max-w-md shadow-xl border border-purple-100">
 
-        {/* Title */}
         <h2 className="text-2xl font-semibold mb-6 text-purple-700">
-          Create New Task
+          {t("task.createTitle")}
         </h2>
 
         <div className="space-y-5">
 
-          {/* Title */}
           <div>
-            <label className="text-sm font-medium text-gray-600">Title *</label>
+            <label className="text-sm font-medium text-gray-600">
+              {t("task.title")} *
+            </label>
             <Input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-              placeholder="Complete Math Assignment"
-              className="mt-1 bg-purple-50/40 border-purple-200 focus:border-purple-400"
+              placeholder={t("task.placeholderTitle")}
+              className="mt-1"
             />
           </div>
 
-          {/* Description */}
           <div>
-            <label className="text-sm font-medium text-gray-600">Description</label>
+            <label className="text-sm font-medium text-gray-600">
+              {t("task.description")}
+            </label>
             <Input
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Add details about your task…"
-              className="mt-1 bg-purple-50/40 border-purple-200 focus:border-purple-400"
+              placeholder={t("task.placeholderDescription")}
+              className="mt-1"
             />
           </div>
 
-          {/* Priority + Status */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="text-sm font-medium text-gray-600">Priority</label>
+              <label className="text-sm font-medium text-gray-600">
+                {t("task.priority")}
+              </label>
               <Select
                 value={priority}
                 onChange={(e) => setPriority(e.target.value as any)}
-                className="mt-1 bg-purple-50/40 border-purple-200 focus:border-purple-400"
               >
-                <option value="low">Low</option>
-                <option value="medium">Medium</option>
-                <option value="high">High</option>
+                <option value="low">{t("task.low")}</option>
+                <option value="medium">{t("task.medium")}</option>
+                <option value="high">{t("task.high")}</option>
               </Select>
             </div>
 
             <div>
-              <label className="text-sm font-medium text-gray-600">Status</label>
+              <label className="text-sm font-medium text-gray-600">
+                {t("task.status")}
+              </label>
               <Select
                 value={status}
                 onChange={(e) => setStatus(e.target.value as TaskStatus)}
-                className="mt-1 bg-purple-50/40 border-purple-200 focus:border-purple-400"
               >
-                <option value="todo">To Do</option>
-                <option value="in_progress">In Progress</option>
-                <option value="completed">Completed</option>
+                <option value="todo">{t("task.todo")}</option>
+                <option value="in_progress">{t("task.inProgress")}</option>
+                <option value="completed">{t("task.completed")}</option>
               </Select>
             </div>
           </div>
 
-          {/* Deadline */}
           <div>
-            <label className="text-sm font-medium text-gray-600">`Deadline`</label>
+            <label className="text-sm font-medium text-gray-600">
+              {t("task.deadline")}
+            </label>
             <Input
               type="date"
               value={deadline}
               onChange={(e) => setDeadline(e.target.value)}
-              className="mt-1 bg-purple-50/40 border-purple-200 focus:border-purple-400"
             />
           </div>
         </div>
 
-        {/* Error Message */}
         {error && (
-          <div className="mb-4 p-3 rounded-lg bg-red-50 border border-red-200">
+          <div className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg">
             <p className="text-sm text-red-700">{error}</p>
           </div>
         )}
 
-        {/* Buttons */}
         <div className="flex justify-end gap-3 mt-8">
-          <Button
-            variant="outline"
-            onClick={onClose}
-            disabled={loading}
-            className="border-purple-300 text-purple-600 hover:bg-purple-100"
-          >
-            Cancel
+          <Button variant="outline" onClick={onClose}>
+            {t("task.cancel")}
           </Button>
 
-          <Button
-            onClick={handleSubmit}
-            disabled={loading}
-            className="bg-purple-500 hover:bg-purple-600 text-white shadow-md"
-          >
-            {loading ? "Creating..." : "Create Task"}
+          <Button onClick={handleSubmit} disabled={loading}>
+            {loading ? t("task.creating") : t("task.create")}
           </Button>
         </div>
       </div>
     </div>
   );
 }
-
-

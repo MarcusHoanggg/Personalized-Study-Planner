@@ -1,28 +1,30 @@
 const vi = {
   translation: {
-    // Layout / Nav
     "layout.title": "Trình lập kế hoạch học tập",
     "nav.dashboard": "Bảng điều khiển",
     "nav.calendar": "Lịch",
     "nav.profile": "Hồ sơ",
     "nav.logout": "Đăng xuất",
 
-    // Landing
     "welcome": "Chào mừng bạn đến với Trình lập kế hoạch học tập cá nhân hóa!",
-    "landing.description": "Sắp xếp việc học, theo dõi tiến độ và đạt được mục tiêu học tập của bạn",
+    "landing.description":
+      "Sắp xếp việc học, theo dõi tiến độ và đạt được mục tiêu học tập của bạn",
     "landing.features.taskManagement.title": "Quản lý công việc",
-    "landing.features.taskManagement.description": "Tạo, sắp xếp và theo dõi các nhiệm vụ học tập một cách hiệu quả",
+    "landing.features.taskManagement.description":
+      "Tạo, sắp xếp và theo dõi các nhiệm vụ học tập một cách hiệu quả",
     "landing.features.calendar.title": "Xem lịch",
-    "landing.features.calendar.description": "Trực quan hóa deadline và lên kế hoạch học tập",
+    "landing.features.calendar.description":
+      "Trực quan hóa deadline và lên kế hoạch học tập",
     "landing.features.collaboration.title": "Cộng tác",
-    "landing.features.collaboration.description": "Chia sẻ nhiệm vụ và làm việc cùng bạn học",
+    "landing.features.collaboration.description":
+      "Chia sẻ nhiệm vụ và làm việc cùng bạn học",
     "landing.cta.getStarted": "Bắt đầu",
     "landing.cta.alreadyHaveAccount": "Đã có tài khoản?",
     "landing.cta.signIn": "Đăng nhập",
 
-    // Login
     "login.title": "Chào mừng quay lại!",
-    "login.description": "Vui lòng đăng nhập để tiếp tục quản lý việc học",
+    "login.description":
+      "Vui lòng đăng nhập để tiếp tục quản lý việc học",
     "login.googleButton": "Tiếp tục với Google",
     "login.altButton": "HOẶC TIẾP TỤC VỚI EMAIL",
     "login.email": "Email",
@@ -30,11 +32,12 @@ const vi = {
     "login.button": "Đăng nhập",
     "login.noAccount": "Chưa có tài khoản?",
     "login.signUp": "Đăng ký",
-    "login.demoNote": "Ứng dụng demo – có thể dùng bất kỳ email nào để thử nghiệm",
+    "login.demoNote":
+      "Ứng dụng demo – có thể dùng bất kỳ email nào để thử nghiệm",
 
-    // Signup
     "signup.title": "Tạo tài khoản của bạn",
-    "signup.description": "Bắt đầu quản lý việc học và theo dõi tiến độ",
+    "signup.description":
+      "Bắt đầu quản lý việc học và theo dõi tiến độ",
     "signup.googleButton": "Đăng ký với Google",
     "signup.altButton": "HOẶC ĐĂNG KÝ VỚI EMAIL",
     "signup.name": "Họ và tên",
@@ -43,18 +46,20 @@ const vi = {
     "signup.button": "Tạo tài khoản",
     "signup.alreadyHaveAccount": "Đã có tài khoản?",
     "signup.signIn": "Đăng nhập",
-    "signup.demoNote": "Ứng dụng demo – có thể dùng bất kỳ tên và email nào để thử nghiệm",
+    "signup.demoNote":
+      "Ứng dụng demo – có thể dùng bất kỳ tên và email nào để thử nghiệm",
 
-    // Dashboard
     "dashboard.title": "Bảng điều khiển",
     "dashboard.subtitle": "Tổng quan các nhiệm vụ học tập",
     "dashboard.newTask": "+ Nhiệm vụ mới",
     "dashboard.shareTasks": "Chia sẻ nhiệm vụ",
     "dashboard.deleteConfirmTitle": "Xóa nhiệm vụ?",
-    "dashboard.deleteConfirmMessage": "Bạn có chắc muốn xóa nhiệm vụ này không?",
+    "dashboard.deleteConfirmMessage":
+      "Bạn có chắc muốn xóa nhiệm vụ này không?",
     "dashboard.cancel": "Hủy",
     "dashboard.delete": "Xóa",
-    "dashboard.emptyState": "Chưa có nhiệm vụ nào. Hãy tạo nhiệm vụ đầu tiên!",
+    "dashboard.emptyState":
+      "Chưa có nhiệm vụ nào. Hãy tạo nhiệm vụ đầu tiên!",
     "dashboard.searchPlaceholder": "Tìm kiếm nhiệm vụ...",
     "dashboard.stats.total": "Tổng số nhiệm vụ",
     "dashboard.stats.todo": "Cần làm",
@@ -68,7 +73,6 @@ const vi = {
     "dashboard.sort.deadline": "Hạn chót",
     "dashboard.sort.priority": "Độ ưu tiên",
 
-    // Notifications
     "noti.success": "Thành công!",
     "noti.updated": "Đã cập nhật!",
     "noti.deleted": "Đã xóa",
@@ -78,10 +82,10 @@ const vi = {
     "noti.taskDeleted": "Nhiệm vụ đã được xóa.",
     "noti.tasksSharedWith": "Đã chia sẻ nhiệm vụ với {{email}}",
 
-    // Share Tasks
     "share.title": "Chia sẻ nhiệm vụ",
     "share.searchRecipients": "Tìm người nhận",
-    "share.searchPlaceholder": "Tìm theo tên hoặc email để thêm người nhận...",
+    "share.searchPlaceholder":
+      "Tìm theo tên hoặc email để thêm người nhận...",
     "share.selectAll": "Chọn tất cả ({{selected}}/{{total}})",
     "share.localOnly": "chỉ cục bộ",
     "share.noTasks": "Không có nhiệm vụ",
@@ -89,18 +93,20 @@ const vi = {
     "share.cancel": "Hủy",
     "share.shareButton": "Chia sẻ nhiệm vụ",
     "share.sharing": "Đang chia sẻ...",
-    "share.error.selectTask": "Vui lòng chọn ít nhất một nhiệm vụ",
-    "share.error.selectUser": "Vui lòng chọn ít nhất một người nhận",
-    "share.error.invalidTasks": "Không thể chia sẻ nhiệm vụ đã chọn. Vui lòng tạo nhiệm vụ từ backend trước.",
-    "share.success": "Đã gửi nhiệm vụ cho {{count}} người nhận thành công.",
+    "share.error.selectTask":
+      "Vui lòng chọn ít nhất một nhiệm vụ",
+    "share.error.selectUser":
+      "Vui lòng chọn ít nhất một người nhận",
+    "share.error.invalidTasks":
+      "Không thể chia sẻ nhiệm vụ đã chọn. Vui lòng tạo nhiệm vụ từ backend trước.",
+    "share.success":
+      "Đã gửi nhiệm vụ cho {{count}} người nhận thành công.",
     "share.localTask": "(Chỉ cục bộ - không thể chia sẻ)",
 
-    // Not Found
     "notfound.title": "Không tìm thấy trang",
     "notfound.description": "Trang bạn tìm không tồn tại.",
     "notfound.backToHome": "Quay về trang chủ",
 
-    // Profile
     "profile.title": "Hồ sơ",
     "profile.subtitle": "Quản lý thông tin tài khoản",
     "profile.name": "Tên",
@@ -126,12 +132,13 @@ const vi = {
     "profile.configured": "Đã cấu hình",
     "profile.connected": "Đã kết nối",
 
-    // Calendar
     "calendar.title": "Lịch",
     "calendar.subtitle": "Xem lịch trình và hạn chót",
     "calendar.previous": "Trước",
     "calendar.next": "Tiếp",
     "calendar.scheduledItems": "{{count}} mục đã được lên lịch",
+    "calendar.noEvents":
+      "Không có nhiệm vụ hoặc sự kiện nào trong ngày này.",
     "addevent.title": "Thêm sự kiện mới",
     "addevent.name": "Tên sự kiện",
     "addevent.date": "Ngày",
@@ -144,10 +151,9 @@ const vi = {
     "eventtype.exam": "Kỳ thi",
     "eventtype.assignment": "Bài tập",
     "eventtype.other": "Khác",
-    "eventtype.amounts": "Không có nhiệm vụ hoặc sự kiện nào trong ngày này.",
-    "calendar.noEvents": "Không có nhiệm vụ hoặc sự kiện nào trong ngày này.",
+    "eventtype.amounts":
+      "Không có nhiệm vụ hoặc sự kiện nào trong ngày này.",
 
-    // LLM Task Generator
     "llm.title": "Tạo nhiệm vụ bằng AI",
     "llm.promptPlaceholder": "Bạn muốn học gì?",
     "llm.generateButton": "Tạo nhiệm vụ",
@@ -158,12 +164,12 @@ const vi = {
     "llm.reject": "Từ chối",
     "llm.close": "Đóng",
 
-    // New Task Modal
     "newtask.title": "Tạo nhiệm vụ mới",
     "newtask.labelTitle": "Tiêu đề *",
     "newtask.labelDescription": "Mô tả",
     "newtask.placeholderTitle": "Hoàn thành bài tập Toán",
-    "newtask.placeholderDescription": "Thêm chi tiết về nhiệm vụ…",
+    "newtask.placeholderDescription":
+      "Thêm chi tiết về nhiệm vụ…",
     "newtask.priority": "Độ ưu tiên",
     "newtask.status": "Trạng thái",
     "newtask.deadline": "Hạn chót",
@@ -172,12 +178,10 @@ const vi = {
     "newtask.creating": "Đang tạo...",
     "newtask.error": "Không thể tạo nhiệm vụ",
 
-    // Edit Task Modal
     "edittask.title": "Chỉnh sửa nhiệm vụ",
     "edittask.save": "Lưu thay đổi",
     "edittask.saving": "Đang lưu...",
 
-    // Task Card
     "task.edit": "Chỉnh sửa",
     "task.setReminder": "Đặt nhắc nhở",
     "task.delete": "Xóa",
@@ -187,6 +191,34 @@ const vi = {
     "task.status.completed": "Hoàn thành",
     "task.status.in_progress": "Đang thực hiện",
     "task.status.todo": "Cần làm",
+
+    "priority.low": "Thấp",
+    "priority.medium": "Trung bình",
+    "priority.high": "Cao",
+
+    task: {
+      createTitle: "Tạo nhiệm vụ mới",
+      editTitle: "Chỉnh sửa nhiệm vụ",
+      title: "Tiêu đề",
+      description: "Mô tả",
+      priority: "Độ ưu tiên",
+      status: "Trạng thái",
+      deadline: "Hạn chót",
+      placeholderTitle: "Hoàn thành bài tập Toán",
+      placeholderDescription: "Thêm chi tiết về nhiệm vụ...",
+      low: "Thấp",
+      medium: "Trung bình",
+      high: "Cao",
+      todo: "Cần làm",
+      inProgress: "Đang thực hiện",
+      completed: "Hoàn thành",
+      cancel: "Hủy",
+      create: "Tạo nhiệm vụ",
+      creating: "Đang tạo...",
+      save: "Lưu thay đổi",
+      saving: "Đang lưu...",
+      errorCreate: "Không thể tạo nhiệm vụ",
+    },
   },
 };
 

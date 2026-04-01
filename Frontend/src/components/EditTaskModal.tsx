@@ -4,139 +4,132 @@ import Button from "../ui/Button";
 import Input from "../ui/Input";
 import Select from "../ui/Select";
 import { updateTask } from "../services/tasks";
+import { useTranslation } from "react-i18next";
 
 interface EditTaskModalProps {
-    task: Task;
-    onClose: () => void;
-    onSave: (updated: Task) => void;
+  task: Task;
+  onClose: () => void;
+  onSave: (updated: Task) => void;
 }
 
-export default function EditTaskModal({ task, onClose, onSave }: EditTaskModalProps) {
-    const [title, setTitle] = useState(task.title);
-    const [description, setDescription] = useState(task.description ?? "");
-    const [priority, setPriority] = useState<"low" | "medium" | "high">(
-        task.priority ?? "medium"
-    );
-    const [status, setStatus] = useState<TaskStatus>(task.status);
-    const [deadline, setDeadline] = useState(task.deadline ?? "");
-    const [loading, setLoading] = useState(false);
+export default function EditTaskModal({
+  task,
+  onClose,
+  onSave,
+}: EditTaskModalProps) {
+  const { t } = useTranslation();
 
-    const handleSave = async () => {
-        if (!title.trim()) return;
+  const [title, setTitle] = useState(task.title);
+  const [description, setDescription] = useState(task.description ?? "");
+  const [priority, setPriority] = useState<"low" | "medium" | "high">(
+    task.priority ?? "medium"
+  );
+  const [status, setStatus] = useState<TaskStatus>(task.status);
+  const [deadline, setDeadline] = useState(task.deadline ?? "");
+  const [loading, setLoading] = useState(false);
 
-        setLoading(true);
-        try {
-            const updatedTask = await updateTask({
-                ...task,
-                title,
-                description,
-                priority,
-                status,
-                deadline: deadline || undefined,
-            });
+  const handleSave = async () => {
+    if (!title.trim()) return;
 
-            onSave(updatedTask);
-            onClose();
-        } catch (error) {
-            console.error("Failed to update task:", error);
-        } finally {
-            setLoading(false);
-        }
-    };
+    setLoading(true);
+    try {
+      const updatedTask = await updateTask({
+        ...task,
+        title,
+        description,
+        priority,
+        status,
+        deadline: deadline || undefined,
+      });
 
+      onSave(updatedTask);
+      onClose();
+    } catch (error) {
+      console.error("Failed to update task:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    return (
-        <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50">
-            <div className="bg-white rounded-3xl p-7 w-full max-w-md shadow-xl border border-purple-100 animate-fadeIn">
+  return (
+    <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="bg-white rounded-3xl p-7 w-full max-w-md shadow-xl border border-purple-100">
 
-                {/* Title */}
-                <h2 className="text-2xl font-semibold mb-6 text-purple-700">
-                    Edit Task
-                </h2>
+        <h2 className="text-2xl font-semibold mb-6 text-purple-700">
+          {t("task.editTitle")}
+        </h2>
 
-                <div className="space-y-5">
+        <div className="space-y-5">
 
-                    {/* Title */}
-                    <div>
-                        <label className="text-sm font-medium text-gray-600">Title *</label>
-                        <Input
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
-                            className="mt-1 bg-purple-50/40 border-purple-200 focus:border-purple-400"
-                        />
-                    </div>
+          <div>
+            <label className="text-sm font-medium text-gray-600">
+              {t("task.title")} *
+            </label>
+            <Input value={title} onChange={(e) => setTitle(e.target.value)} />
+          </div>
 
-                    {/* Description */}
-                    <div>
-                        <label className="text-sm font-medium text-gray-600">Description</label>
-                        <Input
-                            value={description}
-                            onChange={(e) => setDescription(e.target.value)}
-                            className="mt-1 bg-purple-50/40 border-purple-200 focus:border-purple-400"
-                        />
-                    </div>
+          <div>
+            <label className="text-sm font-medium text-gray-600">
+              {t("task.description")}
+            </label>
+            <Input
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </div>
 
-                    {/* Priority + Status */}
-                    <div className="grid grid-cols-2 gap-4">
-                        <div>
-                            <label className="text-sm font-medium text-gray-600">Priority</label>
-                            <Select
-                                value={priority}
-                                onChange={(e) => setPriority(e.target.value as any)}
-                                className="mt-1 bg-purple-50/40 border-purple-200 focus:border-purple-400"
-                            >
-                                <option value="low">Low</option>
-                                <option value="medium">Medium</option>
-                                <option value="high">High</option>
-                            </Select>
-                        </div>
-
-                        <div>
-                            <label className="text-sm font-medium text-gray-600">Status</label>
-                            <Select
-                                value={status}
-                                onChange={(e) => setStatus(e.target.value as TaskStatus)}
-                                className="mt-1 bg-purple-50/40 border-purple-200 focus:border-purple-400"
-                            >
-                                <option value="todo">To Do</option>
-                                <option value="in_progress">In Progress</option>
-                                <option value="completed">Completed</option>
-                            </Select>
-                        </div>
-                    </div>
-
-                    {/* Deadline */}
-                    <div>
-                        <label className="text-sm font-medium text-gray-600">Deadline</label>
-                        <Input
-                            type="date"
-                            value={deadline}
-                            onChange={(e) => setDeadline(e.target.value)}
-                            className="mt-1 bg-purple-50/40 border-purple-200 focus:border-purple-400"
-                        />
-                    </div>
-                </div>
-
-                {/* Buttons */}
-                <div className="flex justify-end gap-3 mt-8">
-                    <Button
-                        variant="outline"
-                        onClick={onClose}
-                        disabled={loading}
-                        className="border-purple-300 text-purple-600 hover:bg-purple-100"
-                    >
-                        Cancel
-                    </Button>
-
-                    <Button
-                        onClick={handleSave}
-                        disabled={loading}
-                        className="bg-purple-500 hover:bg-purple-600 text-white shadow-md"
-                    >
-                        {loading ? "Saving..." : "Save Changes"}
-                    </Button>
-                </div>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="text-sm font-medium text-gray-600">
+                {t("task.priority")}
+              </label>
+              <Select
+                value={priority}
+                onChange={(e) => setPriority(e.target.value as any)}
+              >
+                <option value="low">{t("task.low")}</option>
+                <option value="medium">{t("task.medium")}</option>
+                <option value="high">{t("task.high")}</option>
+              </Select>
             </div>
+
+            <div>
+              <label className="text-sm font-medium text-gray-600">
+                {t("task.status")}
+              </label>
+              <Select
+                value={status}
+                onChange={(e) => setStatus(e.target.value as TaskStatus)}
+              >
+                <option value="todo">{t("task.todo")}</option>
+                <option value="in_progress">{t("task.inProgress")}</option>
+                <option value="completed">{t("task.completed")}</option>
+              </Select>
+            </div>
+          </div>
+
+          <div>
+            <label className="text-sm font-medium text-gray-600">
+              {t("task.deadline")}
+            </label>
+            <Input
+              type="date"
+              value={deadline}
+              onChange={(e) => setDeadline(e.target.value)}
+            />
+          </div>
         </div>
-    );
+
+        <div className="flex justify-end gap-3 mt-8">
+          <Button variant="outline" onClick={onClose}>
+            {t("task.cancel")}
+          </Button>
+
+          <Button onClick={handleSave} disabled={loading}>
+            {loading ? t("task.saving") : t("task.save")}
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
 }
