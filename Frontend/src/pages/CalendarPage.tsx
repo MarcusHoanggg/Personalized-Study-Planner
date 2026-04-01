@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import {
   startOfMonth,
@@ -21,6 +20,11 @@ import { useTranslation } from "react-i18next";
 
 export default function CalendarPage() {
   const { t, i18n } = useTranslation();
+
+  const currentLang = (i18n.resolvedLanguage || i18n.language || "en")
+    .toLowerCase()
+    .split("-")[0];
+
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState(
     format(new Date(), "yyyy-MM-dd")
@@ -31,8 +35,6 @@ export default function CalendarPage() {
   const [newTitle, setNewTitle] = useState("");
   const [newType, setNewType] = useState<EventType>("Class");
 
-  const todayISO = format(new Date(), "yyyy-MM-dd");
-
   const days = eachDayOfInterval({
     start: startOfMonth(currentMonth),
     end: endOfMonth(currentMonth),
@@ -40,7 +42,113 @@ export default function CalendarPage() {
 
   const selectedEvents = events.filter((e) => e.date === selectedDate);
 
-  // Ensure selected date stays valid when switching months
+  const monthNames = {
+    en: [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ],
+    vi: [
+      "tháng 1",
+      "tháng 2",
+      "tháng 3",
+      "tháng 4",
+      "tháng 5",
+      "tháng 6",
+      "tháng 7",
+      "tháng 8",
+      "tháng 9",
+      "tháng 10",
+      "tháng 11",
+      "tháng 12",
+    ],
+    fi: [
+      "tammikuu",
+      "helmikuu",
+      "maaliskuu",
+      "huhtikuu",
+      "toukokuu",
+      "kesäkuu",
+      "heinäkuu",
+      "elokuu",
+      "syyskuu",
+      "lokakuu",
+      "marraskuu",
+      "joulukuu",
+    ],
+    ne: [
+      "जनवरी",
+      "फेब्रुअरी",
+      "मार्च",
+      "अप्रिल",
+      "मे",
+      "जुन",
+      "जुलाई",
+      "अगस्ट",
+      "सेप्टेम्बर",
+      "अक्टोबर",
+      "नोभेम्बर",
+      "डिसेम्बर",
+    ],
+  };
+
+  const getMonthName = (date: Date) => {
+    const names =
+      monthNames[currentLang as keyof typeof monthNames] || monthNames.en;
+    return names[date.getMonth()];
+  };
+
+  const formatMonthYear = (date: Date) => {
+    const month = getMonthName(date);
+    const year = date.getFullYear();
+
+    if (currentLang === "vi") {
+      return `${month} năm ${year}`;
+    }
+
+    if (currentLang === "fi") {
+      return `${month} ${year}`;
+    }
+
+    if (currentLang === "ne") {
+      return `${month} ${year}`;
+    }
+
+    return `${month} ${year}`;
+  };
+
+  const formatFullDate = (date: Date) => {
+    const day = date.getDate();
+    const month = getMonthName(date);
+    const year = date.getFullYear();
+
+    if (currentLang === "vi") {
+      return `${day} ${month}, ${year}`;
+    }
+
+    if (currentLang === "fi") {
+      return `${month} ${day}, ${year}`;
+    }
+
+    if (currentLang === "ne") {
+      return `${month} ${day}, ${year}`;
+    }
+
+    return `${month} ${day}, ${year}`;
+  };
+
+  const monthYearText = formatMonthYear(currentMonth);
+  const selectedDateText = formatFullDate(new Date(selectedDate));
+
   useEffect(() => {
     const start = startOfMonth(currentMonth);
     const end = endOfMonth(currentMonth);
@@ -49,9 +157,8 @@ export default function CalendarPage() {
     if (selected < start || selected > end) {
       setSelectedDate(format(start, "yyyy-MM-dd"));
     }
-  }, [currentMonth]);
+  }, [currentMonth, selectedDate]);
 
-  // Add event
   const handleAddEvent = () => {
     if (!newTitle.trim()) return;
 
@@ -68,7 +175,6 @@ export default function CalendarPage() {
     setShowAddEvent(false);
   };
 
-  // Google Calendar .ics import
   const handleICSImport = async (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -105,11 +211,9 @@ export default function CalendarPage() {
 
   return (
     <div className="space-y-6">
-
-      {/* HEADER */}
       <PageHeader
-        title="Calendar"
-        subtitle="View your schedule and deadlines"
+        title={t("calendar.title")}
+        subtitle={t("calendar.subtitle")}
       >
         <div className="flex gap-3">
           <input
@@ -119,16 +223,6 @@ export default function CalendarPage() {
             id="icsUpload"
             onChange={handleICSImport}
           />
-
-          {/* <Button
-            variant="outline"
-            className="border-purple-300 text-purple-600 hover:bg-purple-100"
-            onClick={() =>
-              document.getElementById("icsUpload")?.click()
-            }
-          >
-            Import from Google Calendar
-          </Button> */}
 
           <Button
             className="bg-purple-500 hover:bg-purple-600 text-white"
@@ -140,38 +234,29 @@ export default function CalendarPage() {
       </PageHeader>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-        {/* LEFT SIDE — Calendar */}
         <Card className="lg:col-span-2 rounded-3xl border border-purple-100 shadow-sm">
-
-          {/* Month Navigation */}
           <div className="flex items-center justify-between mb-6">
             <Button
               variant="outline"
               className="border-purple-300 text-purple-600 hover:bg-purple-100"
-              onClick={() =>
-                setCurrentMonth((prev) => subMonths(prev, 1))
-              }
+              onClick={() => setCurrentMonth((prev) => subMonths(prev, 1))}
             >
-              Previous
+              {t("calendar.previous")}
             </Button>
 
             <h3 className="text-xl font-semibold text-purple-700">
-              {format(currentMonth, "MMMM yyyy")}
+              {monthYearText}
             </h3>
 
             <Button
               variant="outline"
               className="border-purple-300 text-purple-600 hover:bg-purple-100"
-              onClick={() =>
-                setCurrentMonth((prev) => addMonths(prev, 1))
-              }
+              onClick={() => setCurrentMonth((prev) => addMonths(prev, 1))}
             >
-              next
+              {t("calendar.next")}
             </Button>
           </div>
 
-          {/* Calendar Grid */}
           <div className="grid grid-cols-7 gap-3">
             {days.map((day) => {
               const iso = format(day, "yyyy-MM-dd");
@@ -184,13 +269,15 @@ export default function CalendarPage() {
                   onClick={() => setSelectedDate(iso)}
                   className={`
                     p-3 rounded-xl text-center transition shadow-sm
-                    ${isSelected
-                      ? "bg-purple-500 text-white shadow-md"
-                      : "bg-purple-50 hover:bg-purple-100"
+                    ${
+                      isSelected
+                        ? "bg-purple-500 text-white shadow-md"
+                        : "bg-purple-50 hover:bg-purple-100"
                     }
-                    ${!isSelected && isToday
-                      ? "border-2 border-purple-400"
-                      : ""
+                    ${
+                      !isSelected && isToday
+                        ? "border-2 border-purple-400"
+                        : ""
                     }
                   `}
                 >
@@ -201,19 +288,16 @@ export default function CalendarPage() {
           </div>
         </Card>
 
-        {/* RIGHT SIDE — Events */}
         <Card className="rounded-3xl border border-purple-100 shadow-sm">
           <h3 className="text-lg font-semibold text-purple-700">
-            {format(new Date(selectedDate), "MMMM d, yyyy")}
+            {selectedDateText}
           </h3>
           <p className="text-gray-500">
-            {selectedEvents.length} item (s) scheduled
+            {t("calendar.scheduledItems", { count: selectedEvents.length })}
           </p>
 
           {selectedEvents.length === 0 ? (
-            <p className="text-gray-500 mt-3">
-              {t("eventtype.amounts")}
-            </p>
+            <p className="text-gray-500 mt-3">{t("calendar.noEvents")}</p>
           ) : (
             <ul className="mt-4 space-y-3">
               {selectedEvents.map((e) => (
@@ -222,7 +306,12 @@ export default function CalendarPage() {
                   className="p-3 bg-purple-50 rounded-xl border border-purple-100"
                 >
                   <strong className="text-purple-700">{e.title}</strong>
-                  <p className="text-sm text-gray-500">{e.type}</p>
+                  <p className="text-sm text-gray-500">
+                    {e.type === "Class" && t("eventtype.class")}
+                    {e.type === "Exam" && t("eventtype.exam")}
+                    {e.type === "Assignment" && t("eventtype.assignment")}
+                    {e.type === "Other" && t("eventtype.other")}
+                  </p>
                 </li>
               ))}
             </ul>
@@ -230,21 +319,18 @@ export default function CalendarPage() {
         </Card>
       </div>
 
-      {/* ADD EVENT MODAL */}
       {showAddEvent && (
         <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50">
           <Card className="w-full max-w-md rounded-3xl border border-purple-100 shadow-xl p-6">
-
             <h3 className="text-xl font-semibold text-purple-700 mb-4">
-              {t("addevent.title")} to{" "}
-              {format(new Date(selectedDate), "MMMM d, yyyy")}
+              {t("addevent.title")} - {selectedDateText}
             </h3>
 
             <label className="block text-sm font-medium text-gray-600 mb-1">
               {t("addevent.name")}
             </label>
             <Input
-              placeholder="e.g., Physics Lecture"
+              placeholder={t("addevent.placeholderName")}
               value={newTitle}
               onChange={(e) => setNewTitle(e.target.value)}
               className="mb-4 bg-purple-50/40 border-purple-200 focus:border-purple-400"
@@ -255,9 +341,7 @@ export default function CalendarPage() {
             </label>
             <Select
               value={newType}
-              onChange={(e) =>
-                setNewType(e.target.value as EventType)
-              }
+              onChange={(e) => setNewType(e.target.value as EventType)}
               className="mb-4 bg-purple-50/40 border-purple-200 focus:border-purple-400"
             >
               <option value="Class">{t("eventtype.class")}</option>
@@ -288,4 +372,3 @@ export default function CalendarPage() {
     </div>
   );
 }
-
