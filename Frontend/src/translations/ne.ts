@@ -7,19 +7,24 @@ const ne = {
     "nav.logout": "लगआउट",
 
     "welcome": "व्यक्तिगत अध्ययन योजनाकारमा स्वागत छ!",
-    "landing.description": "आफ्नो अध्ययन व्यवस्थित गर्नुहोस्, प्रगति ट्र्याक गर्नुहोस् र शैक्षिक लक्ष्यहरू हासिल गर्नुहोस्",
+    "landing.description":
+      "आफ्नो अध्ययन व्यवस्थित गर्नुहोस्, प्रगति ट्र्याक गर्नुहोस् र शैक्षिक लक्ष्यहरू हासिल गर्नुहोस्",
     "landing.features.taskManagement.title": "कार्य व्यवस्थापन",
-    "landing.features.taskManagement.description": "अध्ययन कार्यहरू सिर्जना, व्यवस्थित र ट्र्याक गर्नुहोस्",
+    "landing.features.taskManagement.description":
+      "अध्ययन कार्यहरू सिर्जना, व्यवस्थित र ट्र्याक गर्नुहोस्",
     "landing.features.calendar.title": "क्यालेन्डर दृश्य",
-    "landing.features.calendar.description": "समयसीमाहरू हेर्नुहोस् र अध्ययन तालिका बनाउनुहोस्",
+    "landing.features.calendar.description":
+      "समयसीमाहरू हेर्नुहोस् र अध्ययन तालिका बनाउनुहोस्",
     "landing.features.collaboration.title": "सहकार्य",
-    "landing.features.collaboration.description": "अध्ययन साझेदारहरूसँग कार्यहरू साझा गर्नुहोस्",
+    "landing.features.collaboration.description":
+      "अध्ययन साझेदारहरूसँग कार्यहरू साझा गर्नुहोस्",
     "landing.cta.getStarted": "सुरु गर्नुहोस्",
     "landing.cta.alreadyHaveAccount": "पहिले नै खाता छ?",
     "landing.cta.signIn": "साइन इन गर्नुहोस्",
 
     "login.title": "फिर्ता स्वागत छ!",
-    "login.description": "अध्ययन व्यवस्थित गर्न जारी राख्न साइन इन गर्नुहोस्",
+    "login.description":
+      "अध्ययन व्यवस्थित गर्न जारी राख्न साइन इन गर्नुहोस्",
     "login.googleButton": "Google सँग जारी राख्नुहोस्",
     "login.altButton": "वा इमेलसँग जारी राख्नुहोस्",
     "login.email": "इमेल",
@@ -27,10 +32,12 @@ const ne = {
     "login.button": "साइन इन",
     "login.noAccount": "खाता छैन?",
     "login.signUp": "साइन अप",
-    "login.demoNote": "डेमो एप – परीक्षणका लागि जुनसुकै इमेल काम गर्छ",
+    "login.demoNote":
+      "डेमो एप – परीक्षणका लागि जुनसुकै इमेल काम गर्छ",
 
     "signup.title": "आफ्नो खाता सिर्जना गर्नुहोस्",
-    "signup.description": "अध्ययन व्यवस्थित गर्न र प्रगति ट्र्याक गर्न सुरु गर्नुहोस्",
+    "signup.description":
+      "अध्ययन व्यवस्थित गर्न र प्रगति ट्र्याक गर्न सुरु गर्नुहोस्",
     "signup.googleButton": "Google सँग साइन अप गर्नुहोस्",
     "signup.altButton": "वा इमेलसँग साइन अप गर्नुहोस्",
     "signup.name": "पूरा नाम",
@@ -39,17 +46,20 @@ const ne = {
     "signup.button": "खाता सिर्जना गर्नुहोस्",
     "signup.alreadyHaveAccount": "पहिले नै खाता छ?",
     "signup.signIn": "साइन इन गर्नुहोस्",
-    "signup.demoNote": "डेमो एप – परीक्षणका लागि जुनसुकै नाम र इमेल काम गर्छ",
+    "signup.demoNote":
+      "डेमो एप – परीक्षणका लागि जुनसुकै नाम र इमेल काम गर्छ",
 
     "dashboard.title": "ड्यासबोर्ड",
     "dashboard.subtitle": "तपाईंका अध्ययन कार्यहरूको सारांश",
     "dashboard.newTask": "+ नयाँ कार्य",
     "dashboard.shareTasks": "कार्यहरू साझा गर्नुहोस्",
     "dashboard.deleteConfirmTitle": "कार्य मेटाउने?",
-    "dashboard.deleteConfirmMessage": "के तपाईं यो कार्य मेटाउन निश्चित हुनुहुन्छ?",
+    "dashboard.deleteConfirmMessage":
+      "के तपाईं यो कार्य मेटाउन निश्चित हुनुहुन्छ?",
     "dashboard.cancel": "रद्द गर्नुहोस्",
     "dashboard.delete": "मेटाउनुहोस्",
-    "dashboard.emptyState": "अहिले कुनै कार्य छैन। सुरु गर्न पहिलो कार्य सिर्जना गर्नुहोस्!",
+    "dashboard.emptyState":
+      "अहिले कुनै कार्य छैन। सुरु गर्न पहिलो कार्य सिर्जना गर्नुहोस्!",
     "dashboard.searchPlaceholder": "कार्यहरू खोज्नुहोस्...",
     "dashboard.stats.total": "कुल कार्यहरू",
     "dashboard.stats.todo": "गर्नुपर्ने",
@@ -82,14 +92,19 @@ const ne = {
     "share.cancel": "रद्द गर्नुहोस्",
     "share.shareButton": "कार्य साझा गर्नुहोस्",
     "share.sharing": "साझा गर्दै...",
-    "share.error.selectTask": "कम्तिमा एउटा कार्य चयन गर्नुहोस्",
-    "share.error.selectUser": "कम्तिमा एउटा प्राप्तकर्ता चयन गर्नुहोस्",
-    "share.error.invalidTasks": "चयन गरिएका कार्यहरू साझा गर्न सकिँदैन। कृपया पहिले backend API प्रयोग गरेर कार्य सिर्जना गर्नुहोस्।",
-    "share.success": "{{count}} जनालाई कार्य सफलतापूर्वक पठाइयो।",
+    "share.error.selectTask":
+      "कम्तिमा एउटा कार्य चयन गर्नुहोस्",
+    "share.error.selectUser":
+      "कम्तिमा एउटा प्राप्तकर्ता चयन गर्नुहोस्",
+    "share.error.invalidTasks":
+      "चयन गरिएका कार्यहरू साझा गर्न सकिँदैन। कृपया पहिले backend API प्रयोग गरेर कार्य सिर्जना गर्नुहोस्।",
+    "share.success":
+      "{{count}} जनालाई कार्य सफलतापूर्वक पठाइयो।",
     "share.localTask": "(स्थानीय मात्र - साझा गर्न सकिँदैन)",
 
     "notfound.title": "पृष्ठ फेला परेन",
-    "notfound.description": "तपाईं खोज्नु भएको पृष्ठ अवस्थित छैन।",
+    "notfound.description":
+      "तपाईं खोज्नु भएको पृष्ठ अवस्थित छैन।",
     "notfound.backToHome": "गृहपृष्ठमा फर्कनुहोस्",
 
     "profile.title": "प्रोफाइल",
@@ -111,9 +126,11 @@ const ne = {
     "profile.tasksShared": "साझा गरिएका कार्यहरू",
     "profile.preferences": "प्राथमिकताहरू",
     "profile.emailNotifications": "इमेल सूचनाहरू",
-    "profile.emailNotificationsDesc": "कार्यहरूका लागि इमेल रिमाइन्डर प्राप्त गर्नुहोस्",
+    "profile.emailNotificationsDesc":
+      "कार्यहरूका लागि इमेल रिमाइन्डर प्राप्त गर्नुहोस्",
     "profile.calendarIntegration": "क्यालेन्डर एकीकरण",
-    "profile.calendarIntegrationDesc": "Google क्यालेन्डरसँग सिंक गर्नुहोस्",
+    "profile.calendarIntegrationDesc":
+      "Google क्यालेन्डरसँग सिंक गर्नुहोस्",
     "profile.configured": "कन्फिगर गरिएको",
     "profile.connected": "जोडिएको",
 
@@ -122,7 +139,8 @@ const ne = {
     "calendar.previous": "अघिल्लो",
     "calendar.next": "अर्को",
     "calendar.scheduledItems": "{{count}} वस्तु तालिकामा राखिएको छ",
-    "calendar.noEvents": "यस दिनका लागि कुनै कार्य वा कार्यक्रम तय गरिएको छैन।",
+    "calendar.noEvents":
+      "यस दिनका लागि कुनै कार्य वा कार्यक्रम तय गरिएको छैन।",
     "addevent.title": "नयाँ कार्यक्रम थप्नुहोस्",
     "addevent.name": "कार्यक्रमको नाम",
     "addevent.date": "कार्यक्रमको मिति",
@@ -135,7 +153,8 @@ const ne = {
     "eventtype.exam": "परीक्षा",
     "eventtype.assignment": "असाइनमेन्ट",
     "eventtype.other": "अन्य",
-    "eventtype.amounts": "यस दिनका लागि कुनै कार्य वा कार्यक्रम तय गरिएको छैन।",
+    "eventtype.amounts":
+      "यस दिनका लागि कुनै कार्य वा कार्यक्रम तय गरिएको छैन।",
 
     "llm.title": "AI कार्य जेनरेटर",
     "llm.promptPlaceholder": "तपाईं के सिक्न चाहनुहुन्छ?",
@@ -151,7 +170,8 @@ const ne = {
     "newtask.labelTitle": "शीर्षक *",
     "newtask.labelDescription": "विवरण",
     "newtask.placeholderTitle": "गणितको असाइनमेन्ट पूरा गर्नुहोस्",
-    "newtask.placeholderDescription": "आफ्नो कार्यको विवरण थप्नुहोस्…",
+    "newtask.placeholderDescription":
+      "आफ्नो कार्यको विवरण थप्नुहोस्…",
     "newtask.priority": "प्राथमिकता",
     "newtask.status": "स्थिति",
     "newtask.deadline": "समयसीमा",
@@ -177,6 +197,30 @@ const ne = {
     "priority.low": "कम",
     "priority.medium": "मध्यम",
     "priority.high": "उच्च",
+
+    task: {
+      createTitle: "नयाँ कार्य सिर्जना गर्नुहोस्",
+      editTitle: "कार्य सम्पादन गर्नुहोस्",
+      title: "शीर्षक",
+      description: "विवरण",
+      priority: "प्राथमिकता",
+      status: "स्थिति",
+      deadline: "समयसीमा",
+      placeholderTitle: "गणितको असाइनमेन्ट पूरा गर्नुहोस्",
+      placeholderDescription: "कार्यको विवरण थप्नुहोस्...",
+      low: "कम",
+      medium: "मध्यम",
+      high: "उच्च",
+      todo: "गर्नुपर्ने",
+      inProgress: "प्रक्रियामा",
+      completed: "पूरा भएको",
+      cancel: "रद्द गर्नुहोस्",
+      create: "कार्य सिर्जना गर्नुहोस्",
+      creating: "सिर्जना हुँदैछ...",
+      save: "परिवर्तनहरू सुरक्षित गर्नुहोस्",
+      saving: "सुरक्षित हुँदैछ...",
+      errorCreate: "कार्य सिर्जना गर्न असफल",
+    },
   },
 };
 

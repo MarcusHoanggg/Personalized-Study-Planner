@@ -7,19 +7,24 @@ const fi = {
     "nav.logout": "Kirjaudu ulos",
 
     "welcome": "Tervetuloa henkilökohtaiseen opiskelusuunnittelijaan!",
-    "landing.description": "Järjestä opiskelusi, seuraa edistymistäsi ja saavuta akateemiset tavoitteesi",
+    "landing.description":
+      "Järjestä opiskelusi, seuraa edistymistäsi ja saavuta akateemiset tavoitteesi",
     "landing.features.taskManagement.title": "Tehtävienhallinta",
-    "landing.features.taskManagement.description": "Luo, järjestä ja seuraa opiskelutehtäviäsi tehokkaasti",
+    "landing.features.taskManagement.description":
+      "Luo, järjestä ja seuraa opiskelutehtäviäsi tehokkaasti",
     "landing.features.calendar.title": "Kalenterinäkymä",
-    "landing.features.calendar.description": "Visualisoi määräajat ja suunnittele opiskeluaikataulu",
+    "landing.features.calendar.description":
+      "Visualisoi määräajat ja suunnittele opiskeluaikataulu",
     "landing.features.collaboration.title": "Yhteistyö",
-    "landing.features.collaboration.description": "Jaa tehtäviä ja tee yhteistyötä opiskelukumppaneiden kanssa",
+    "landing.features.collaboration.description":
+      "Jaa tehtäviä ja tee yhteistyötä opiskelukumppaneiden kanssa",
     "landing.cta.getStarted": "Aloita",
     "landing.cta.alreadyHaveAccount": "Onko sinulla jo tili?",
     "landing.cta.signIn": "Kirjaudu sisään",
 
     "login.title": "Tervetuloa takaisin!",
-    "login.description": "Kirjaudu sisään jatkaaksesi opiskelun järjestämistä",
+    "login.description":
+      "Kirjaudu sisään jatkaaksesi opiskelun järjestämistä",
     "login.googleButton": "Jatka Googlella",
     "login.altButton": "TAI JATKA SÄHKÖPOSTILLA",
     "login.email": "Sähköposti",
@@ -27,10 +32,12 @@ const fi = {
     "login.button": "Kirjaudu sisään",
     "login.noAccount": "Eikö sinulla ole tiliä?",
     "login.signUp": "Rekisteröidy",
-    "login.demoNote": "Demo-sovellus – mikä tahansa sähköposti toimii testaukseen",
+    "login.demoNote":
+      "Demo-sovellus – mikä tahansa sähköposti toimii testaukseen",
 
     "signup.title": "Luo tilisi",
-    "signup.description": "Aloita opiskelun järjestäminen ja edistymisen seuranta",
+    "signup.description":
+      "Aloita opiskelun järjestäminen ja edistymisen seuranta",
     "signup.googleButton": "Rekisteröidy Googlella",
     "signup.altButton": "TAI REKISTERÖIDY SÄHKÖPOSTILLA",
     "signup.name": "Koko nimi",
@@ -39,17 +46,20 @@ const fi = {
     "signup.button": "Luo tili",
     "signup.alreadyHaveAccount": "Onko sinulla jo tili?",
     "signup.signIn": "Kirjaudu sisään",
-    "signup.demoNote": "Demo-sovellus – mikä tahansa nimi ja sähköposti toimii testaukseen",
+    "signup.demoNote":
+      "Demo-sovellus – mikä tahansa nimi ja sähköposti toimii testaukseen",
 
     "dashboard.title": "Kojelauta",
     "dashboard.subtitle": "Yleiskatsaus opiskelutehtävistäsi",
     "dashboard.newTask": "+ Uusi tehtävä",
     "dashboard.shareTasks": "Jaa tehtäviä",
     "dashboard.deleteConfirmTitle": "Poistetaanko tehtävä?",
-    "dashboard.deleteConfirmMessage": "Haluatko varmasti poistaa tämän tehtävän?",
+    "dashboard.deleteConfirmMessage":
+      "Haluatko varmasti poistaa tämän tehtävän?",
     "dashboard.cancel": "Peruuta",
     "dashboard.delete": "Poista",
-    "dashboard.emptyState": "Ei tehtäviä vielä. Luo ensimmäinen tehtäväsi aloittaaksesi!",
+    "dashboard.emptyState":
+      "Ei tehtäviä vielä. Luo ensimmäinen tehtäväsi aloittaaksesi!",
     "dashboard.searchPlaceholder": "Etsi tehtäviä...",
     "dashboard.stats.total": "Tehtäviä yhteensä",
     "dashboard.stats.todo": "Tehtävänä",
@@ -74,7 +84,8 @@ const fi = {
 
     "share.title": "Jaa tehtäviä",
     "share.searchRecipients": "Etsi vastaanottajia",
-    "share.searchPlaceholder": "Etsi nimellä tai sähköpostilla...",
+    "share.searchPlaceholder":
+      "Etsi nimellä tai sähköpostilla...",
     "share.selectAll": "Valitse kaikki jaettavat ({{selected}}/{{total}})",
     "share.localOnly": "vain paikallinen",
     "share.noTasks": "Ei tehtäviä",
@@ -83,13 +94,16 @@ const fi = {
     "share.shareButton": "Jaa tehtävät",
     "share.sharing": "Jaetaan...",
     "share.error.selectTask": "Valitse vähintään yksi tehtävä",
-    "share.error.selectUser": "Valitse vähintään yksi vastaanottaja",
-    "share.error.invalidTasks": "Valittuja tehtäviä ei voi jakaa. Luo tehtävät ensin backend-API:n kautta.",
+    "share.error.selectUser":
+      "Valitse vähintään yksi vastaanottaja",
+    "share.error.invalidTasks":
+      "Valittuja tehtäviä ei voi jakaa. Luo tehtävät ensin backend-API:n kautta.",
     "share.success": "Tehtävät lähetetty {{count}} vastaanottajalle.",
     "share.localTask": "(Vain paikallinen - ei voi jakaa)",
 
     "notfound.title": "Sivua ei löydy",
-    "notfound.description": "Etsimääsi sivua ei ole olemassa.",
+    "notfound.description":
+      "Etsimääsi sivua ei ole olemassa.",
     "notfound.backToHome": "Takaisin etusivulle",
 
     "profile.title": "Profiili",
@@ -111,9 +125,11 @@ const fi = {
     "profile.tasksShared": "Jaetut tehtävät",
     "profile.preferences": "Asetukset",
     "profile.emailNotifications": "Sähköposti-ilmoitukset",
-    "profile.emailNotificationsDesc": "Vastaanota sähköpostimuistutuksia tehtävistä",
+    "profile.emailNotificationsDesc":
+      "Vastaanota sähköpostimuistutuksia tehtävistä",
     "profile.calendarIntegration": "Kalenterin integraatio",
-    "profile.calendarIntegrationDesc": "Synkronoi Google-kalenterin kanssa",
+    "profile.calendarIntegrationDesc":
+      "Synkronoi Google-kalenterin kanssa",
     "profile.configured": "Määritetty",
     "profile.connected": "Yhdistetty",
 
@@ -122,7 +138,8 @@ const fi = {
     "calendar.previous": "Edellinen",
     "calendar.next": "Seuraava",
     "calendar.scheduledItems": "{{count}} kohde(tta) aikataulutettu",
-    "calendar.noEvents": "Tälle päivälle ei ole aikataulutettuja tehtäviä tai tapahtumia.",
+    "calendar.noEvents":
+      "Tälle päivälle ei ole aikataulutettuja tehtäviä tai tapahtumia.",
     "addevent.title": "Lisää uusi tapahtuma",
     "addevent.name": "Tapahtuman nimi",
     "addevent.date": "Tapahtuman päivämäärä",
@@ -135,7 +152,8 @@ const fi = {
     "eventtype.exam": "Koe",
     "eventtype.assignment": "Tehtävä",
     "eventtype.other": "Muu",
-    "eventtype.amounts": "Tälle päivälle ei ole aikataulutettuja tehtäviä tai tapahtumia.",
+    "eventtype.amounts":
+      "Tälle päivälle ei ole aikataulutettuja tehtäviä tai tapahtumia.",
 
     "llm.title": "AI-tehtävägeneraattori",
     "llm.promptPlaceholder": "Mitä haluat oppia?",
@@ -177,6 +195,30 @@ const fi = {
     "priority.low": "Matala",
     "priority.medium": "Keskitaso",
     "priority.high": "Korkea",
+
+    task: {
+      createTitle: "Luo uusi tehtävä",
+      editTitle: "Muokkaa tehtävää",
+      title: "Otsikko",
+      description: "Kuvaus",
+      priority: "Prioriteetti",
+      status: "Tila",
+      deadline: "Määräaika",
+      placeholderTitle: "Suorita matematiikan tehtävä",
+      placeholderDescription: "Lisää tehtävän tiedot...",
+      low: "Matala",
+      medium: "Keskitaso",
+      high: "Korkea",
+      todo: "Tehtävänä",
+      inProgress: "Kesken",
+      completed: "Valmis",
+      cancel: "Peruuta",
+      create: "Luo tehtävä",
+      creating: "Luodaan...",
+      save: "Tallenna muutokset",
+      saving: "Tallennetaan...",
+      errorCreate: "Tehtävän luominen epäonnistui",
+    },
   },
 };
 
