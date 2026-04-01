@@ -91,7 +91,7 @@ const ne = {
     "share.sharing": "साझा गर्दै...",
     "share.error.selectTask": "कम्तिमा एउटा कार्य चयन गर्नुहोस्",
     "share.error.selectUser": "कम्तिमा एउटा प्राप्तकर्ता चयन गर्नुहोस्",
-    "share.error.invalidTasks": "चयन गरिएका कार्यहरू साझा गर्न सकिँदैन।",
+    "share.error.invalidTasks": "चयन गरिएका कार्यहरू साझा गर्न सकिँदैन। कृपया पहिले backend API प्रयोग गरेर कार्य सिर्जना गर्नुहोस्।",
     "share.success": "{{count}} जनालाई कार्य सफलतापूर्वक पठाइयो।",
     "share.localTask": "(स्थानीय मात्र - साझा गर्न सकिँदैन)",
 
@@ -101,7 +101,7 @@ const ne = {
     "notfound.backToHome": "गृहपृष्ठमा फर्कनुहोस्",
 
     // Profile
-    "profile.title": " प्रोफाइल",
+    "profile.title": "प्रोफाइल",
     "profile.subtitle": "आफ्नो खाता विवरण व्यवस्थित गर्नुहोस्",
     "profile.name": "नाम",
     "profile.email": "इमेल",
@@ -128,17 +128,65 @@ const ne = {
 
     // Calendar
     "calendar.title": "क्यालेन्डर",
+    "calendar.subtitle": "आफ्नो तालिका र समयसीमा हेर्नुहोस्",
+    "calendar.previous": "अघिल्लो",
+    "calendar.next": "अर्को",
+    "calendar.scheduledItems": "{{count}} वस्तु तालिकामा राखिएको छ",
     "addevent.title": "नयाँ कार्यक्रम थप्नुहोस्",
     "addevent.name": "कार्यक्रमको नाम",
     "addevent.date": "कार्यक्रमको मिति",
     "addevent.type": "कार्यक्रमको प्रकार",
     "addevent.saveButton": "कार्यक्रम सुरक्षित गर्नुहोस्",
     "addevent.cancelButton": "रद्द गर्नुहोस्",
+    "addevent.placeholderName": "जस्तै: भौतिकशास्त्र व्याख्यान",
     "eventtype.class": "कक्षा",
     "eventtype.study": "अध्ययन सत्र",
     "eventtype.exam": "परीक्षा",
+    "eventtype.assignment": "असाइनमेन्ट",
     "eventtype.other": "अन्य",
     "eventtype.amounts": "यस दिनका लागि कुनै कार्य वा कार्यक्रम तय गरिएको छैन।",
+    "calendar.noEvents": "यस दिनका लागि कुनै कार्य वा कार्यक्रम तय गरिएको छैन।",
+
+    // LLM Task Generator
+    "llm.title": "AI कार्य जेनरेटर",
+    "llm.promptPlaceholder": "तपाईं के सिक्न चाहनुहुन्छ?",
+    "llm.generateButton": "कार्यहरू सिर्जना गर्नुहोस्",
+    "llm.generating": "सिर्जना हुँदैछ...",
+    "llm.deadline": "समयसीमा",
+    "llm.priority": "प्राथमिकता",
+    "llm.accept": "स्वीकार गर्नुहोस्",
+    "llm.reject": "अस्वीकार गर्नुहोस्",
+    "llm.close": "बन्द गर्नुहोस्",
+
+    // New Task Modal
+    "newtask.title": "नयाँ कार्य सिर्जना गर्नुहोस्",
+    "newtask.labelTitle": "शीर्षक *",
+    "newtask.labelDescription": "विवरण",
+    "newtask.placeholderTitle": "गणितको असाइनमेन्ट पूरा गर्नुहोस्",
+    "newtask.placeholderDescription": "आफ्नो कार्यको विवरण थप्नुहोस्…",
+    "newtask.priority": "प्राथमिकता",
+    "newtask.status": "स्थिति",
+    "newtask.deadline": "समयसीमा",
+    "newtask.cancel": "रद्द गर्नुहोस्",
+    "newtask.create": "कार्य सिर्जना गर्नुहोस्",
+    "newtask.creating": "सिर्जना हुँदैछ...",
+    "newtask.error": "कार्य सिर्जना गर्न असफल",
+
+    // Edit Task Modal
+    "edittask.title": "कार्य सम्पादन गर्नुहोस्",
+    "edittask.save": "परिवर्तनहरू सुरक्षित गर्नुहोस्",
+    "edittask.saving": "सुरक्षित हुँदैछ...",
+
+    // Task Card
+    "task.edit": "सम्पादन गर्नुहोस्",
+    "task.setReminder": "रिमाइन्डर सेट गर्नुहोस्",
+    "task.delete": "मेटाउनुहोस्",
+    "task.createdOn": "सिर्जना गरिएको मिति",
+    "task.received": "प्राप्त",
+    "task.priorityLabel": "प्राथमिकता",
+    "task.status.completed": "पूरा भएको",
+    "task.status.in_progress": "प्रक्रियामा",
+    "task.status.todo": "गर्नुपर्ने",
   },
 };
 

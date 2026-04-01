@@ -4,7 +4,7 @@ import fi from './translations/fi';
 import ne from './translations/ne';
 import vi from './translations/vi';
 
-// English is the default language 
+// English is the default language
 const en = {
     translation: {
         // Layout / Nav
@@ -138,17 +138,67 @@ const en = {
 
         // Calendar
         "calendar.title": "Calendar",
+        "calendar.subtitle": "View your schedule and deadlines",
+        "calendar.previous": "Previous",
+        "calendar.next": "Next",
+        "calendar.scheduledItems": "{{count}} item(s) scheduled",
         "addevent.title": "Add New Event",
         "addevent.name": "Event Name",
         "addevent.date": "Event Date",
         "addevent.type": "Event Type",
         "addevent.saveButton": "Save Event",
         "addevent.cancelButton": "Cancel",
+        "addevent.placeholderName": "e.g., Physics Lecture",
         "eventtype.class": "Class",
         "eventtype.study": "Study Session",
         "eventtype.exam": "Exam",
+        "eventtype.assignment": "Assignment",
         "eventtype.other": "Other",
         "eventtype.amounts": "No tasks or events scheduled for this day.",
+
+        // Calendar extras
+        "calendar.noEvents": "No tasks or events scheduled for this day.",
+
+        // LLM Task Generator
+        "llm.title": "AI Task Generator",
+        "llm.promptPlaceholder": "What do you want to learn?",
+        "llm.generateButton": "Generate Tasks",
+        "llm.generating": "Generating...",
+        "llm.deadline": "Deadline",
+        "llm.priority": "Priority",
+        "llm.accept": "Accept",
+        "llm.reject": "Reject",
+        "llm.close": "Close",
+
+        // New Task Modal
+        "newtask.title": "Create New Task",
+        "newtask.labelTitle": "Title *",
+        "newtask.labelDescription": "Description",
+        "newtask.placeholderTitle": "Complete Math Assignment",
+        "newtask.placeholderDescription": "Add details about your task…",
+        "newtask.priority": "Priority",
+        "newtask.status": "Status",
+        "newtask.deadline": "Deadline",
+        "newtask.cancel": "Cancel",
+        "newtask.create": "Create Task",
+        "newtask.creating": "Creating...",
+        "newtask.error": "Failed to create task",
+
+        // Edit Task Modal
+        "edittask.title": "Edit Task",
+        "edittask.save": "Save Changes",
+        "edittask.saving": "Saving...",
+
+        // Task Card
+        "task.edit": "Edit",
+        "task.setReminder": "Set Reminder",
+        "task.delete": "Delete",
+        "task.createdOn": "Created on",
+        "task.received": "Received",
+        "task.priorityLabel": "Priority",
+        "task.status.completed": "Completed",
+        "task.status.in_progress": "In Progress",
+        "task.status.todo": "To Do",
     },
 };
 
@@ -159,10 +209,9 @@ i18n.use(initReactI18next).init({
     lng: savedLang,
     fallbackLng: "en",
     interpolation: { escapeValue: false },
-    resources: { en, fi, ne, vi }, // each language imported from its own file
+    resources: { en, fi, ne, vi },
 });
 
-// Persist language choice whenever it changes
 i18n.on("languageChanged", (lng) => {
     localStorage.setItem("i18n_lang", lng);
 });

@@ -151,8 +151,7 @@ export default function MainLayout() {
               hover:bg-purple-100 transition
             "
           >
-            
-            {t("logout.title")}
+            {t("nav.logout")}
           </button>
 
         </div>

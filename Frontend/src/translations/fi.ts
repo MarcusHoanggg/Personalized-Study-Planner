@@ -91,10 +91,9 @@ const fi = {
     "share.sharing": "Jaetaan...",
     "share.error.selectTask": "Valitse vähintään yksi tehtävä",
     "share.error.selectUser": "Valitse vähintään yksi vastaanottaja",
-    "share.error.invalidTasks": "Valittuja tehtäviä ei voi jakaa.",
+    "share.error.invalidTasks": "Valittuja tehtäviä ei voi jakaa. Luo tehtävät ensin backend-API:n kautta.",
     "share.success": "Tehtävät lähetetty {{count}} vastaanottajalle.",
     "share.localTask": "(Vain paikallinen - ei voi jakaa)",
-
 
     // Not Found
     "notfound.title": "Sivua ei löydy",
@@ -129,17 +128,65 @@ const fi = {
 
     // Calendar
     "calendar.title": "Opiskelukalenteri",
+    "calendar.subtitle": "Näytä aikataulusi ja määräaikasi",
+    "calendar.previous": "Edellinen",
+    "calendar.next": "Seuraava",
+    "calendar.scheduledItems": "{{count}} kohde(tta) aikataulutettu",
     "addevent.title": "Lisää uusi tapahtuma",
     "addevent.name": "Tapahtuman nimi",
     "addevent.date": "Tapahtuman päivämäärä",
     "addevent.type": "Tapahtuman tyyppi",
     "addevent.saveButton": "Tallenna tapahtuma",
     "addevent.cancelButton": "Peruuta",
+    "addevent.placeholderName": "esim. Fysiikan luento",
     "eventtype.class": "Luokka",
     "eventtype.study": "Opiskelusessio",
     "eventtype.exam": "Koe",
+    "eventtype.assignment": "Tehtävä",
     "eventtype.other": "Muu",
     "eventtype.amounts": "Tälle päivälle ei ole aikataulutettuja tehtäviä tai tapahtumia.",
+    "calendar.noEvents": "Tälle päivälle ei ole aikataulutettuja tehtäviä tai tapahtumia.",
+
+    // LLM Task Generator
+    "llm.title": "AI-tehtävägeneraattori",
+    "llm.promptPlaceholder": "Mitä haluat oppia?",
+    "llm.generateButton": "Luo tehtävät",
+    "llm.generating": "Luodaan...",
+    "llm.deadline": "Määräaika",
+    "llm.priority": "Prioriteetti",
+    "llm.accept": "Hyväksy",
+    "llm.reject": "Hylkää",
+    "llm.close": "Sulje",
+
+    // New Task Modal
+    "newtask.title": "Luo uusi tehtävä",
+    "newtask.labelTitle": "Otsikko *",
+    "newtask.labelDescription": "Kuvaus",
+    "newtask.placeholderTitle": "Suorita matematiikan tehtävä",
+    "newtask.placeholderDescription": "Lisää tehtäväsi tiedot…",
+    "newtask.priority": "Prioriteetti",
+    "newtask.status": "Tila",
+    "newtask.deadline": "Määräaika",
+    "newtask.cancel": "Peruuta",
+    "newtask.create": "Luo tehtävä",
+    "newtask.creating": "Luodaan...",
+    "newtask.error": "Tehtävän luominen epäonnistui",
+
+    // Edit Task Modal
+    "edittask.title": "Muokkaa tehtävää",
+    "edittask.save": "Tallenna muutokset",
+    "edittask.saving": "Tallennetaan...",
+
+    // Task Card
+    "task.edit": "Muokkaa",
+    "task.setReminder": "Aseta muistutus",
+    "task.delete": "Poista",
+    "task.createdOn": "Luotu",
+    "task.received": "Vastaanotettu",
+    "task.priorityLabel": "Prioriteetti",
+    "task.status.completed": "Valmis",
+    "task.status.in_progress": "Kesken",
+    "task.status.todo": "Tehtävänä",
   },
 };
 
