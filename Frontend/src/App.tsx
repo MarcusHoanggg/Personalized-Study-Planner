@@ -1,25 +1,3 @@
-// // src/App.tsx
-// import { BrowserRouter, Routes, Route } from "react-router-dom";
-// import MainLayout from "./layout/MainLayout";
-// import DashboardPage from "./pages/DashboardPage";
-// import CalendarPage from "./pages/CalendarPage";
-// import ProfilePage from "./pages/ProfilePage";
-
-// export default function App() {
-//   return (
-//     <BrowserRouter>
-//       <Routes>
-//         <Route element={<MainLayout />}>
-//           <Route path="/" element={<DashboardPage />} />
-//           <Route path="/dashboard" element={<DashboardPage />} />
-//           <Route path="/calendar" element={<CalendarPage />} />
-//           <Route path="/profile" element={<ProfilePage />} />
-//         </Route>
-//       </Routes>
-//     </BrowserRouter>
-//   );
-// }
-
 import { Routes, Route } from "react-router-dom";
 import MainLayout from "./layout/MainLayout";
 import DashboardPage from "./pages/DashboardPage";
@@ -31,12 +9,9 @@ import LandingPage from "./pages/LandingPage";
 import NotFoundPage from "./pages/NotFoundPage";
 import OAuth2RedirectPage from "./pages/OAuth2RedirectPage";
 import ProtectedRoute from "./components/ProtectedRoute";
-import LanguageDropdown from "./components/LanguageDropdown";
 
 export default function App() {
   return (
-    <>
-
       <Routes>
 
         <Route path="/" element={<LandingPage />} />
@@ -60,6 +35,5 @@ export default function App() {
 
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
-    </>
   );
 }
