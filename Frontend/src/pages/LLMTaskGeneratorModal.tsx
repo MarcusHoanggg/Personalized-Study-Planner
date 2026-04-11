@@ -22,9 +22,8 @@ interface SuggestedTask {
 
 export default function LLMTaskGeneratorModal({
   onClose,
-  onAddTask,
 }: LLMTaskGeneratorModalProps) {
-  const { t } = useTranslation();
+  const { t, i18n} = useTranslation();
 
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
@@ -41,6 +40,7 @@ export default function LLMTaskGeneratorModal({
         {
           prompt,
           additionalContext: "",
+          language: i18n.language,
         },
         {
           headers: {

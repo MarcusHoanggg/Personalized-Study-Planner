@@ -25,18 +25,18 @@ public class LlmClient {
     // sends a prompt to gemini API and returns the raw response
     public String sendPrompt(String prompt) {
         String requestBody = String.format("""
-                                {
-                                  "contents": [
-                                    {
-                                      "parts": [
-                                        {
-                                          "text": %s
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                                """, escapeJson(prompt));
+                {
+                  "contents": [
+                    {
+                      "parts": [
+                        {
+                          "text": %s
+                        }
+                      ]
+                    }
+                  ]
+                }
+                """, escapeJson(prompt));
 
         String finalUrl = completionUrl + "?key=" + apiKey;
         HttpRequest request = HttpRequest.newBuilder()
@@ -45,24 +45,11 @@ public class LlmClient {
                 .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                 .build();
         try {
-            System.out.println("=== LLM REQUEST ===");
-            System.out.println("URL: " + finalUrl);
-            System.out.println("Request body preview: "
-                    + requestBody.substring(0, Math.min(200, requestBody.length())) + "...");
-
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-
-            System.out.println("=== LLM RESPONSE ===");
-            System.out.println("Status: " + response.statusCode());
-            System.out.println("Body preview: "
-                    + response.body().substring(0, Math.min(500, response.body().length()))
-                    + "...");
-
             if (response.statusCode() != 200) {
                 throw new RuntimeException("Gemini API returned status " + response.statusCode() +
                         ": " + response.body());
             }
-
             return response.body();
 
         } catch (Exception e) {
