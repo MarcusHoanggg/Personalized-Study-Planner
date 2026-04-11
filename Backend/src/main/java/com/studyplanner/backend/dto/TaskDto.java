@@ -28,5 +28,6 @@ public class TaskDto {
     private Task.Status status;
     private boolean completed;
     private String sharedByEmail;
+    private Task.Language language;
 
 }

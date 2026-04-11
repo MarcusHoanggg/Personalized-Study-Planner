@@ -15,6 +15,7 @@ export interface Task {
   createdAt: string;
   priority?: "low" | "medium" | "high";
   sharedByEmail?: string;
+  language: string;
 }
 
 // =========================

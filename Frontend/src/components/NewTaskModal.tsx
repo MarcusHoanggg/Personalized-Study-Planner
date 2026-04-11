@@ -12,7 +12,7 @@ interface NewTaskModalProps {
 }
 
 export default function NewTaskModal({ onClose, onCreate }: NewTaskModalProps) {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -34,6 +34,7 @@ export default function NewTaskModal({ onClose, onCreate }: NewTaskModalProps) {
         priority,
         status,
         deadline: deadline || undefined,
+        language: i18n.language,
       });
 
       onCreate(newTask);

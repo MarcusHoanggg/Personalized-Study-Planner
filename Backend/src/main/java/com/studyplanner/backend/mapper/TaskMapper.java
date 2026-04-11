@@ -17,6 +17,7 @@ public class TaskMapper {
                 .status(task.getStatus())
                 .completed(task.isCompleted())
                 .sharedByEmail(task.getSharedByEmail())
+                .language(task.getLanguage())
                 .build();
     }
 
@@ -30,6 +31,7 @@ public class TaskMapper {
                 .priority(taskDto.getPriority())
                 .status(taskDto.getStatus())
                 .completed(taskDto.isCompleted())
+                .language(taskDto.getLanguage())
                 .build();
     }
 
@@ -42,6 +44,7 @@ public class TaskMapper {
         task.setPriority(taskDto.getPriority());
         task.setStatus(taskDto.getStatus());
         task.setCompleted(taskDto.isCompleted());
+        task.setLanguage(taskDto.getLanguage());
     }
 
 }

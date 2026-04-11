@@ -17,9 +17,6 @@ export default function LandingPage() {
 
 
 
-
-
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-100 via-pink-100 to-blue-100 flex items-center justify-center px-4">
       <div className="max-w-4xl mx-auto text-center space-y-8 animate-pageFade">

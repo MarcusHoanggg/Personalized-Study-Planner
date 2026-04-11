@@ -1,10 +1,8 @@
 package com.studyplanner.backend.entity;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -41,9 +39,6 @@ public class Task {
     @Column(name = "task_deadline")
     private LocalDateTime taskDeadline;
 
-    public void setGoogleEventId(String googleEventId) {
-
-    }
 
     public enum Priority {
         LOW,
@@ -80,12 +75,44 @@ public class Task {
     @JoinColumn(name = "suggested_task_id")
     private SuggestedLLM suggestedTask;
 
+    // Creation time stamp
     @CreationTimestamp
     @Column(name = "created_at", updatable = false, nullable = false)
     private LocalDateTime createdAt;
 
+    // Updated time stamp
     @UpdateTimestamp
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+
+    @Getter
+    public enum Language{
+        EN("en"),
+        FI("fi"),
+        NE("ne"),
+        VI("vi");
+
+        private final String code;
+
+        Language(String code) {
+            this.code = code;
+        }
+        @JsonCreator
+        public static Language fromCode(String value) {
+            for (Language lang : values()) {
+                if (lang.code.equalsIgnoreCase(value)) {
+                    return lang;
+                }
+            }
+            throw new IllegalArgumentException("Unknown language: " + value);
+        }
+    }
+
+    // Language column showing the tasks saved language
+    @Enumerated(EnumType.STRING)
+    @Column(name="Language")
+    private Language language;
+
 
 }
