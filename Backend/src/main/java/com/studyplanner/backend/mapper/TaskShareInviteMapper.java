@@ -6,6 +6,10 @@ import com.studyplanner.backend.entity.TaskShareInvite;
 import com.studyplanner.backend.entity.User;
 
 public class TaskShareInviteMapper {
+    private TaskShareInviteMapper() {
+        /* This utility class should not be instantiated */
+    }
+
 
     public static TaskShareInviteDto mapToDto(TaskShareInvite invite) {
         User sender = invite.getSender();

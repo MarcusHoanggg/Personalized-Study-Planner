@@ -5,6 +5,10 @@ import com.studyplanner.backend.entity.Task;
 import com.studyplanner.backend.entity.User;
 
 public class TaskMapper {
+    private TaskMapper() {
+        /* This utility class should not be instantiated */
+    }
+
 
     public static TaskDto mapToTaskDto(Task task) {
         return TaskDto.builder()

@@ -2,6 +2,7 @@ package com.studyplanner.backend.client;
 
 import org.springframework.beans.factory.annotation.Value;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -11,10 +12,6 @@ import java.net.http.HttpResponse;
 public class LlmClient {
     @Value("${gemini.completion-url}")
     private String completionUrl;
-
-    // @Value("${ollama.model}")
-    // private String model;
-
     @Value("${gemini.api-key}")
     private String apiKey;
 
@@ -23,7 +20,7 @@ public class LlmClient {
             .build();
 
     // sends a prompt to gemini API and returns the raw response
-    public String sendPrompt(String prompt) {
+    public String sendPrompt(String prompt) throws IOException {
         String requestBody = String.format("""
                 {
                   "contents": [
@@ -45,17 +42,25 @@ public class LlmClient {
                 .POST(HttpRequest.BodyPublishers.ofString(requestBody))
                 .build();
         try {
-            HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<String> response =
+                    httpClient.send(request, HttpResponse.BodyHandlers.ofString());
+
             if (response.statusCode() != 200) {
-                throw new RuntimeException("Gemini API returned status " + response.statusCode() +
-                        ": " + response.body());
+                throw new IOException(
+                        "Gemini API returned status " + response.statusCode() +
+                                ": " + response.body()
+                );
             }
+
             return response.body();
 
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to call Gemini API: " + e.getMessage(), e);
-        }
-    }
+        } catch (IOException e) {
+            throw e; // preserve meaning
+
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt(); // REQUIRED
+            throw new IOException("Request interrupted", e);
+        }    }
 
     // escapes special characters in the JSON string
     private String escapeJson(String text) {

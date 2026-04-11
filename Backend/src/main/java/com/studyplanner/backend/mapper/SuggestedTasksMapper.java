@@ -4,6 +4,10 @@ import com.studyplanner.backend.dto.SuggestedTasksDto;
 import com.studyplanner.backend.entity.SuggestedLLM;
 
 public class SuggestedTasksMapper {
+    private SuggestedTasksMapper() {
+        /* This utility class should not be instantiated */
+    }
+
 
     public static SuggestedTasksDto toDto(SuggestedLLM entity) {
         return SuggestedTasksDto.builder()

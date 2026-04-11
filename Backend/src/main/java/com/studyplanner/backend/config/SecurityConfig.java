@@ -41,7 +41,6 @@ public class SecurityConfig {
 
     private final JwtAuthFilter jwtAuthFilter;
     private final OAuth2SuccessHandler oAuth2SuccessHandler;
-    // private final UserRepository userRepository;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -108,7 +107,6 @@ public class SecurityConfig {
             // JWT flow - load token from DB
             String email = authentication.getName();
             userRepository.findByEmail(email).ifPresent(user -> {
-                System.out.println("JWT auth name resolved as: {}" + email); // ← add this
 
                 // can't set local var directly, use workaround below
             });
