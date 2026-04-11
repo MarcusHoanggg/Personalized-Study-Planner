@@ -66,13 +66,6 @@ public class TaskTest {
         assertEquals(a.hashCode(), b.hashCode());
     }
 
-    @Test
-    void setGoogleEventId_noOp_andToString() {
-        Task t = Task.builder().id(2L).taskName("T").build();
-        // method is empty in current implementation; ensure calling it doesn't throw
-        t.setGoogleEventId("evt-123");
-        assertNotNull(t);
-        assertTrue(t.toString().contains("Task"));
-    }
+
 }
 

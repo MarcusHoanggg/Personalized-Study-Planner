@@ -18,6 +18,7 @@ interface BackendTask {
     status: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED';
     completed: boolean;
     sharedByEmail?: string;
+    language: string;
 }
 
 function getToken() {
@@ -67,6 +68,7 @@ function mapBackendToFrontend(task: BackendTask): Task {
         createdAt: new Date().toISOString(), // Backend doesn't return createdAt, using placeholder
         priority: priorityMap[task.priority] || 'medium',
         sharedByEmail: task.sharedByEmail,
+        language: task.language,
     };
 }
 
@@ -100,6 +102,7 @@ function mapFrontendToBackend(task: Partial<Task>): Partial<BackendTask> {
         priority: priorityMap[task.priority || 'medium'] as 'LOW' | 'MEDIUM' | 'HIGH',
         status: statusMap[task.status || 'todo'] as 'PENDING' | 'IN_PROGRESS' | 'COMPLETED',
         completed: task.status === 'completed',
+        language: task.language,
     };
 }
 
