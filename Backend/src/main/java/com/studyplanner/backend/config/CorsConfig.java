@@ -11,7 +11,7 @@ import java.util.List;
 @Configuration
 public class CorsConfig {
 
-    private final static String FRONTEND_URL="http://localhost:3000";
+    private static final String FRONTEND_URL="http://localhost:5173";
 
     @Bean
     public CorsFilter corsFilter() {

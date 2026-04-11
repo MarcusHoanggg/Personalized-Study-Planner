@@ -163,9 +163,18 @@ export default function TaskCard({
             <p className="text-sm text-gray-600 mt-1">{description}</p>
           )}
 
-          <p className="text-xs text-gray-400 mt-2">
-            Created on: {new Date(task.createdAt).toLocaleDateString()}
-          </p>
+            <p className="text-xs text-gray-400 mt-2">
+                Deadline:{" "}
+                {task.deadline
+                    ? new Date(task.deadline).toLocaleString("en-GB", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                    })
+                    : "No deadline"}
+            </p>
 
           {task.sharedByEmail && (
             <p className="text-xs text-purple-500 mt-1 bg-purple-50 px-2 py-1 rounded-lg inline-block">

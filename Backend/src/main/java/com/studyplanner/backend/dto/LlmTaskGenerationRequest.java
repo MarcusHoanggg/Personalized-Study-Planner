@@ -17,5 +17,6 @@ public class LlmTaskGenerationRequest {
     // optional
     private String additionalContext;
     private boolean sent;
+    private String language;
 
 }

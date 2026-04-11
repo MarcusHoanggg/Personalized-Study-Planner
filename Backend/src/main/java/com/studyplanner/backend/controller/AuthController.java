@@ -29,11 +29,9 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserLoginDto body) {
-        // Use email for authentication (UserLoginDto exposes `getEmail()`)
+    public ResponseEntity<Map<String, String>> login(@RequestBody UserLoginDto body) {
         authManager.authenticate(new UsernamePasswordAuthenticationToken(body.getEmail(), body.getPassword()));
         UserDetails userDetails = userDetailsService.loadUserByUsername(body.getEmail());
-        // String token = jwtUtil.generateToken(userDetails);
         String token = jwtUtil.generateToken(Map.of("userId", userDetails.getUsername()), userDetails);
         return ResponseEntity.ok(Map.of("token", token));
     }

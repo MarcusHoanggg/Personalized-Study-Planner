@@ -39,8 +39,8 @@ public class JwtUtil {
     public Long extractUserId(String token) {
         Object userId = getClaims(token).get("userId");
 
-        if (userId instanceof Integer)
-            return ((Integer) userId).longValue();
+        if (userId instanceof Integer integer)
+            return integer.longValue();
 
         return ((Long) userId);
     }

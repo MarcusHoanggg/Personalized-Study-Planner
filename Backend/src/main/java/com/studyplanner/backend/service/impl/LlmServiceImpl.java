@@ -25,6 +25,7 @@ import java.time.LocalDateTime;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -62,7 +63,7 @@ public class LlmServiceImpl implements LlmService {
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         // Build prompts
-        String systemPrompt = buildSystemPrompt();
+        String systemPrompt = buildSystemPrompt(request.getLanguage());
         String userPrompt = "User request: " + request.getPrompt();
         if (request.getAdditionalContext() != null && !request.getAdditionalContext().isBlank()) {
             userPrompt += "\nAdditional context: " + request.getAdditionalContext();
@@ -130,7 +131,15 @@ public class LlmServiceImpl implements LlmService {
     // Private helpers
     // ─────────────────────────────────────────────────────────────────────────────
 
-    private String buildSystemPrompt() {
+    private String buildSystemPrompt(String language) {
+        Map<String, String> languageNames = Map.of(
+                "en", "English",
+                "fi", "Finnish",
+                "vi", "Vietnamese",
+                "ne", "Nepali"
+        );
+        String languageName = languageNames.getOrDefault(language, "English");
+
         return """
                 You are a study planner assistant. Generate concrete, actionable study tasks.
                 
@@ -153,10 +162,8 @@ public class LlmServiceImpl implements LlmService {
                 - taskDescription: Clear action (3-4 sentences)
                 - taskDeadline: ISO 8601 format (YYYY-MM-DDTHH:mm:ss), realistic future dates
                 - priority: HIGH, MEDIUM, or LOW
-                - Generate 3-8 tasks spread over time
-                - Suggest a youtube video that aligns most with your suggestion
-                - Make a clickable link for the youtube video
-                - Today's date is """ + LocalDateTime.now().toLocalDate();
+                - Today's date is""" + LocalDateTime.now().toLocalDate() +
+                "- IMPORTANT: Generate all task names and descriptions in " + languageName + " only.";
     }
 
     private List<SuggestedTasksDto> parseLlmResponse(String rawResponse) {

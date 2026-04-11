@@ -5,6 +5,10 @@ import com.studyplanner.backend.dto.UserRegisterDto;
 import com.studyplanner.backend.entity.User;
 
 public class UserMapper {
+    private UserMapper() {
+        /* This utility class should not be instantiated */
+    }
+
 
     // Use when: user logs in, views profile, or fetches user data.
     // Never includes password for security.

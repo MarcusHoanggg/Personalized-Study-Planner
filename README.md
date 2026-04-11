@@ -44,6 +44,11 @@ The system architecture is backed by:
 - A **Use Case diagram** that shows high-level interactions like registration/login, Google sign-in, creating/updating study plans, generating schedules, and tracking progress.
 
 These diagrams live alongside the project documentation and are referenced by the sprint reports.
+### Localization
+
+- Row-based localization: Each task stores a language column (EN/FI/VI/NE) set from the user's active UI language via i18next. LLM-generated tasks are prompted to respond in the same language.
+
+
 
 ### Sprint reports
 
