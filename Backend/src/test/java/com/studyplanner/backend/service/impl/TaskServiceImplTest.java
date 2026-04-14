@@ -130,6 +130,20 @@ class TaskServiceImplTest {
 			assertThrows(ResourceNotFoundException.class, () -> taskService.createTask(testTaskDto));
 			verify(taskRepository, never()).save(any(Task.class));
 		}
+
+		@Test
+		@DisplayName("Should continue when calendar sync fails during create")
+		void createTask_WhenCalendarSyncFails_ShouldStillReturnTask() throws IOException {
+			when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
+			when(taskRepository.save(any(Task.class))).thenReturn(testTask);
+			when(calendarService.pushToCalendar(any(Task.class))).thenThrow(new IOException("calendar down"));
+
+			TaskDto result = taskService.createTask(testTaskDto);
+
+			assertNotNull(result);
+			verify(taskRepository, times(1)).save(any(Task.class));
+			verify(reminderService, times(1)).createReminderForTask(any(Task.class));
+		}
 	}
 
 	@Nested
@@ -266,6 +280,53 @@ class TaskServiceImplTest {
 	}
 
 	@Nested
+	@DisplayName("additional filter/update tests")
+	class AdditionalCoverageTests {
+
+		@Test
+		void getTasksByCompleted_ShouldReturnFilteredTasks() {
+			when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
+			when(taskRepository.findByUserIdAndCompleted(1L, false)).thenReturn(List.of(testTask));
+			List<TaskDto> result = taskService.getTasksByCompleted(1L, false);
+			assertEquals(1, result.size());
+			assertFalse(result.get(0).isCompleted());
+		}
+
+		@Test
+		void getTasksByDateRangeAndDeadline_ShouldReturnFilteredTasks() {
+			when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
+			when(taskRepository.findByUserIdAndTaskDeadlineBetween(eq(1L), any(LocalDateTime.class), any(LocalDateTime.class)))
+					.thenReturn(List.of(testTask));
+			when(taskRepository.findByUserIdAndTaskDeadline(1L, testTask.getTaskDeadline())).thenReturn(List.of(testTask));
+
+			List<TaskDto> range = taskService.getTasksByDateRange(1L, LocalDateTime.now().minusDays(1), LocalDateTime.now().plusDays(1));
+			List<TaskDto> deadline = taskService.getTasksByDeadline(1L, testTask.getTaskDeadline());
+			assertEquals(1, range.size());
+			assertEquals(1, deadline.size());
+		}
+
+		@Test
+		void getTasksByStatusAndPriority_ShouldReturnFilteredTasks() {
+			when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
+			when(taskRepository.findByUserIdAndStatusAndPriority(1L, Status.PENDING, Priority.HIGH))
+					.thenReturn(List.of(testTask));
+			List<TaskDto> result = taskService.getTasksByStatusAndPriority(1L, Status.PENDING, Priority.HIGH);
+			assertEquals(1, result.size());
+		}
+
+		@Test
+		void updateTaskStatusAndPriority_ShouldPersistChanges() {
+			when(taskRepository.findById(1L)).thenReturn(Optional.of(testTask));
+			when(taskRepository.save(any(Task.class))).thenAnswer(inv -> inv.getArgument(0));
+
+			TaskDto statusUpdated = taskService.updateTaskStatus(1L, 1L, "IN_PROGRESS");
+			TaskDto priorityUpdated = taskService.updateTaskPriority(1L, 1L, Priority.LOW);
+			assertEquals(Status.IN_PROGRESS, statusUpdated.getStatus());
+			assertEquals(Priority.LOW, priorityUpdated.getPriority());
+		}
+	}
+
+	@Nested
 	@DisplayName("updateTask Tests")
 	class UpdateTaskTests {
 
@@ -320,6 +381,32 @@ class TaskServiceImplTest {
 			assertThrows(UnauthorizedAccessException.class,
 					() -> taskService.updateTask(999L, 1L, testTaskDto));
 			verify(taskRepository, never()).save(any(Task.class));
+		}
+
+		@Test
+		@DisplayName("Should recreate reminder when deadline changes")
+		void updateTask_WhenDeadlineChanges_ShouldRecreateReminder() throws Exception {
+			LocalDateTime originalDeadline = LocalDateTime.of(2024, 12, 31, 23, 59, 59);
+			LocalDateTime newDeadline = LocalDateTime.of(2025, 1, 1, 12, 0, 0);
+			testTask.setTaskDeadline(originalDeadline);
+			TaskDto updateDto = TaskDto.builder()
+					.taskDeadline(newDeadline)
+					.taskName(testTask.getTaskName())
+					.taskDescription(testTask.getTaskDescription())
+					.priority(testTask.getPriority())
+					.status(testTask.getStatus())
+					.completed(testTask.isCompleted())
+					.build();
+
+			when(taskRepository.findById(1L)).thenReturn(Optional.of(testTask));
+			when(taskRepository.save(any(Task.class))).thenAnswer(inv -> inv.getArgument(0));
+			when(calendarService.pushToCalendar(any(Task.class))).thenThrow(new IOException("calendar down"));
+
+			TaskDto result = taskService.updateTask(1L, 1L, updateDto);
+
+			assertEquals(newDeadline, result.getTaskDeadline());
+			verify(reminderService, times(1)).cancelReminderForTask(1L);
+			verify(reminderService, times(1)).createReminderForTask(any(Task.class));
 		}
 	}
 
