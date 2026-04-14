@@ -26,6 +26,7 @@ import com.studyplanner.backend.dto.LlmTaskGenerationRequest;
 import com.studyplanner.backend.dto.LlmTaskGenerationResponse;
 import com.studyplanner.backend.entity.SuggestedLLM;
 import com.studyplanner.backend.entity.User;
+import com.studyplanner.backend.exception.LlmResponseParseException;
 import com.studyplanner.backend.exception.ResourceNotFoundException;
 import com.studyplanner.backend.repository.SuggestedTaskRepository;
 import com.studyplanner.backend.repository.UserRepository;
@@ -129,7 +130,33 @@ class LlmServiceImplTest {
                 .prompt("plan")
                 .language("fi")
                 .build();
-        assertThrows(RuntimeException.class, () -> llmService.generateTaskSuggestions(req, 1L));
+        assertThrows(LlmResponseParseException.class, () -> llmService.generateTaskSuggestions(req, 1L));
+    }
+
+    @Test
+    void generateTaskSuggestions_WhenAllTasksInvalid_ShouldThrowCustomParseException() {
+        User user = User.builder().id(1L).email("u@example.com").build();
+        when(suggestedTaskRepository.countByUserIdAndTaskDeadlineBetween(anyLong(), any(), any())).thenReturn(0L);
+        when(userRepository.findById(1L)).thenReturn(Optional.of(user));
+        when(chatClient.prompt().system(any(String.class)).user(any(String.class)).call().content())
+                .thenReturn("""
+                        {
+                          "tasks":[
+                            {
+                              "taskName":"Bad task",
+                              "taskDescription":"Invalid date",
+                              "taskDeadline":"not-a-date",
+                              "priority":"MEDIUM"
+                            }
+                          ]
+                        }
+                        """);
+
+        LlmTaskGenerationRequest req = LlmTaskGenerationRequest.builder()
+                .prompt("plan")
+                .language("en")
+                .build();
+        assertThrows(LlmResponseParseException.class, () -> llmService.generateTaskSuggestions(req, 1L));
     }
 
     @Test

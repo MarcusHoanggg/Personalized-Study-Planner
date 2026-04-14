@@ -10,6 +10,7 @@ import com.studyplanner.backend.entity.SuggestedLLM.Priority;
 import com.studyplanner.backend.entity.SuggestedLLM.Status;
 import com.studyplanner.backend.entity.SuggestedLLM.SuggestedStatus;
 import com.studyplanner.backend.entity.User;
+import com.studyplanner.backend.exception.LlmResponseParseException;
 import com.studyplanner.backend.exception.ResourceNotFoundException;
 import com.studyplanner.backend.mapper.SuggestedTasksMapper;
 import com.studyplanner.backend.repository.SuggestedTaskRepository;
@@ -21,7 +22,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 import java.time.LocalDateTime;
+import java.time.format.DateTimeParseException;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
@@ -170,44 +174,48 @@ public class LlmServiceImpl implements LlmService {
         List<SuggestedTasksDto> tasks = new ArrayList<>();
 
         try {
-            // Strip markdown code blocks if Gemini adds them
             String cleaned = rawResponse.trim();
             if (cleaned.startsWith("```json")) cleaned = cleaned.substring(7);
             if (cleaned.startsWith("```")) cleaned = cleaned.substring(3);
             if (cleaned.endsWith("```")) cleaned = cleaned.substring(0, cleaned.length() - 3);
             cleaned = cleaned.trim();
 
-            // Parse JSON
             JsonNode root = objectMapper.readTree(cleaned);
             JsonNode taskArray = root.path("tasks");
 
             if (taskArray.isArray()) {
                 for (JsonNode taskNode : taskArray) {
-                    try {
-                        tasks.add(SuggestedTasksDto.builder()
-                                .taskName(taskNode.path("taskName").asText())
-                                .taskDescription(taskNode.path("taskDescription").asText())
-                                .taskDeadline(LocalDateTime.parse(
-                                        taskNode.path("taskDeadline").asText()))
-                                .priority(Priority.valueOf(
-                                        taskNode.path("priority").asText("MEDIUM")))
-                                .build());
-                    } catch (Exception e) {
-                        log.warn("Failed to parse task: {}", e.getMessage());
+                    SuggestedTasksDto parsedTask = parseTaskNode(taskNode);
+                    if (parsedTask != null) {
+                        tasks.add(parsedTask);
                     }
                 }
             }
-        } catch (Exception e) {
+        } catch (JsonProcessingException e) {
             log.error("Parse error: {}", e.getMessage());
             log.error("Raw response: {}", rawResponse);
-            throw new RuntimeException("Invalid LLM response: " + e.getMessage(), e);
+            throw new LlmResponseParseException("Invalid LLM response: " + e.getMessage(), e);
         }
 
         if (tasks.isEmpty()) {
-            throw new RuntimeException("LLM generated no valid tasks");
+            throw new LlmResponseParseException("LLM generated no valid tasks");
         }
 
         return tasks;
+    }
+
+    private SuggestedTasksDto parseTaskNode(JsonNode taskNode) {
+        try {
+            return SuggestedTasksDto.builder()
+                    .taskName(taskNode.path("taskName").asText())
+                    .taskDescription(taskNode.path("taskDescription").asText())
+                    .taskDeadline(LocalDateTime.parse(taskNode.path("taskDeadline").asText()))
+                    .priority(Priority.valueOf(taskNode.path("priority").asText("MEDIUM")))
+                    .build();
+        } catch (DateTimeParseException | IllegalArgumentException e) {
+            log.warn("Failed to parse task node: {}", e.getMessage());
+            return null;
+        }
     }
 
 

@@ -50,9 +50,9 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         String firstName = oauth2User.getAttribute("name");
 
         // Check if user already exists in the database
-        User user = userRepository.findByGoogleId(googleId).orElseGet(() -> {
+        User user = userRepository.findByGoogleId(googleId).orElseGet(() ->
             // Check if email is already registered with a local account
-            return userRepository.findByEmail(email).map(existingUser -> {
+            userRepository.findByEmail(email).map(existingUser -> {
                 existingUser.setGoogleId(googleId);
                 existingUser.setAuthProvider(User.AuthProvider.GOOGLE);
                 return userRepository.save(existingUser);
@@ -72,8 +72,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                     log.warn("Failed to send welcome email to {}: {}", email, e.getMessage());
                 }
                 return saved;
-            });
-        });
+            }));
 
         try {
             OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;

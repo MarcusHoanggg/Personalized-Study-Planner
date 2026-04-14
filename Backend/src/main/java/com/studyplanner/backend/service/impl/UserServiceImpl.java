@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -68,7 +67,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserProfileUpdateDto createUser(UserRegisterDto userDto) {
         if (userRepository.findByEmail(userDto.getEmail()).isPresent()) {
-            throw new RuntimeException("Email already registered");
+            throw new UnauthorizedAccessException("Email already registered");
         }
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -135,7 +134,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.searchUsers(query.trim(), excludeUserId)
                 .stream()
                 .map(this::mapToUserSearchDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     // ─────────────────────────────────────────────────────────────────────────────
@@ -157,7 +156,7 @@ public class UserServiceImpl implements UserService {
                 .map(id -> userRepository.findById(id)
                         .orElseThrow(() -> new ResourceNotFoundException(
                                 "Recipient not found with id: " + id)))
-                .collect(Collectors.toList());
+                .toList();
 
         List<Task> tasks = shareTaskDto.getTaskIds().stream()
                 .map(id -> {
@@ -170,7 +169,7 @@ public class UserServiceImpl implements UserService {
                     }
                     return task;
                 })
-                .collect(Collectors.toList());
+                .toList();
 
         List<TaskShareInviteDto> createdInvites = new ArrayList<>();
 
@@ -294,7 +293,7 @@ public class UserServiceImpl implements UserService {
         return inviteRepository.findByReceiverIdAndStatusWithDetails(userId, InviteStatus.PENDING)
                 .stream()
                 .map(TaskShareInviteMapper::mapToDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -303,7 +302,7 @@ public class UserServiceImpl implements UserService {
         return inviteRepository.findByReceiverIdWithDetails(userId)
                 .stream()
                 .map(TaskShareInviteMapper::mapToDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
