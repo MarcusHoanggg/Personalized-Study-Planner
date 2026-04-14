@@ -124,7 +124,7 @@ public class LlmServiceImpl implements LlmService {
 
     @Override
     public LlmTaskGenerationResponse chat(LlmTaskGenerationRequest prompt) {
-        return null;
+        throw new UnsupportedOperationException("chat endpoint is not implemented yet");
     }
 
     // ─────────────────────────────────────────────────────────────────────────────

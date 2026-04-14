@@ -22,11 +22,11 @@ import com.studyplanner.backend.service.ReminderService;
 import com.studyplanner.backend.service.TaskService;
 
 import lombok.AllArgsConstructor;
-
-import static org.hibernate.query.sqm.tree.SqmNode.log;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class TaskServiceImpl implements TaskService {
 
     private final TaskRepository taskRepository;
@@ -64,14 +64,7 @@ public class TaskServiceImpl implements TaskService {
 
         // Auto create a reminder for the task
         reminderService.createReminderForTask(saved);
-        try {
-            String eventId = calendarService.pushToCalendar(saved);
-            if (eventId != null) {
-                log.info("Task synced to Google Calendar with event ID: {}");
-            }
-        } catch (Exception e) {
-            log.error("Failed to sync task to Google Calendar: {}", e.getMessage(), e);
-        }
+        syncTaskToCalendar(saved);
         return TaskMapper.mapToTaskDto(saved);
     }
 
@@ -181,15 +174,7 @@ public class TaskServiceImpl implements TaskService {
             reminderService.createReminderForTask(updated);
         }
 
-        // updated tasks
-        try {
-            String eventId = calendarService.pushToCalendar(updated);
-            if (eventId != null) {
-                log.info("Task synced to Google Calendar with event ID: {}");
-            }
-        } catch (Exception e) {
-            log.error("Failed to sync task to Google Calendar: {}", e.getMessage(), e);
-        }
+        syncTaskToCalendar(updated);
 
         return TaskMapper.mapToTaskDto(updated);
     }
@@ -236,7 +221,16 @@ public class TaskServiceImpl implements TaskService {
         // cancel reminder before deleting task
         reminderService.cancelReminderForTask(taskId);
         taskRepository.delete(task);
+    }
 
-
+    private void syncTaskToCalendar(Task task) {
+        try {
+            String eventId = calendarService.pushToCalendar(task);
+            if (eventId != null) {
+                log.info("Task synced to Google Calendar with event ID: {}", eventId);
+            }
+        } catch (Exception e) {
+            log.error("Failed to sync task to Google Calendar: {}", e.getMessage(), e);
+        }
     }
 }
