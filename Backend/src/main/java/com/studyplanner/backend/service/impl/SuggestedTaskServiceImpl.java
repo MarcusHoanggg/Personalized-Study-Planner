@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,17 +28,39 @@ import com.studyplanner.backend.repository.TaskRepository;
 import com.studyplanner.backend.service.ReminderService;
 import com.studyplanner.backend.service.SuggestedTaskService;
 
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
-@AllArgsConstructor
 @Slf4j
 public class SuggestedTaskServiceImpl implements SuggestedTaskService {
 
     private final SuggestedTaskRepository suggestedTaskRepository;
     private final TaskRepository taskRepository;
     private final ReminderService reminderService;
+    private final SuggestedTaskService transactionalService;
+
+    @Autowired
+    public SuggestedTaskServiceImpl(
+            SuggestedTaskRepository suggestedTaskRepository,
+            TaskRepository taskRepository,
+            ReminderService reminderService,
+            @Lazy SuggestedTaskService transactionalService) {
+        this.suggestedTaskRepository = suggestedTaskRepository;
+        this.taskRepository = taskRepository;
+        this.reminderService = reminderService;
+        this.transactionalService = transactionalService;
+    }
+
+    // Test-friendly constructor
+    SuggestedTaskServiceImpl(
+            SuggestedTaskRepository suggestedTaskRepository,
+            TaskRepository taskRepository,
+            ReminderService reminderService) {
+        this.suggestedTaskRepository = suggestedTaskRepository;
+        this.taskRepository = taskRepository;
+        this.reminderService = reminderService;
+        this.transactionalService = null;
+    }
 
     @Override
     @Transactional(readOnly = true)
@@ -44,7 +68,7 @@ public class SuggestedTaskServiceImpl implements SuggestedTaskService {
         return suggestedTaskRepository.findByUserIdAndSuggestedStatus(userId, SuggestedStatus.PENDING)
                 .stream()
                 .map(SuggestedTasksMapper::toDto)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -130,7 +154,7 @@ public class SuggestedTaskServiceImpl implements SuggestedTaskService {
         if (response.getAcceptedIds() != null && !response.getAcceptedIds().isEmpty()) {
             for (Long id : response.getAcceptedIds()) {
                 try {
-                    acceptedTasks.add(acceptSuggestion(id, userId));
+                    acceptedTasks.add(getTransactionalDelegate().acceptSuggestion(id, userId));
                 } catch (Exception e) {
                     log.warn("Failed to accept suggestion {}: {}", id, e.getMessage());
                     // Continue processing other IDs even if one fails
@@ -142,7 +166,7 @@ public class SuggestedTaskServiceImpl implements SuggestedTaskService {
         if (response.getDeclinedIds() != null && !response.getDeclinedIds().isEmpty()) {
             for (Long id : response.getDeclinedIds()) {
                 try {
-                    declinedSuggestions.add(declineSuggestion(id, userId));
+                    declinedSuggestions.add(getTransactionalDelegate().declineSuggestion(id, userId));
                 } catch (Exception e) {
                     log.warn("Failed to decline suggestion {}: {}", id, e.getMessage());
                     // Continue processing other IDs even if one fails
@@ -165,7 +189,7 @@ public class SuggestedTaskServiceImpl implements SuggestedTaskService {
         List<TaskDto> acceptedTasks = new ArrayList<>();
         for (Long id : suggestionIds) {
             try {
-                acceptedTasks.add(acceptSuggestion(id, userId));
+                acceptedTasks.add(getTransactionalDelegate().acceptSuggestion(id, userId));
             } catch (Exception e) {
                 log.warn("Failed to accept suggestion {}: {}", id, e.getMessage());
             }
@@ -208,6 +232,10 @@ public class SuggestedTaskServiceImpl implements SuggestedTaskService {
                 .stream()
                 .map(SuggestedTasksMapper::toDto)
                 .collect(Collectors.toList());
+    }
+
+    private SuggestedTaskService getTransactionalDelegate() {
+        return transactionalService != null ? transactionalService : this;
     }
 
 }

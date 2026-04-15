@@ -27,20 +27,20 @@ public class ReminderServiceImp implements ReminderService {
 
         // Skip if no deadline is set
         if (task.getTaskDeadline() == null) {
-            log.info("Task '{}' has no deadline - reminder skiped", task.getTaskName());
+            log.info("Task '{}' has no deadline - reminder skipped", task.getTaskName());
             return;
         }
 
         // Skip if reminder already exists
         if (reminderRepository.existsByTaskIdAndReminderSentFalse(task.getId())) {
-            log.info("Reminder for task '{}' already exists - reminder skiped", task.getTaskName());
+            log.info("Reminder for task '{}' already exists - reminder skipped", task.getTaskName());
             return;
         }
 
         // Schedule reminder for exactly 1 day before deadline
         LocalDateTime reminderDate = task.getTaskDeadline().minusDays(1);
 
-        // Dont schedule reminder if its already exist
+        // Do not schedule reminder if calculated date is in the past
         if (reminderDate.isBefore(LocalDateTime.now())) {
             log.info("Reminder date {} is in the past for the task: '{}' - skip", reminderDate, task.getTaskName());
             return;

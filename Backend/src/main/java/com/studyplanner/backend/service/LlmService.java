@@ -9,7 +9,7 @@ public interface LlmService {
 
     LlmTaskGenerationResponse generateTaskSuggestions(LlmTaskGenerationRequest request, Long userId);
 
-    // check if user has exceed their LLM limit for the period of time.
+    // check if user has exceeded their LLM limit for the period of time.
     // user can have 50 suggestion per month
     boolean canUserRequestMoreSuggestions(Long userId);
 
