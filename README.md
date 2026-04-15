@@ -46,7 +46,7 @@ The system architecture is backed by:
 These diagrams live alongside the project documentation and are referenced by the sprint reports.
 ### Localization
 
-- Row-based localization: Users may set the language of their choice from the given four options. Language will automtically be synched with the backend and stored in database. When users create their tasks or generate tasks using LLM's they are stored in the DB and a additional column **Language** was added which shows the language of the user when creating the tasks.
+-  Row-based localization: Users may set the language of their choice from the given four options. Language will automatically be synched with the backend and stored in the database. When users create their tasks or generate tasks using LLM's they are stored in the DB and an additional column **Language** was added which shows the language of the user when creating the tasks.
 - Additionally the LLM will respond in the language set by the user.
 
 
