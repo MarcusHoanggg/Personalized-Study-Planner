@@ -30,7 +30,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.contains;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.atLeastOnce;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
@@ -101,7 +100,7 @@ class OAuth2SuccessHandlerTest {
         String redirectUrl = captor.getValue();
         assertNotNull(redirectUrl, "Redirect URL should not be null");
         assertTrue(redirectUrl.contains("mock-jwt-test@example.com"));
-        verify(emailService).sendWelcomeEmail(eq("test@example.com"), eq("John Doe"));
+        verify(emailService).sendWelcomeEmail("test@example.com", "John Doe");
     }
 
     @Test
@@ -145,7 +144,7 @@ class OAuth2SuccessHandlerTest {
         when(userDetailsService.loadUserByUsername("test@example.com")).thenReturn(userDetails);
         when(jwtUtil.generateToken(anyMap(), any())).thenReturn("mock-jwt");
         org.mockito.Mockito.doThrow(new RuntimeException("smtp down"))
-                .when(emailService).sendWelcomeEmail(eq("test@example.com"), eq("John Doe"));
+                .when(emailService).sendWelcomeEmail("test@example.com","John Doe");
         mockOAuthClient();
 
         successHandler.onAuthenticationSuccess(request, response, authentication);
