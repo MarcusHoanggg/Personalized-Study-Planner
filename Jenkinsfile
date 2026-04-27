@@ -1,79 +1,81 @@
 pipeline {
     agent any
+
     tools {
-        maven 'Maven3'
-        jdk 'jdk-17'
+        maven 'maven'
+        jdk 'jdk-21'
     }
+
     environment {
-        DOCKERHUB_CREDENTIALS_ID = 'darksolu'
-        DOCKERHUB_REPO = 'darksolu'
+        PATH = "C:\\Program Files\\Docker\\Docker\\resources\\bin;${env.PATH}"
+        DOCKERHUB_CREDENTIALS_ID = 'docker-hub'
+        DOCKERHUB_REPO_BACKEND = 'mustah21/study-planner-backend'
+        DOCKERHUB_REPO_FRONTEND = 'mustah21/study-planner-frontend'
         DOCKER_IMAGE_TAG = 'p1'
     }
+
     stages {
+
         stage('Checkout') {
             steps {
                 git credentialsId: 'Github',
-                    url: 'https://github.com/MarcusHoanggg/Personalized-Study-Planner',
-                    branch: 'docker'
+                        url: 'https://github.com/MarcusHoanggg/Personalized-Study-Planner',
+                        branch: 'main'
             }
         }
-        stage('Build Backend') {
+
+        stage('Build') {
+            steps {
+                withCredentials([file(credentialsId: 'application-yaml', variable: 'APP_YAML')]) {
+                    bat """
+                        copy "%APP_YAML%" "Backend\\src\\main\\resources\\application.yaml"
+                        cd Backend
+                        mvn clean install -DskipTests
+                    """
+                }
+            }
+        }
+
+        stage('Test') {
             steps {
                 dir('Backend') {
-                    bat 'mvn clean package -DskipTests'
+                    bat 'mvn test'
+                    bat 'if exist target\\site\\jacoco\\jacoco.xml (echo JACOCO FOUND) else (echo JACOCO NOT FOUND)'
                 }
             }
         }
-        stage('Test Backend') {
+        stage('SonarQube Analysis') {
             steps {
                 dir('Backend') {
-                    bat 'mvn test -Dmaven.test.failure.ignore=true'
-                }
-            }
-            post {
-                always {
-                    junit allowEmptyResults: true,
-                          testResults: 'Backend/**/target/surefire-reports/*.xml'
-                }
-            }
-        }
-        stage('Build Docker Images') {
-            steps {
-                script {
-                    docker.build("${DOCKERHUB_REPO}/backend:${DOCKER_IMAGE_TAG}", "./Backend")
-                    docker.build("${DOCKERHUB_REPO}/frontend:${DOCKER_IMAGE_TAG}", "./Frontend")
-                }
-            }
-        }
-        stage('Push Docker Images') {
-            steps {
-                script {
-                    docker.withRegistry('https://index.docker.io/v1/', DOCKERHUB_CREDENTIALS_ID) {
-                        docker.image("${DOCKERHUB_REPO}/backend:${DOCKER_IMAGE_TAG}").push()
-                        docker.image("${DOCKERHUB_REPO}/frontend:${DOCKER_IMAGE_TAG}").push()
+                    withSonarQubeEnv('SonarQubeServer') {
+                        withCredentials([string(credentialsId: 'study-planner-sonar-token', variable: 'SONAR_TOKEN')]) {
+                            bat 'mvn sonar:sonar -Dsonar.token=%SONAR_TOKEN%'
+                        }
                     }
                 }
             }
         }
-        stage('Deploy with Docker Compose') {
+        stage('Publish Test Results') {
             steps {
-                withCredentials([file(credentialsId: 'env-file', variable: 'ENV_FILE')]) {
-                    bat 'copy "%ENV_FILE%" .env'
-                    bat 'docker rm -f study_planner_db study_planner_backend study_planner_frontend || exit 0'
-                    bat 'docker compose down --remove-orphans'
-                    bat 'docker compose up -d'
+                junit 'Backend/**/target/surefire-reports/*.xml'
+            }
+        }
+
+
+        stage('Build and Push Docker Image') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                        bat 'docker logout'
+                        bat 'docker login -u %DOCKER_USER% -p %DOCKER_PASS%'
+                        bat 'docker build -t %DOCKER_USER%/study-planner-backend:p1 ./Backend'
+                        bat 'docker build -t %DOCKER_USER%/study-planner-frontend:p1 ./Frontend'
+                        bat 'docker push %DOCKER_USER%/study-planner-backend:p1'
+                        bat 'docker push %DOCKER_USER%/study-planner-frontend:p1'
+                    }
                 }
             }
         }
-    }
-    post {
-        failure {
-            echo 'Pipeline failed. Check the logs above.'
-        }
-        success {
-            echo 'Pipeline succeeded!'
-            echo 'Frontend: http://localhost:5173'
-            echo 'Backend:  http://localhost:8081'
-        }
+
     }
 }

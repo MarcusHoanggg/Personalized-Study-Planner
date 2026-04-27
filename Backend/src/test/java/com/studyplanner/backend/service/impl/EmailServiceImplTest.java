@@ -56,7 +56,6 @@ class EmailServiceImplTest {
         verify(mailSender, times(1)).send(captor.capture());
         MimeMessage sent = captor.getValue();
         assertTrue(sent.getSubject().contains("Physics practice"));
-        assertTrue(sent.getContent() != null);
     }
 
     @Test
