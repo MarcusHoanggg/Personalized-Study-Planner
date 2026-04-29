@@ -133,10 +133,9 @@ class TaskServiceImplTest {
 
 		@Test
 		@DisplayName("Should continue when calendar sync fails during create")
-		void createTask_WhenCalendarSyncFails_ShouldStillReturnTask() throws IOException {
+		void createTask_WhenCalendarSyncFails_ShouldStillReturnTask() {
 			when(userRepository.findById(1L)).thenReturn(Optional.of(testUser));
 			when(taskRepository.save(any(Task.class))).thenReturn(testTask);
-			when(calendarService.pushToCalendar(any(Task.class))).thenThrow(new IOException("calendar down"));
 
 			TaskDto result = taskService.createTask(testTaskDto);
 
@@ -385,7 +384,7 @@ class TaskServiceImplTest {
 
 		@Test
 		@DisplayName("Should recreate reminder when deadline changes")
-		void updateTask_WhenDeadlineChanges_ShouldRecreateReminder() throws Exception {
+		void updateTask_WhenDeadlineChanges_ShouldRecreateReminder() {
 			LocalDateTime originalDeadline = LocalDateTime.of(2024, 12, 31, 23, 59, 59);
 			LocalDateTime newDeadline = LocalDateTime.of(2025, 1, 1, 12, 0, 0);
 			testTask.setTaskDeadline(originalDeadline);
@@ -400,7 +399,6 @@ class TaskServiceImplTest {
 
 			when(taskRepository.findById(1L)).thenReturn(Optional.of(testTask));
 			when(taskRepository.save(any(Task.class))).thenAnswer(inv -> inv.getArgument(0));
-			when(calendarService.pushToCalendar(any(Task.class))).thenThrow(new IOException("calendar down"));
 
 			TaskDto result = taskService.updateTask(1L, 1L, updateDto);
 

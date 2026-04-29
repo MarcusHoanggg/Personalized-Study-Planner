@@ -167,7 +167,7 @@ public class TaskServiceImpl implements TaskService {
         TaskMapper.updateTask(task, taskDto);
         Task updated = taskRepository.save(task);
 
-        // If deadline chnaged, cancel the old reminder and create a new one
+        // If deadline changed, cancel the old reminder and create a new one
         boolean deadlineChanged = !Objects.equals(oldDeadline, task.getTaskDeadline());
         if (deadlineChanged) {
             reminderService.cancelReminderForTask(taskId);
