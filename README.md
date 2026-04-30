@@ -49,7 +49,20 @@ These diagrams live alongside the project documentation and are referenced by th
 -  Row-based localization: Users may set the language of their choice from the given four options. Language will automatically be synched with the backend and stored in the database. When users create their tasks or generate tasks using LLM's they are stored in the DB and an additional column **Language** was added which shows the language of the user when creating the tasks.
 - Additionally the LLM will respond in the language set by the user.
 
+---
 
+## Testing
+Sprint 7 focused on comprehensive functional and non-functional testing of the application. The following testing activities were completed:
+
+- **Functional Testing** — Final JUnit unit tests executed after Sprint 6 code cleanup, bug tracking and resolution, Trello user story review, and successful Jenkins build with Docker deployment.
+- **Heuristic Evaluation** — The UI was evaluated against Nielsen's 10 Usability Heuristics, with findings and recommendations documented.
+- **User Acceptance Testing (UAT)** — All six core user scenarios (authentication, task management, session scheduling, calendar view, localization, and profile management) were tested and accepted.
+- **Static Code Analysis** — SonarQube integrated via Jenkins pipeline; all quality gate metrics resolved to grade A or B.
+- **Security Testing** — Manual OWASP-based testing covering authentication, authorization, input validation, and API configuration.
+
+> Full details of all testing activities, results, and the bug tracking table are available in the **`Sprint Report/`** folder in the project root.
+
+---
 
 ### Sprint reports
 
