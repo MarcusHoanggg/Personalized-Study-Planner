@@ -305,7 +305,7 @@ Group: Group 8
 Name	                              Role
 Aashish Timalsina	                  Project Lead, Backend Developer, Database Design, Scrum Master (Sprints 4, 7)
 Megha Kumari	                      UI/UX Designer (Figma), Frontend Developer, Scrum Master (Sprints 2, 8)
-Minh Hoang	                        Frontend Developer (Sprint 1)
+Minh Hoang	                        Frontend Developer Scrum Master (Sprint 1)
 Jari Orkolainen	                    Backend Developer, Tester, Scrum Master (Sprint 5)
 Mustafa Ahmad	                      Backend Developer, DevOps (Jenkins, Docker), Scrum Master (Sprints 3, 6)
 
