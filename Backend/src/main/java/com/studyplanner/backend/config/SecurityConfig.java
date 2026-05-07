@@ -33,7 +33,6 @@ import com.studyplanner.backend.security.OAuth2SuccessHandler;
 
 import lombok.RequiredArgsConstructor;
 
-
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -43,26 +42,29 @@ public class SecurityConfig {
     private final OAuth2SuccessHandler oAuth2SuccessHandler;
 
     @Bean
+    @SuppressWarnings("java:S4502") // CSRF disabled intentionally: app is stateless, auth via JWT Bearer tokens in
+                                    // headers (not cookies), so CSRF attacks are not applicable
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .cors(cors -> {})
-            .csrf(AbstractHttpConfigurer::disable) // CSRF disabled because the application is stateless and uses JWT tokens in headers
-            .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .requestMatchers(
-                    "/api/v1/users/register",
-                    "/api/v1/users/login",
-                    "/oauth2/**",
-                    "/login/oauth2/**",
-                    "/actuator/**",
-                    "/"
-                ).permitAll()
-                .requestMatchers("/api/llm/**").permitAll()
-                .anyRequest().authenticated()
-            )
-            .oauth2Login(oauth2 -> oauth2.successHandler(oAuth2SuccessHandler))
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+                .cors(cors -> {
+                })
+                .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(sess -> sess
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers(
+                                "/api/v1/users/register",
+                                "/api/v1/users/login",
+                                "/oauth2/**",
+                                "/login/oauth2/**",
+                                "/actuator/**",
+                                "/")
+                        .permitAll()
+                        .requestMatchers("/api/llm/**").permitAll()
+                        .anyRequest().authenticated())
+                .oauth2Login(oauth2 -> oauth2.successHandler(oAuth2SuccessHandler))
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -89,9 +91,11 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
         return authConfig.getAuthenticationManager();
     }
+
     @Bean
     @RequestScope
-    public CalendarServiceImpl calendarService(OAuth2AuthorizedClientService clientService, UserRepository userRepository) {
+    public CalendarServiceImpl calendarService(OAuth2AuthorizedClientService clientService,
+            UserRepository userRepository) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String accessToken = null;
 
@@ -100,7 +104,8 @@ public class SecurityConfig {
             OAuth2AuthenticationToken oauthToken = (OAuth2AuthenticationToken) authentication;
             String clientRegistrationId = oauthToken.getAuthorizedClientRegistrationId();
             if (clientRegistrationId.equals("google")) {
-                OAuth2AuthorizedClient client = clientService.loadAuthorizedClient(clientRegistrationId, oauthToken.getName());
+                OAuth2AuthorizedClient client = clientService.loadAuthorizedClient(clientRegistrationId,
+                        oauthToken.getName());
                 accessToken = client.getAccessToken().getTokenValue();
             }
         } else {
